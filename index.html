@@ -872,6 +872,111 @@ window.onload = function() {
     drawGrid();
 };
 
+// Render circles with representative texture, outline, and fuzz
+function drawTexturedWigglyCircle(x, y, diameter, colorValue, outlineColorValue, outlineThickness, fuzz, texture) {
+    const radius = diameter / 2;
+
+    // Fill the circle with the selected background color
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.fillStyle = getColorFromValue(colorValue); // Circle's background color
+    ctx.fill();
+
+    // Handle texture patterns (1: vertical stripes, 2: horizontal stripes, 3: polka dots)
+    if (texture > 0) {
+        ctx.save();  // Save the current context state
+
+        // Create the pattern based on the texture value
+        const pattern = getTexturePattern(ctx, texture);  // This function should return a pattern
+        if (pattern) {
+            ctx.fillStyle = pattern;
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.fill();  // Apply the pattern fill
+        }
+
+        ctx.restore();  // Restore the original context state after filling the texture
+    }
+
+    // Handle special cases for outlineThickness
+    if (outlineThickness === -2) {
+        // Render a half-outline
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI); // Half circle (half outline)
+        ctx.strokeStyle = getColorFromValue(outlineColorValue);
+        ctx.lineWidth = 1; // Thin line for half-outline
+        ctx.stroke();
+    } else if (outlineThickness > 0 || outlineThickness <= -1) {
+        // Draw the wiggly outline if fuzz > 0 and positive outlineThickness
+        const actualOutlineColor = (outlineThickness <= 0 && outlineThickness !== -2) ? getColorFromValue(colorValue) : getColorFromValue(outlineColorValue);
+
+        if (fuzz > 0) {
+            const segments = 100;
+            const wiggleAmount = fuzz * 0.5;  // Increase wiggle with fuzz value
+
+            ctx.beginPath();
+            for (let i = 0; i <= segments; i++) {
+                const angle = (i / segments) * Math.PI * 2;
+                const wiggle = Math.sin(i * 5) * wiggleAmount;
+
+                // Calculate current x, y based on wiggled radius
+                const currentRadius = radius + wiggle;
+                const offsetX = x + Math.cos(angle) * currentRadius;
+                const offsetY = y + Math.sin(angle) * currentRadius;
+
+                if (i === 0) {
+                    ctx.moveTo(offsetX, offsetY);
+                } else {
+                    ctx.lineTo(offsetX, offsetY);
+                }
+            }
+            ctx.closePath();
+            ctx.lineWidth = Math.abs(outlineThickness) > 0 ? outlineThickness : 1;  // For fuzz, we'll still use 1px outline if outlineThickness is <= 0
+            ctx.strokeStyle = actualOutlineColor;
+            ctx.stroke();
+        } else {
+            // Regular outline without fuzz
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.lineWidth = outlineThickness;
+            ctx.strokeStyle = actualOutlineColor;
+            ctx.stroke();
+        }
+    }
+}
+
+// Function to generate patterns based on texture value with transparency
+function getTexturePattern(ctx, texture) {
+    const patternCanvas = document.createElement('canvas');
+    patternCanvas.width = 10;
+    patternCanvas.height = 10;
+    const patternCtx = patternCanvas.getContext('2d');
+
+    // Set the transparency with rgba (25% opacity)
+    const transparentWhite = 'rgba(255, 255, 255, 0.25)';
+
+    switch (texture) {
+        case 1: // Vertical stripes
+            patternCtx.fillStyle = transparentWhite;
+            patternCtx.fillRect(2, 0, 2, 10);  // Vertical stripe
+            break;
+        case 2: // Horizontal stripes
+            patternCtx.fillStyle = transparentWhite;
+            patternCtx.fillRect(0, 2, 10, 2);  // Horizontal stripe
+            break;
+        case 3: // Polka dots
+            patternCtx.fillStyle = transparentWhite;
+            patternCtx.beginPath();
+            patternCtx.arc(5, 5, 2, 0, Math.PI * 2);
+            patternCtx.fill();
+            break;
+        default:
+            return null;  // No pattern for other values
+    }
+
+    return ctx.createPattern(patternCanvas, 'repeat');
+}
+
 // Function to redraw all circles after grid is drawn
 function redrawCircles() {
     const centerX = canvas.width / 2;
@@ -884,32 +989,13 @@ function redrawCircles() {
         let x = (circle.x * centerX) + centerX;
         let y = (circle.y * centerY) + centerY;
 
-        // Draw the circle fill
-        ctx.beginPath();
-        ctx.arc(x, y, circle.diameter, 0, Math.PI * 2);
-        ctx.fillStyle = getColorFromValue(circle.color);
-        ctx.fill();
-
-        // Outline handling based on the outlineThickness value
-        if (circle.outlineThickness === -2) {
-            // Render a half-outline
-            ctx.beginPath();
-            ctx.arc(x, y, circle.diameter, 0, Math.PI); // Half circle (half outline)
-            ctx.strokeStyle = getColorFromValue(circle.outlineColor);
-            ctx.lineWidth = 1; // Thin line for half-outline
-            ctx.stroke();
-        } else if (circle.outlineThickness >= 0) {
-            // Render a full outline for valid positive thickness
-            ctx.lineWidth = circle.outlineThickness;
-            ctx.strokeStyle = getColorFromValue(circle.outlineColor);
-            ctx.stroke();
-        } else if (circle.outlineThickness < -2) {
-            // No outline if outlineThickness is -1, -3 or any negative value lower than -2
-            // No stroke method will be called in this case
-        }
+        // Draw the circle fill and wiggly outline based on the fuzz and texture value
+        drawTexturedWigglyCircle(
+            x, y, circle.diameter, circle.color, circle.outlineColor, 
+            circle.outlineThickness, circle.fuzz, circle.texture
+        );
     });
 }
-
 
 // Track mouse movement to display a preview circle on hover
 canvas.addEventListener('mousemove', function(event) {
@@ -926,17 +1012,16 @@ canvas.addEventListener('mousemove', function(event) {
     drawGrid();
     redrawCircles();
 
-    // Get the current diameter from the input field
+    // Get the current diameter from the input field for hover preview
     const diameter = parseInt(document.getElementById('diameter').value);
+    const colorValue = document.getElementById('color').value;
+    const outlineColor = document.getElementById('outlineColor').value;
+    const outlineThickness = parseInt(document.getElementById('outlineThickness').value);
+    const fuzz = parseInt(document.getElementById('fuzz').value);
+    const texture = parseInt(document.getElementById('texture').value);
 
-    // Draw a preview circle at the current mouse position
-    ctx.beginPath();
-    ctx.arc(mouseX, mouseY, diameter, 0, Math.PI * 2);
-    ctx.strokeStyle = '#aaa'; // Light gray outline for the preview circle
-    ctx.lineWidth = 2;
-    ctx.setLineDash([5, 5]);  // Dashed line for the preview
-    ctx.stroke();
-    ctx.setLineDash([]);  // Reset the line dash setting
+    // Use the same function as for the final circle, but just draw the outline for preview
+    drawTexturedWigglyCircle(mouseX, mouseY, diameter, colorValue, outlineColor, outlineThickness, fuzz, texture);
 });
 
 // Add a wheel event listener to control the diameter with the mouse wheel
@@ -964,14 +1049,14 @@ canvas.addEventListener('wheel', function(event) {
     drawGrid();
     redrawCircles();
 
-    // Draw a new preview circle with updated diameter
-    ctx.beginPath();
-    ctx.arc(mouseX, mouseY, diameter, 0, Math.PI * 2);
-    ctx.strokeStyle = '#aaa';
-    ctx.lineWidth = 2;
-    ctx.setLineDash([5, 5]);
-    ctx.stroke();
-    ctx.setLineDash([]); // Reset the line dash setting
+    // Draw a new preview circle with updated diameter using the same function
+    const colorValue = document.getElementById('color').value;
+    const outlineColor = document.getElementById('outlineColor').value;
+    const outlineThickness = parseInt(document.getElementById('outlineThickness').value);
+    const fuzz = parseInt(document.getElementById('fuzz').value);
+    const texture = parseInt(document.getElementById('texture').value);
+
+    drawTexturedWigglyCircle(mouseX, mouseY, diameter, colorValue, outlineColor, outlineThickness, fuzz, texture);
 });
 
 // Remove the preview circle when the mouse leaves the canvas
@@ -1035,29 +1120,8 @@ canvas.addEventListener('click', function(event) {
     const texture = parseInt(document.getElementById('texture').value);
     const group = parseInt(document.getElementById('group').value);
 
-    // Draw the circle fill
-    ctx.beginPath();
-    ctx.arc(clickX, clickY, diameter, 0, Math.PI * 2);
-    ctx.fillStyle = getColorFromValue(colorValue);
-    ctx.fill();
-
-    // Outline handling based on the outlineThickness value
-    if (outlineThickness === -2) {
-        // Render a half-outline
-        ctx.beginPath();
-        ctx.arc(clickX, clickY, diameter, 0, Math.PI); // Half circle (half outline)
-        ctx.strokeStyle = getColorFromValue(outlineColorValue);
-        ctx.lineWidth = 1; // Thin line for half-outline
-        ctx.stroke();
-    } else if (outlineThickness >= 0) {
-        // Render a full outline for valid positive thickness
-        ctx.lineWidth = outlineThickness;
-        ctx.strokeStyle = getColorFromValue(outlineColorValue);
-        ctx.stroke();
-    } else if (outlineThickness < -2) {
-        // No outline if outlineThickness is -1, -3 or any negative value lower than -2
-        // No stroke method will be called in this case
-    }
+    // Draw the circle fill and wiggly outline based on the fuzz and texture value
+    drawTexturedWigglyCircle(clickX, clickY, diameter, colorValue, outlineColorValue, outlineThickness, fuzz, texture);
 
     // Save circle data
     circles.push({
