@@ -169,23 +169,7 @@
         <div class="control-panel">
             <h3>Paintballz Properties</h3>
             
-            <div class="form-group">
-                <label>Select Petz Type: 
-                    <select id="petzType" onchange="updateBaseBallDropdown()">
-                        <option value="dogz">Dogz</option>
-                        <option value="catz">Catz</option>
-                        <option value="babyz">Babyz</option>
-                        <option value="addballz" selected>Add Ballz</option>
-                    </select>
-                </label>
-        
-                <label id="baseBallLabel" style="display: none;">Base Ballz #:
-                    <input list="baseBallOptions" id="baseBall" style="display:none;">
-                    <datalist id="baseBallOptions"></datalist>
-                </label>
-        
-                <label id="addBallLabel">Add Ballz #: <input type="number" id="addBallNumber" min="67" value="67"></label>
-        
+            <div class="form-group">        
                 <label>Diameter (% of base): <input type="number" id="diameter" value="30"></label>
                 <label>Color: 
                     <input list="colorOptions" id="color" name="color">
@@ -307,6 +291,22 @@
             </div>
             
             <h3>Global Properties</h3>
+
+            <label>Select Petz Type: 
+                <select id="petzType" onchange="updateBaseBallDropdown()">
+                    <option value="dogz">Dogz</option>
+                    <option value="catz">Catz</option>
+                    <option value="babyz">Babyz</option>
+                    <option value="addballz" selected>Add Ballz</option>
+                </select>
+            </label>
+    
+            <label id="baseBallLabel" style="display: none;">Base Ballz #:
+                <input list="baseBallOptions" id="baseBall" style="display:none;">
+                <datalist id="baseBallOptions"></datalist>
+            </label>
+    
+            <label id="addBallLabel">Add Ballz #: <input type="number" id="addBallNumber" min="67" value="67"></label>
 
             <label>Transform for Roll/Pitch/Yaw:
                 <input type="checkbox" id="transformRotation">
@@ -896,14 +896,6 @@ canvas.addEventListener('click', function(event) {
     const fuzz = parseInt(document.getElementById('fuzz').value);
     const texture = parseInt(document.getElementById('texture').value);
     const group = parseInt(document.getElementById('group').value);
-
-    let baseBall;
-    const petzType = document.getElementById('petzType').value;
-    if (petzType === 'addballz') {
-        baseBall = document.getElementById('addBallNumber').value;
-    } else {
-        baseBall = document.getElementById('baseBall').value;
-    }
     
     // Draw the circle
     ctx.beginPath();
@@ -914,9 +906,7 @@ canvas.addEventListener('click', function(event) {
     ctx.strokeStyle = getColorFromValue(outlineColorValue);
     ctx.stroke();
 
-    // Save the circle data with raw x, y values before applying multiplier
     circles.push({
-        baseBall: baseBall,
         x: x.toFixed(2), y: y.toFixed(2), z: z, diameter: diameter, 
         color: colorValue, fuzz: fuzz, outlineColor: outlineColorValue, 
         outlineThickness: outlineThickness, texture: texture, group: group
@@ -1195,7 +1185,7 @@ function loadFromTSVinferRPY() {
 
 function loadDefaultLNZ() {
     // Default example LNZ content
-    const defaultLNZ = `baseball\tdiameter\tdirection (x,y,z)\tcolor\toutlinecolor\tfuzz\toutline\tgroup\ttexture\tanchored
+    const defaultLNZ = `;baseball\tdiameter\tdirection (x,y,z)\tcolor\toutlinecolor\tfuzz\toutline\tgroup\ttexture\tanchored
 6\t10\t0.36,-0.22,1.00\t33\t244\t0\t-1\t-1\t1\t0
 6\t10\t0.32,-0.12,1.00\t33\t244\t0\t-1\t-1\t1\t0
 6\t10\t0.26,-0.04,1.00\t33\t244\t0\t-1\t-1\t1\t0
@@ -1230,39 +1220,38 @@ function loadDefaultLNZ() {
 
 // Display the TSV
 function displayTSV() {
-    // Fetch the global settings
     const coordinateMultiplier = parseFloat(document.getElementById('coordinateMultiplier').value);
     const anchored = document.getElementById('anchored').checked;
-
-    // Prepare the header for the TSV
-    let tsvContent = ";baseball\tdiameter\tdirection (x,y,z)\tcolor\toutlinecolor\tfuzz\toutline\tgroup\ttexture\tanchored\n";
-
-    // Reverse so that first Paintballz placed appear first in the LNZ
-    const reversedCircles = [...circles].reverse();
     
-    // Loop through all Paintballz to generate LNZ
+    // Get the global baseBall once
+    let baseBall;
+    const petzType = document.getElementById('petzType').value;
+    if (petzType === 'addballz') {
+        baseBall = document.getElementById('addBallNumber').value;
+    } else {
+        baseBall = document.getElementById('baseBall').value;
+    }
+
+    let tsvContent = ";baseball\tdiameter\tdirection (x,y,z)\tcolor\toutlinecolor\tfuzz\toutline\tgroup\ttexture\tanchored\n";
+    const reversedCircles = [...circles].reverse();
+
     reversedCircles.forEach(circle => {
-            // Apply the coordinate multiplier globally to x and y values
-            let x = (circle.x * coordinateMultiplier).toFixed(2);
-            let y = (circle.y * coordinateMultiplier).toFixed(2);
-            let z = circle.z.toFixed(2);
+        let x = (circle.x * coordinateMultiplier).toFixed(2);
+        let y = (circle.y * coordinateMultiplier).toFixed(2);
+        let z = circle.z.toFixed(2);
 
-            // Apply the roll/pitch/yaw transformation only for LNZ output
-            if (document.getElementById('transformRotation').checked) {
-                const transformed = applyTransform(x, y, z);
-                x = transformed.x.toFixed(2);
-                y = transformed.y.toFixed(2);
-                z = transformed.z.toFixed(2);
-            }
+        if (document.getElementById('transformRotation').checked) {
+            const transformed = applyTransform(x, y, z);
+            x = transformed.x.toFixed(2);
+            y = transformed.y.toFixed(2);
+            z = transformed.z.toFixed(2);
+        }
 
-            // Apply the anchored setting globally
-            const anchoredColumn = anchored ? '\t0' : '';
+        const anchoredColumn = anchored ? '\t0' : '';
 
-            // Generate the TSV row for the current Paintballz
-            tsvContent += `${circle.baseBall}\t${circle.diameter}\t${x},${y},${z}\t${circle.color}\t${circle.outlineColor}\t${circle.fuzz}\t${circle.outlineThickness}\t${circle.group}\t${circle.texture}${anchoredColumn}\n`;
-        });
+        tsvContent += `${baseBall}\t${circle.diameter}\t${x},${y},${z}\t${circle.color}\t${circle.outlineColor}\t${circle.fuzz}\t${circle.outlineThickness}\t${circle.group}\t${circle.texture}${anchoredColumn}\n`;
+    });
 
-    // Set the TSV content in the output textarea
     document.getElementById('tsvOutput').value = tsvContent;
 }
 </script>
