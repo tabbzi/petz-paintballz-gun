@@ -2,6 +2,7 @@
 Web app using HTML5 + Java to draw and export LNZ Paint Ballz
 
 ## To-Do
+- [ ]  Change output to comma-delimited to be very explicit!
 - [ ]  Make helper sphere less confusing
 - [ ]  Make labels on draw area more clear
 - [ ]  Normalize load from LNZ to eliminate any roll / pitch / yaw transformations back to (0,0,1) (figure out that math)
