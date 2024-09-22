@@ -3,13 +3,13 @@ Web app using HTML5 + Java to draw and export LNZ Paint Ballz
 
 ## To-Do
 - [ ]  Host live version on GitHub.io
-- [ ]  Remove extra rotation function
+- [x]  Remove extra rotation function
 - [ ]  Add a copy button
 - [ ]  Add a hover cursor circle to see where placing
 - [ ]  Add a delete circle functionality
 - [ ]  Check for correct roll / pitch / yaw
 - [ ]  Add preset roll yaw pitch for centered on back top front right left bottom of ball with visual guide
-- [ ]  Allow comma-delimited LNZ input in addition to tab-delimited (or just remove commas from input)
+- [x]  Allow comma-delimited LNZ input in addition to tab-delimited (or just remove commas from input)
 - [ ]  Make helper sphere less confusing
 - [ ]  Normalize load from LNZ to eliminate any roll / pitch / yaw transformations back to (0,0,1) (figure out that math)
 - [ ]  Remove nonfunctional function for autopopulating dropdown with color map
