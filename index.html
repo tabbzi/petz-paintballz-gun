@@ -1068,8 +1068,8 @@ function setRotation(view) {
     switch(view) {
         case 'front':
             roll = 0;
-            pitch = 0;
-            yaw = Math.PI;
+            pitch = Math.PI;
+            yaw = 0;
             break;
         case 'back':
             roll = 0;
@@ -1077,13 +1077,13 @@ function setRotation(view) {
             yaw = 0;
             break;
         case 'top':
-            roll = Math.PI / 2;
-            pitch = 0;
+            roll = -Math.PI / 2;
+            pitch = Math.PI;
             yaw = 0;
             break;
         case 'bottom':
-            roll = -Math.PI / 2;
-            pitch = 0;
+            roll = Math.PI / 2;
+            pitch = Math.PI;
             yaw = 0;
             break;
         case 'left':
