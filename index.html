@@ -1522,7 +1522,7 @@ function displayTSV() {
 
         const anchoredColumn = anchored ? '\t0' : '';
 
-        tsvContent += `${baseBall}\t${circle.diameter}\t${x},${y},${z}\t${circle.color}\t${circle.outlineColor}\t${circle.fuzz}\t${circle.outlineThickness}\t${circle.group}\t${circle.texture}${anchoredColumn}\n`;
+        tsvContent += `${baseBall},${circle.diameter},${x},${y},${z},${circle.color},${circle.outlineColor},${circle.fuzz},${circle.outlineThickness},${circle.group},${circle.texture}${anchoredColumn}\n`;
     });
 
     // reversedCircles.forEach(circle => {
