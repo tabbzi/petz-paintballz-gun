@@ -12,15 +12,14 @@
             font-size: 10px;
             background-color: #2f2f2f;
             color: #e0e0e0;
-            margin: 0;
-            padding: 20px;
+            margin: 5px;
+            padding: 5px;
         }
 
         .note {
             font-family: 'Roboto Mono';
             font-size: 8px;
             color: #e0e0e0;
-            margin: 0;
         }
 
         h1 {
@@ -62,6 +61,7 @@
             display: flex;
             flex-direction: column;
             margin-right: 10px;
+            padding: 10px;
         }
 
         canvas {
@@ -160,6 +160,13 @@
             <label for="yaw">Yaw: 
                 <input type="range" id="yaw" min="-3.14" max="3.14" step="0.01" value="0">
             </label>
+
+            <button onclick="setRotation('front')">Front</button>
+            <button onclick="setRotation('back')">Back</button>
+            <button onclick="setRotation('top')">Top</button>
+            <button onclick="setRotation('bottom')">Bottom</button>
+            <button onclick="setRotation('left')">Left</button>
+            <button onclick="setRotation('right')">Right</button>
         </div>
     </div>
 
@@ -169,6 +176,8 @@
         <div class="control-panel">
             <h3>Paintballz Properties</h3>
             
+            <p class="note">These settings apply to <i>each</i> Paintballz placed!</p>
+
             <div class="form-group">        
                 <label>Diameter (% of base): <input type="number" id="diameter" value="30"></label>
                 <label>Color: 
@@ -292,6 +301,8 @@
             
             <h3>Global Properties</h3>
 
+            <p class="note">These settings apply to <i>all</i> output Paintballz!</p>
+
             <label>Select Petz Type: 
                 <select id="petzType" onchange="updateBaseBallDropdown()">
                     <option value="dogz">Dogz</option>
@@ -325,9 +336,11 @@
 
             <textarea id="tsvOutput"></textarea>
 
-            <button onclick="loadFromTSV()">Load from LNZ!</button>
+            <button id="copyTextButton">Copy LNZ code</button>
 
-            <button onclick="loadDefaultLNZ()">Load Rubby Ducky LNZ!</button>
+            <button onclick="loadFromTSV()">Load from LNZ</button>
+
+            <button onclick="loadDefaultLNZ()">Load example Rubby Ducky LNZ!</button>
             
         </div>
 </div>
@@ -876,6 +889,44 @@ function redrawCircles() {
     });
 }
 
+// Track mouse movement to display a preview circle on hover
+canvas.addEventListener('mousemove', function(event) {
+    const rect = canvas.getBoundingClientRect();
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+
+    // Clear the canvas before drawing the preview
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Redraw the grid and existing circles
+    drawGrid();
+    redrawCircles();
+
+    // Get the current diameter from the input field
+    const diameter = parseInt(document.getElementById('diameter').value);
+
+    // Draw a preview circle at the current mouse position
+    ctx.beginPath();
+    ctx.arc(mouseX, mouseY, diameter, 0, Math.PI * 2);
+    ctx.strokeStyle = '#aaa'; // Light gray outline for the preview circle
+    ctx.lineWidth = 2;
+    ctx.setLineDash([5, 5]);  // Dashed line for the preview
+    ctx.stroke();
+    ctx.setLineDash([]);  // Reset the line dash setting
+});
+
+// Remove the preview circle when the mouse leaves the canvas
+canvas.addEventListener('mouseout', function() {
+    // Clear the canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Redraw the grid and existing circles
+    drawGrid();
+    redrawCircles();
+});
+
 // Handle click event to draw on the canvas
 canvas.addEventListener('click', function(event) {
     const rect = canvas.getBoundingClientRect();
@@ -973,6 +1024,43 @@ function reverseRotation(x, y, z, yaw, pitch, roll = 0) {
     y = tempY;
 
     return { x, y, z };
+}
+
+// Function to set roll, pitch, and yaw based on face button
+function setRotation(view) {
+    switch(view) {
+        case 'front':
+            roll = 0;
+            pitch = 0;
+            yaw = 0;
+            break;
+        case 'back':
+            roll = 0;
+            pitch = 0;
+            yaw = Math.PI;
+            break;
+        case 'top':
+            roll = 0;
+            pitch = Math.PI / 2;
+            yaw = 0;
+            break;
+        case 'bottom':
+            roll = 0;
+            pitch = -Math.PI / 2;
+            yaw = 0;
+            break;
+        case 'left':
+            roll = 0;
+            pitch = 0;
+            yaw = Math.PI / 2;
+            break;
+        case 'right':
+            roll = 0;
+            pitch = 0;
+            yaw = -Math.PI / 2;
+            break;
+    }
+    drawSphere();  // Redraw the sphere with the new rotation
 }
 
 // Function to apply the transform if the checkbox is checked
@@ -1254,6 +1342,15 @@ function displayTSV() {
 
     document.getElementById('tsvOutput').value = tsvContent;
 }
+
+// Function to copy text from the textarea
+document.getElementById('copyTextButton').addEventListener('click', function() {
+    const tsvOutput = document.getElementById('tsvOutput');
+    tsvOutput.select();
+    document.execCommand('copy'); // Copy the selected text to clipboard
+    alert('Copied to clipboard');
+});
+
 </script>
 
 </body>
