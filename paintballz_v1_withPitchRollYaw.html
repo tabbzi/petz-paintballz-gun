@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Petz Paintballz Gun</title>
+        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+        <style>
+        body {
+            font-family: 'Press Start 2P';
+            font-size: 10px;
+            background-color: #2f2f2f;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .note {
+            font-family: 'Roboto Mono';
+            font-size: 8px;
+            color: #e0e0e0;
+            margin: 0;
+        }
+
+        h1 {
+            color: #ffffff;
+            text-align: center;
+            text-shadow: 2px 2px 4px #000000;
+        }
+
+        h2 {
+            color: #ffffff;
+            text-align: center;
+            text-shadow: 2px 2px 4px #000000;
+        }
+
+        a:link, a:visited {
+            color: #00bfa5;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #1de9b6;
+            text-decoration: underline;
+        }
+
+        a:active {
+            color: #00bfa5;
+        }
+
+        .container {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            background-color: #424242;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .drawing-area, .sphere-area {
+            display: flex;
+            flex-direction: column;
+            margin-right: 10px;
+        }
+
+        canvas {
+            border: 3px solid #616161;
+            background-color: #303030;
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .control-panel {
+            margin-top: 10px;
+            margin-right: 10px;
+            padding: 5px;
+            color: #bdbdbd;
+        }
+
+        select, input, button {
+                font-family: 'Press Start 2P';
+                font-size: 8px;
+                background-color: #616161;
+                color: #ffffff;
+                border: 2px solid #757575;
+                padding: 8px;
+                margin: 5px;
+                border-radius: 5px;
+                outline: none;
+                box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+                display: block;
+                width: 100%;
+            }
+
+        button {
+            margin-top: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #757575;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            background-color: #303030;
+            color: #e0e0e0;
+            border: 3px solid #616161;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 12px;
+            font-family: 'Roboto Mono';
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Scrollbar style */
+        textarea::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        textarea::-webkit-scrollbar-thumb {
+            background-color: #757575;
+            border-radius: 10px;
+        }
+
+        textarea::-webkit-scrollbar-track {
+            background-color: #424242;
+            border-radius: 10px;
+        }
+        </style>
+    </head>
+<body>
+    <h1>Petz Paintballz Gun</h1>
+    <p>A handy web app for placing and exporting LNZ Paint Ballz!</p>
+    <p>- Kathleen @ <a href="https://www.tabbloza.com/petz">Tabbloza</a></p>
+
+    <div class="container">
+        <div class="drawing-area">
+
+    <canvas id="paintCanvas" width="500" height="500"></canvas>
+
+    <div class="sphere-area">
+        <!-- Canvas for drawing the 3D Sphere -->
+        <canvas id="sphereCanvas" width="300" height="300"></canvas>
+
+        <!-- Controls for pitch, yaw, roll -->
+        <div>
+            <label for="roll">Roll: 
+                <p class="note"></p>
+                <input type="range" id="roll" min="-3.14" max="3.14" step="0.01" value="0">
+            </label>
+            <label for="pitch">Pitch: 
+                <input type="range" id="pitch" min="-3.14" max="3.14" step="0.01" value="0">
+            </label>
+            <label for="yaw">Yaw: 
+                <input type="range" id="yaw" min="-3.14" max="3.14" step="0.01" value="0">
+            </label>
+        </div>
+    </div>
+
+    </div>
+
+    <div class="container">
+        <div class="control-panel">
+            <h3>Paintballz Properties</h3>
+            
+            <div class="form-group">
+                <label>Select Petz Type: 
+                    <select id="petzType" onchange="updateBaseBallDropdown()">
+                        <option value="dogz">Dogz</option>
+                        <option value="catz">Catz</option>
+                        <option value="addballz" selected>Add Ballz</option>
+                    </select>
+                </label>
+        
+                <label id="baseBallLabel" style="display: none;">Base Ballz #:
+                    <input list="baseBallOptions" id="baseBall" style="display:none;">
+                    <datalist id="baseBallOptions"></datalist>
+                </label>
+        
+                <label id="addBallLabel">Add Ballz #: <input type="number" id="addBallNumber" min="67" value="67"></label>
+        
+                <label>Diameter (% of base): <input type="number" id="diameter" value="30"></label>
+                <label>Color: 
+                    <input list="colorOptions" id="color" name="color">
+                    <datalist id="colorOptions">
+                        <option value="0" style="background-color: #000000;">0 (basic black)</option>
+                        <option value="1" style="background-color: #840000;">1 (basic dark red)</option>
+                        <option value="2" style="background-color: #008400;">2 (basic green)</option>
+                        <option value="3" style="background-color: #848400;">3 (basic yellow)</option>
+                        <option value="4" style="background-color: #000084;">4 (basic blue)</option>
+                        <option value="5" style="background-color: #840084;">5 (basic purple)</option>
+                        <option value="6" style="background-color: #008484;">6 (basic teal)</option>
+                        <option value="7" style="background-color: #848484;">7 (basic gray)</option>
+                        <option value="8" style="background-color: #C6C6C6;">8 (basic white)</option>
+                        <option value="9" style="background-color: #C60000;">9 (basic red)</option>
+                        
+                        <option value="15" style="background-color: #D6CEC6;">10s (whites)</option>
+                        
+                        <option value="25" style="background-color: #5A5A5A;">20s (grays)</option>
+                        
+                        <option value="35" style="background-color: #181818;">30s (blacks)</option>
+                        
+                        <option value="45" style="background-color: #BDA57B;">40s (creams)</option>
+                        
+                        <option value="55" style="background-color: #632918;">50s (red-browns)</option>
+                        
+                        <option value="65" style="background-color: #9C5A08;">60s (oranges)</option>
+                        
+                        <option value="75" style="background-color: #D68C9C;">70s (pinks)</option>
+                        
+                        <option value="85" style="background-color: #942100;">80s (reds)</option>
+                        
+                        <option value="95" style="background-color: #522908;">90s (browns)</option>
+                        
+                        <option value="105" style="background-color: #947331;">100s (fawns)</option>
+                        
+                        <option value="115" style="background-color: #4A525A;">110s (blue-grays)</option>
+                        
+                        <option value="125" style="background-color: #8C7B63;">120s (ashes)</option>
+                        
+                        <option value="135" style="background-color: #107B18;">130s (greens)</option>
+                        
+                        <option value="145" style="background-color: #2939B5;">140s (blues)</option>
+                        
+                        <option value="155" style="background-color: #6BC6FF;">150s (ice-blues)</option>
+                        
+                        <option value="165" style="background-color: #C6C608;">160s (yellows)</option>
+                        
+                        <option value="175" style="background-color: #73A5B5;">170s (lavenders)</option>
+                        
+                        <option value="185" style="background-color: #A56B5A;">180s (roses)</option>
+                        
+                        <option value="195" style="background-color: #395A63;">190s (teals)</option>
+                        
+                        <option value="244" style="background-color: #000000;">244 (pure black)</option>
+                    </datalist>
+                </label>
+        
+                <label>Fuzz: <input type="number" id="fuzz" value="0"></label>
+        
+                <label>Outline Color: 
+                    <input list="outlineColorOptions" id="outlineColor" name="outlineColor">
+                    <datalist id="outlineColorOptions">
+                        <option value="0" style="background-color: #000000;">0 (basic black)</option>
+                        <option value="1" style="background-color: #840000;">1 (basic dark red)</option>
+                        <option value="2" style="background-color: #008400;">2 (basic green)</option>
+                        <option value="3" style="background-color: #848400;">3 (basic yellow)</option>
+                        <option value="4" style="background-color: #000084;">4 (basic blue)</option>
+                        <option value="5" style="background-color: #840084;">5 (basic purple)</option>
+                        <option value="6" style="background-color: #008484;">6 (basic teal)</option>
+                        <option value="7" style="background-color: #848484;">7 (basic gray)</option>
+                        <option value="8" style="background-color: #C6C6C6;">8 (basic white)</option>
+                        <option value="9" style="background-color: #C60000;">9 (basic red)</option>
+                        
+                        <option value="15" style="background-color: #D6CEC6;">10s (whites)</option>
+                        
+                        <option value="25" style="background-color: #5A5A5A;">20s (grays)</option>
+                        
+                        <option value="35" style="background-color: #181818;">30s (blacks)</option>
+                        
+                        <option value="45" style="background-color: #BDA57B;">40s (creams)</option>
+                        
+                        <option value="55" style="background-color: #632918;">50s (red-browns)</option>
+                        
+                        <option value="65" style="background-color: #9C5A08;">60s (oranges)</option>
+                        
+                        <option value="75" style="background-color: #D68C9C;">70s (pinks)</option>
+                        
+                        <option value="85" style="background-color: #942100;">80s (reds)</option>
+                        
+                        <option value="95" style="background-color: #522908;">90s (browns)</option>
+                        
+                        <option value="105" style="background-color: #947331;">100s (fawns)</option>
+                        
+                        <option value="115" style="background-color: #4A525A;">110s (blue-grays)</option>
+                        
+                        <option value="125" style="background-color: #8C7B63;">120s (ashes)</option>
+                        
+                        <option value="135" style="background-color: #107B18;">130s (greens)</option>
+                        
+                        <option value="145" style="background-color: #2939B5;">140s (blues)</option>
+                        
+                        <option value="155" style="background-color: #6BC6FF;">150s (ice-blues)</option>
+                        
+                        <option value="165" style="background-color: #C6C608;">160s (yellows)</option>
+                        
+                        <option value="175" style="background-color: #73A5B5;">170s (lavenders)</option>
+                        
+                        <option value="185" style="background-color: #A56B5A;">180s (roses)</option>
+                        
+                        <option value="195" style="background-color: #395A63;">190s (teals)</option>
+                        
+                        <option value="244" style="background-color: #000000;">244 (pure black)</option>
+                    </datalist>
+                </label>
+        
+                <label>Outline Thickness: <input type="number" id="outlineThickness" value="-1"></label>
+                <label>Texture: <input type="number" id="texture" value="1"></label>
+                <label>Group: <input type="number" id="group" value="-1"></label>
+            </div>
+            
+            <h3>Global Properties</h3>
+
+            <label>Transform for Roll/Pitch/Yaw:
+                <input type="checkbox" id="transformRotation">
+            </label>
+            
+            <label>Anchored:
+                <input type="checkbox" id="anchored" checked>
+            </label>
+        
+            <label>Coordinate Multiplier: 
+                <input type="number" id="coordinateMultiplier" value="4" step="0.5">
+                <p class="note">The <b>Coordinate Multiplier</b> controls spacing of Paint Ballz over Ballz.</p>
+            </label>
+
+            <button onclick="displayTSV()">Display LNZ!</button>
+
+            <textarea id="tsvOutput"></textarea>
+
+            <button onclick="loadFromTSV()">Load from LNZ!</button>
+            
+        </div>
+</div>
+
+<script>
+       const canvas = document.getElementById('paintCanvas');
+        const sphereCanvas = document.getElementById('sphereCanvas');
+        const ctx = canvas.getContext('2d');
+        const sphereCtx = sphereCanvas.getContext('2d');
+        let circles = [];
+
+        // Initial roll, pitch, yaw values
+        let roll = 0, pitch = 0, yaw = 0;
+
+        // Array to store points of the sphere (latitude and longitude based)
+        const spherePoints = [];
+        const radius = 100;
+
+        // Generate points for the sphere
+        for (let lat = -Math.PI / 2; lat <= Math.PI / 2; lat += Math.PI / 12) {
+            for (let lon = 0; lon <= 2 * Math.PI; lon += Math.PI / 12) {
+                const x = Math.cos(lat) * Math.cos(lon);
+                const y = Math.cos(lat) * Math.sin(lon);
+                const z = Math.sin(lat);
+                spherePoints.push({ x, y, z });
+            }
+        }
+
+        function project(x, y, z) {
+            const scale = radius / (radius + z); // Simple perspective projection
+            return {
+                x: (sphereCanvas.width / 2) + x * scale * radius,
+                y: (sphereCanvas.height / 2) + y * scale * radius
+            };
+        }
+
+        // Draw the 3D sphere on the 2D canvas
+        function drawSphere() {
+            sphereCtx.clearRect(0, 0, sphereCanvas.width, sphereCanvas.height);
+            spherePoints.forEach(point => {
+                const rotated = rotate(point.x, point.y, point.z);
+                const projected = project(rotated.x, rotated.y, rotated.z);
+                
+                // Draw a small circle for each point on the sphere
+                sphereCtx.beginPath();
+                sphereCtx.arc(projected.x, projected.y, 3, 0, Math.PI * 2);
+                sphereCtx.fillStyle = rotated.z > 0 ? 'red' : 'gray'; // Front half in red, back half in gray
+                sphereCtx.fill();
+            });
+
+            // Show current axis position on the sphere
+            const originProjected = project(0, 0, 1); // The "forward" point on the sphere
+            sphereCtx.beginPath();
+            sphereCtx.arc(originProjected.x, originProjected.y, 5, 0, Math.PI * 2);
+            sphereCtx.fillStyle = 'blue'; // Mark the forward point in blue
+            sphereCtx.fill();
+        }
+
+        // Update rotations based on slider input
+        document.getElementById('roll').addEventListener('input', function () {
+            roll = parseFloat(this.value);
+            drawSphere();
+        });
+
+        document.getElementById('pitch').addEventListener('input', function () {
+            pitch = parseFloat(this.value);
+            drawSphere();
+        });
+
+        document.getElementById('yaw').addEventListener('input', function () {
+            yaw = parseFloat(this.value);
+            drawSphere();
+        });
+
+        // Draw the sphere initially
+        drawSphere();
+
+        // Transform x, y, z based on roll/pitch/yaw
+        function applyTransform(x, y, z) {
+            if (document.getElementById('transformRotation').checked) {
+                const rotated = rotate(x, y, z);
+                return { x: rotated.x, y: rotated.y, z: rotated.z };
+            }
+            return { x, y, z };
+        }
+
+    const dogzBaseBallz = [
+        "0: L ankle", "1: L eyebrow1", "2: L eyebrow2", "3: L eyebrow3", 
+        "4: L ear1", "5: L ear2", "6: L ear3", "7: L elbow", "8: L eye", 
+        "9: L finger1", "10: L finger2", "11: L finger3", "12: L foot",
+        "13: L hand", "14: L iris", "15: L jowl", "16: L knee", "17: L nostril",
+        "18: L shoulder", "19: L hip", "20: L toe1", "21: L toe2", "22: L toe3", 
+        "23: L wrist", "24: R ankle", "25: R eyebrow1", "26: R eyebrow2", "27: R eyebrow3",
+        "28: R ear1", "29: R ear2", "30: R ear3", "31: R elbow", "32: R eye",
+        "33: R finger1", "34: R finger2", "35: R finger3", "36: R foot", "37: R hand", 
+        "38: R iris", "39: R jowl", "40: R knee", "41: R nostril", "42: R shoulder",
+        "43: R hip", "44: R toe1", "45: R toe2", "46: R toe3", "47: R wrist", 
+        "48: belly", "49: butt", "50: chest", "51: chin", "52: head", "53: jaw", 
+        "54: neck", "55: nose (bottom)", "56: snout", "57: tail1", "58: tail2", 
+        "59: tail3", "60: tail4", "61: tail5", "62: tail6", "63: tongue1", "64: tongue2", 
+        "65: Z-trans", "66: Z-orient"
+    ];
+
+    const catzBaseBallz = [
+        "0: ankleL", "1: ankleR", "2: belly", "3: butt", "4: cheekL", "5: cheekR", 
+        "6: chest", "7: chin", "8: earL1", "9: earL2", "10: earR1", "11: earR2", 
+        "12: elbowL", "13: elbowR", "14: eyeL", "15: eyeR", "16: fingerL1", "17: fingerL2", 
+        "18: fingerL3", "19: fingerR1", "20: fingerR2", "21: fingerR3", "22: handL", 
+        "23: handR", "24: head", "25: hipL", "26: hipR", "27: irisL", "28: irisR", 
+        "29: jaw", "30: jowlL", "31: jowlR", "32: kneeL", "33: kneeR", "34: knuckleL", 
+        "35: knuckleR", "36: neck", "37: nose", "38: shoulderL", "39: shoulderR", 
+        "40: snout", "41: soleL", "42: soleR", "43: tail1", "44: tail2", "45: tail3", 
+        "46: tail4", "47: tail5", "48: tail6", "49: toeL1", "50: toeL2", "51: toeL3", 
+        "52: toeR1", "53: toeR2", "54: toeR3", "55: tongue1", "56: tongue2", "57: whiskerL1", 
+        "58: whiskerL2", "59: whiskerL3", "60: whiskerR1", "61: whiskerR2", "62: whiskerR3", 
+        "63: wristL", "64: wristR", "65: Z-orient", "66: Z-trans"
+    ];
+
+    // Color mapping for predefined colors
+    const colorMap = {
+        0: '#000000',   // basic black
+        1: '#840000',   // basic dark red
+        2: '#008400',   // basic green
+        3: '#848400',   // basic yellow
+        4: '#000084',   // basic blue
+        5: '#840084',   // basic purple
+        6: '#008484',   // basic teal
+        7: '#848484',   // basic gray
+        8: '#C6C6C6',   // basic white
+        9: '#C60000',   // basic red
+        10: '#D6CEC6',
+        11: '#D6CEC6',
+        12: '#D6CEC6',
+        13: '#D6CEC6',
+        14: '#D6CEC6',
+        15: '#D6CEC6',
+        16: '#D6CEC6',
+        17: '#D6CEC6',
+        18: '#D6CEC6',
+        19: '#D6CEC6',
+        20: '#5A5A5A',
+        21: '#5A5A5A',
+        22: '#5A5A5A',
+        23: '#5A5A5A',
+        24: '#5A5A5A',
+        25: '#5A5A5A',
+        26: '#5A5A5A',
+        27: '#5A5A5A',
+        28: '#5A5A5A',
+        29: '#5A5A5A',
+        30: '#181818',
+        31: '#181818',
+        32: '#181818',
+        33: '#181818',
+        34: '#181818',
+        35: '#181818',
+        36: '#181818',
+        37: '#181818',
+        38: '#181818',
+        39: '#181818',
+        40: '#BDA57B',
+        41: '#BDA57B',
+        42: '#BDA57B',
+        43: '#BDA57B',
+        44: '#BDA57B',
+        45: '#BDA57B',
+        46: '#BDA57B',
+        47: '#BDA57B',
+        48: '#BDA57B',
+        49: '#BDA57B',
+        50: '#632918',
+        51: '#632918',
+        52: '#632918',
+        53: '#632918',
+        54: '#632918',
+        55: '#632918',
+        56: '#632918',
+        57: '#632918',
+        58: '#632918',
+        59: '#632918',
+        60: '#9C5A08',
+        61: '#9C5A08',
+        62: '#9C5A08',
+        63: '#9C5A08',
+        64: '#9C5A08',
+        65: '#9C5A08',
+        66: '#9C5A08',
+        67: '#9C5A08',
+        68: '#9C5A08',
+        69: '#9C5A08',
+        70: '#D68C9C',
+        71: '#D68C9C',
+        72: '#D68C9C',
+        73: '#D68C9C',
+        74: '#D68C9C',
+        75: '#D68C9C',
+        76: '#D68C9C',
+        77: '#D68C9C',
+        78: '#D68C9C',
+        79: '#D68C9C',
+        80: '#942100',
+        81: '#942100',
+        82: '#942100',
+        83: '#942100',
+        84: '#942100',
+        85: '#942100',
+        86: '#942100',
+        87: '#942100',
+        88: '#942100',
+        89: '#942100',
+        90: '#522908',
+        91: '#522908',
+        92: '#522908',
+        93: '#522908',
+        94: '#522908',
+        95: '#522908',
+        96: '#522908',
+        97: '#522908',
+        98: '#522908',
+        99: '#522908',
+        100: '#947331',
+        101: '#947331',
+        102: '#947331',
+        103: '#947331',
+        104: '#947331',
+        105: '#947331',
+        106: '#947331',
+        107: '#947331',
+        108: '#947331',
+        109: '#947331',
+        110: '#4A525A',
+        111: '#4A525A',
+        112: '#4A525A',
+        113: '#4A525A',
+        114: '#4A525A',
+        115: '#4A525A',
+        116: '#4A525A',
+        117: '#4A525A',
+        118: '#4A525A',
+        119: '#4A525A',
+        120: '#8C7B63',
+        121: '#8C7B63',
+        122: '#8C7B63',
+        123: '#8C7B63',
+        124: '#8C7B63',
+        125: '#8C7B63',
+        126: '#8C7B63',
+        127: '#8C7B63',
+        128: '#8C7B63',
+        129: '#8C7B63',
+        130: '#107B18',
+        131: '#107B18',
+        132: '#107B18',
+        133: '#107B18',
+        134: '#107B18',
+        135: '#107B18',
+        136: '#107B18',
+        137: '#107B18',
+        138: '#107B18',
+        139: '#107B18',
+        140: '#2939B5',
+        141: '#2939B5',
+        142: '#2939B5',
+        143: '#2939B5',
+        144: '#2939B5',
+        145: '#2939B5',
+        146: '#2939B5',
+        147: '#2939B5',
+        148: '#2939B5',
+        149: '#2939B5',
+        150: '#6BC6FF',
+        151: '#6BC6FF',
+        152: '#6BC6FF',
+        153: '#6BC6FF',
+        154: '#6BC6FF',
+        155: '#6BC6FF',
+        156: '#6BC6FF',
+        157: '#6BC6FF',
+        158: '#6BC6FF',
+        159: '#6BC6FF',
+        160: '#C6C608',
+        161: '#C6C608',
+        162: '#C6C608',
+        163: '#C6C608',
+        164: '#C6C608',
+        165: '#C6C608',
+        166: '#C6C608',
+        167: '#C6C608',
+        168: '#C6C608',
+        169: '#C6C608',
+        170: '#73A5B5',
+        171: '#73A5B5',
+        172: '#73A5B5',
+        173: '#73A5B5',
+        174: '#73A5B5',
+        175: '#73A5B5',
+        176: '#73A5B5',
+        177: '#73A5B5',
+        178: '#73A5B5',
+        179: '#73A5B5',
+        180: '#A56B5A',
+        181: '#A56B5A',
+        182: '#A56B5A',
+        183: '#A56B5A',
+        184: '#A56B5A',
+        185: '#A56B5A',
+        186: '#A56B5A',
+        187: '#A56B5A',
+        188: '#A56B5A',
+        189: '#A56B5A',
+        190: '#395A63',
+        191: '#395A63',
+        192: '#395A63',
+        193: '#395A63',
+        194: '#395A63',
+        195: '#395A63',
+        196: '#395A63',
+        197: '#395A63',
+        198: '#395A63',
+        199: '#395A63',
+    };
+
+    // Populate dropdown using colorMap
+    const colorSelect = document.getElementById('color');
+    colorSelect.innerHTML = '';
+    for (let key in colorMap) {
+        let option = document.createElement('option');
+        option.value = key;
+        option.style.backgroundColor = colorMap[key];
+        option.text = `${key} (${colorMap[key]})`;
+        colorSelect.appendChild(option);
+    }
+
+    // Function to get hex colors based on color value selected
+    function getColorFromValue(value) {
+        return colorMap[value] || '#000000';
+    }
+
+    // Update dropdowns for Catz or Dogz selection
+    function updateBaseBallDropdown() {
+        const petzType = document.getElementById('petzType').value;
+        const baseBallInput = document.getElementById('baseBall');
+        const baseBallDatalist = document.getElementById('baseBallOptions');
+        const addBallLabel = document.getElementById('addBallLabel');
+        const baseBallLabel = document.getElementById('baseBallLabel');
+
+        // Clear existing datalist options
+        baseBallDatalist.innerHTML = '';
+
+        if (petzType === 'dogz') {
+            baseBallInput.style.display = 'inline';
+            baseBallLabel.style.display = 'inline';
+            addBallLabel.style.display = 'none';
+
+            // Populate datalist for Dogz
+            dogzBaseBallz.forEach((ball, index) => {
+                baseBallDatalist.innerHTML += `<option value="${index}">${ball}</option>`;
+            });
+        } else if (petzType === 'catz') {
+            baseBallInput.style.display = 'inline';
+            baseBallLabel.style.display = 'inline';
+            addBallLabel.style.display = 'none';
+
+            // Populate datalist for Catz
+            catzBaseBallz.forEach((ball, index) => {
+                baseBallDatalist.innerHTML += `<option value="${index}">${ball}</option>`;
+            });
+        } else if (petzType === 'addballz') {
+            baseBallInput.style.display = 'none';
+            baseBallLabel.style.display = 'none';
+            addBallLabel.style.display = 'inline';
+        }
+    }
+
+    // Set default to Add Ballz on page load
+    window.onload = function() {
+        document.getElementById('petzType').value = 'addballz';
+        updateBaseBallDropdown();
+    }
+
+    // Canvas grid
+    function drawGrid() {
+        const gridSpacing = 50; // Set spacing between grid lines
+        const textOffset = 15; // Set offset for text labels
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+
+        // Fetch the global coordinate multiplier
+        const coordinateMultiplier = parseFloat(document.getElementById('coordinateMultiplier').value);
+
+        // Draw vertical grid lines and labels
+        ctx.beginPath();
+        ctx.strokeStyle = '#888'; // Light gray for grid lines
+        ctx.lineWidth = 1;
+        for (let x = 0; x <= canvas.width; x += gridSpacing) {
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, canvas.height);
+            ctx.stroke();
+
+            // Label the x-axis based on the multiplier, converting back to coordinate system
+            const labelValueX = ((x - centerX) / centerX * coordinateMultiplier).toFixed(2);
+            ctx.fillStyle = '#888'; // Color for axis labels
+            ctx.font = '12px Arial';
+            ctx.fillText(labelValueX, x + 2, centerY + textOffset);
+        }
+
+        // Draw horizontal grid lines and labels
+        ctx.beginPath();
+        for (let y = 0; y <= canvas.height; y += gridSpacing) {
+            ctx.moveTo(0, y);
+            ctx.lineTo(canvas.width, y);
+            ctx.stroke();
+
+            // Label the y-axis based on the multiplier, converting back to coordinate system
+            const labelValueY = ((centerY - y) / centerY * coordinateMultiplier).toFixed(2);
+            ctx.fillText(labelValueY, centerX + textOffset, y - 2);
+        }
+
+        // Draw axes lines (X and Y)
+        ctx.beginPath();
+        ctx.strokeStyle = '#555'; // Darker color for axes
+        ctx.lineWidth = 2;
+
+        // Vertical axis (Y-axis)
+        ctx.moveTo(centerX, 0);
+        ctx.lineTo(centerX, canvas.height);
+        ctx.stroke();
+
+        // Horizontal axis (X-axis)
+        ctx.moveTo(0, centerY);
+        ctx.lineTo(canvas.width, centerY);
+        ctx.stroke();
+    }
+
+// Redraw grid when multiplier changes
+document.getElementById('coordinateMultiplier').addEventListener('input', function() {
+    drawGrid();
+});
+
+// Also draw the grid when page loads
+window.onload = function() {
+    drawGrid();
+};
+
+// Function to redraw all circles after grid is drawn
+function redrawCircles() {
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+
+    const coordinateMultiplier = parseFloat(document.getElementById('coordinateMultiplier').value);
+
+    // Loop through and redraw each circle
+    circles.forEach(circle => {
+        let x = (circle.x * centerX) + centerX;
+        let y = (circle.y * centerY) + centerY;
+
+        // Draw the circle
+        ctx.beginPath();
+        ctx.arc(x, y, circle.diameter, 0, Math.PI * 2);
+        ctx.fillStyle = getColorFromValue(circle.color);
+        ctx.fill();
+        ctx.lineWidth = circle.outlineThickness;
+        ctx.strokeStyle = getColorFromValue(circle.outlineColor);
+        ctx.stroke();
+    });
+}
+
+// Handle click event to draw on the canvas
+canvas.addEventListener('click', function(event) {
+    const rect = canvas.getBoundingClientRect();
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const clickX = event.clientX - rect.left;
+    const clickY = event.clientY - rect.top;
+
+    // Normalize x, y with respect to the center of the canvas (without applying multiplier)
+    let x = (clickX - centerX) / centerX;  // Positive x = left on ballz, negative x = right on ballz, WHEN z = 1
+    let y = (clickY - centerY) / centerY;  // Positive y = down on ballz, negative y = up on ballz, WHEN z = 1
+    const z = 1;  // z is set to 1 initially, then gets transformed based on the roll/pitch/yaw values
+
+    const diameter = parseInt(document.getElementById('diameter').value);
+    const colorValue = document.getElementById('color').value;
+    const outlineColorValue = document.getElementById('outlineColor').value;  
+    const outlineThickness = parseInt(document.getElementById('outlineThickness').value);
+    const fuzz = parseInt(document.getElementById('fuzz').value);
+    const texture = parseInt(document.getElementById('texture').value);
+    const group = parseInt(document.getElementById('group').value);
+
+    let baseBall;
+    const petzType = document.getElementById('petzType').value;
+    if (petzType === 'addballz') {
+        baseBall = document.getElementById('addBallNumber').value;
+    } else {
+        baseBall = document.getElementById('baseBall').value;
+    }
+
+    // Draw the circle
+    ctx.beginPath();
+    ctx.arc(clickX, clickY, diameter, 0, Math.PI * 2);
+    ctx.fillStyle = getColorFromValue(colorValue);
+    ctx.fill();
+    ctx.lineWidth = outlineThickness;
+    ctx.strokeStyle = getColorFromValue(outlineColorValue);
+    ctx.stroke();
+
+    // Save the circle data with raw x, y values before applying multiplier
+    circles.push({
+        baseBall: baseBall,
+        x: x.toFixed(2), y: y.toFixed(2), z: z, diameter: diameter, 
+        color: colorValue, fuzz: fuzz, outlineColor: outlineColorValue, 
+        outlineThickness: outlineThickness, texture: texture, group: group
+    });
+});
+
+// Ensure the grid is redrawn whenever the multiplier changes
+document.getElementById('coordinateMultiplier').addEventListener('input', function() {
+    // Clear the canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw the grid and then redraw all circles
+    drawGrid();
+    redrawCircles();
+});
+
+// Also draw the grid and existing circles when the page loads
+window.onload = function() {
+    drawGrid();
+    redrawCircles();
+};
+
+// Function to rotate a point (x, y, z) by the current yaw, pitch, and roll values (order matters!)
+function rotate(x, y, z) {
+    // Apply yaw (Z-axis)
+    let tempX = x * Math.cos(yaw) - y * Math.sin(yaw);
+    let tempY = x * Math.sin(yaw) + y * Math.cos(yaw);
+    x = tempX;
+    y = tempY;
+
+    // Apply pitch (Y-axis)
+    let tempZ = z * Math.cos(pitch) - x * Math.sin(pitch);
+    tempX = z * Math.sin(pitch) + x * Math.cos(pitch);
+    z = tempZ;
+    x = tempX;
+
+    // Apply roll (X-axis)
+    tempY = y * Math.cos(roll) - z * Math.sin(roll);
+    tempZ = y * Math.sin(roll) + z * Math.cos(roll);
+    y = tempY;
+    z = tempZ;
+
+    return { x, y, z };
+}
+
+// Function to rotate a point (x, y, z) by the current roll, pitch, and yaw values (order matters!)
+function rotate(x, y, z) {
+    // Apply yaw (Z-axis)
+    let tempX = x * Math.cos(yaw) - y * Math.sin(yaw);
+    let tempY = x * Math.sin(yaw) + y * Math.cos(yaw);
+    x = tempX;
+    y = tempY;
+
+    // Apply pitch (Y-axis)
+    let tempZ = z * Math.cos(pitch) - x * Math.sin(pitch);
+    tempX = z * Math.sin(pitch) + x * Math.cos(pitch);
+    z = tempZ;
+    x = tempX;
+
+    // Apply roll (X-axis)
+    tempY = y * Math.cos(roll) - z * Math.sin(roll);
+    tempZ = y * Math.sin(roll) + z * Math.cos(roll);
+    y = tempY;
+    z = tempZ;
+
+    return { x, y, z };
+}
+
+// Function to apply the transform if the checkbox is checked
+function applyTransform(x, y, z) {
+    if (document.getElementById('transformRotation').checked) {
+        const rotated = rotate(x, y, z);
+        return { x: rotated.x, y: rotated.y, z: rotated.z };
+    }
+    return { x, y, z };
+}
+    
+// Function to load data from the TSV and draw it back on the canvas
+function loadFromTSV() {
+    // Clear the existing circles array and canvas
+    circles = [];
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Fetch the global settings (anchored and multiplier)
+    const coordinateMultiplier = parseFloat(document.getElementById('coordinateMultiplier').value);
+
+    // Get the TSV content from the textarea
+    const tsvContent = document.getElementById('tsvOutput').value;
+    
+    // Split the TSV content by lines
+    const lines = tsvContent.trim().split('\n');
+
+    // Start parsing from the second line (ignore the header)
+    for (let i = 1; i < lines.length; i++) {
+        const row = lines[i].split('\t');
+        
+        // Extract the values based on the TSV columns and reverse multiplier
+        const baseBall = row[0];
+        const diameter = parseFloat(row[1]);
+        const [x, y, z] = row[2].split(',').map(coord => parseFloat(coord) / coordinateMultiplier);
+        const colorValue = row[3];
+        const outlineColorValue = row[4];
+        const fuzz = parseInt(row[5]);
+        const outlineThickness = parseInt(row[6]);
+        const group = parseInt(row[7]);
+        const texture = parseInt(row[8]);
+
+        // Calculate actual canvas coordinates e.g. reverse x and y values and divide by multiplier
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const canvasX = (x * centerX) + centerX;
+        const canvasY = (y * centerY) + centerY;
+
+        // Draw the circle on the canvas
+        ctx.beginPath();
+        ctx.arc(canvasX, canvasY, diameter, 0, Math.PI * 2);
+        ctx.fillStyle = getColorFromValue(colorValue);  // Set the fill color
+        ctx.fill();
+        ctx.lineWidth = outlineThickness;
+        ctx.strokeStyle = getColorFromValue(outlineColorValue);  // Set the outline color
+        ctx.stroke();
+
+        // Save parsed circle data
+        circles.push({
+            baseBall: baseBall,
+            x: x.toFixed(2), y: y.toFixed(2), z: z, diameter: diameter, 
+            color: colorValue, fuzz: fuzz, outlineColor: outlineColorValue, 
+            outlineThickness: outlineThickness, texture: texture, group: group
+        });
+    }
+}
+
+// Display the TSV
+function displayTSV() {
+    // Fetch the global settings
+    const coordinateMultiplier = parseFloat(document.getElementById('coordinateMultiplier').value);
+    const anchored = document.getElementById('anchored').checked;
+
+    // Prepare the header for the TSV
+    let tsvContent = "baseball\tdiameter\tdirection (x,y,z)\tcolor\toutlinecolor\tfuzz\toutline\tgroup\ttexture\tanchored\n";
+
+    // Reverse so that first Paintballz placed appear first in the LNZ
+    const reversedCircles = [...circles].reverse();
+    
+    // Loop through all Paintballz to generate LNZ
+    reversedCircles.forEach(circle => {
+            // Apply the coordinate multiplier globally to x and y values
+            let x = (circle.x * coordinateMultiplier).toFixed(2);
+            let y = (circle.y * coordinateMultiplier).toFixed(2);
+            let z = circle.z.toFixed(2);
+
+            // Apply the roll/pitch/yaw transformation only for LNZ output
+            if (document.getElementById('transformRotation').checked) {
+                const transformed = applyTransform(x, y, z);
+                x = transformed.x.toFixed(2);
+                y = transformed.y.toFixed(2);
+                z = transformed.z.toFixed(2);
+            }
+
+            // Apply the anchored setting globally
+            const anchoredColumn = anchored ? '\t0' : '';
+
+            // Generate the TSV row for the current Paintballz
+            tsvContent += `${circle.baseBall}\t${circle.diameter}\t${x},${y},${z}\t${circle.color}\t${circle.outlineColor}\t${circle.fuzz}\t${circle.outlineThickness}\t${circle.group}\t${circle.texture}${anchoredColumn}\n`;
+        });
+
+    // Set the TSV content in the output textarea
+    document.getElementById('tsvOutput').value = tsvContent;
+}
+</script>
+
+</body>
+</html>
