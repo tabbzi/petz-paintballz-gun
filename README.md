@@ -5,18 +5,18 @@ Web app using HTML5 + Java to draw and export LNZ Paint Ballz
 - [ ]  Conform value types and protect from vulnerabilities
 - [ ]  Host live version on GitHub.io
 - [x]  Remove extra rotation function
-- [ ]  Add a copy button
-- [ ]  Add a hover cursor circle to see where placing
+- [x]  Add a copy button
+- [x]  Add a hover cursor circle to see where placing
 - [ ]  Add a delete circle functionality
 - [ ]  Check for correct roll / pitch / yaw
-- [ ]  Add preset roll yaw pitch for centered on back top front right left bottom of ball with visual guide
+- [x]  Add preset roll yaw pitch for centered on back top front right left bottom of ball with visual guide
 - [x]  Allow comma-delimited LNZ input in addition to tab-delimited (or just remove commas from input)
 - [ ]  Make helper sphere less confusing
 - [ ]  Normalize load from LNZ to eliminate any roll / pitch / yaw transformations back to (0,0,1) (figure out that math)
 - [ ]  Remove nonfunctional function for autopopulating dropdown with color map
-- [ ]  Move base ballz to global properties
+- [x]  Move base ballz to global properties
 - [ ]  Render no outline when -1 and render left half-circle outline when -2 e.g. https://www.kirupa.com/html5/drawing_circles_canvas.htm
-- [ ]  Remove transform that happens during initial draw (comment out see what it does)
+- [x]  Remove transform that happens during initial draw (comment out see what it does)
 - [ ]  Add documentation on how to use Paintballz Gun and warning to back up Paintballz often
 - [ ]  Render fuzz on circles e.g. https://stackoverflow.com/questions/33907082/draw-squiggly-line-along-a-curve-in-javascript
 - [ ]  Add a ico and splash image of a Catz with paintball scope
