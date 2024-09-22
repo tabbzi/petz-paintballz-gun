@@ -1357,7 +1357,7 @@ function displayTSV() {
     let tsvContent = ";baseball\tdiameter\tdirection (x,y,z)\tcolor\toutlinecolor\tfuzz\toutline\tgroup\ttexture\tanchored\n";
     const reversedCircles = [...circles].reverse();
 
-    circles.forEach(circle => {
+    reversedCircles.forEach(circle => {
         let x = (circle.x * coordinateMultiplier).toFixed(2);
         let y = (circle.y * coordinateMultiplier).toFixed(2);
         let z = circle.z.toFixed(2);
@@ -1373,23 +1373,6 @@ function displayTSV() {
 
         tsvContent += `${baseBall}\t${circle.diameter}\t${x},${y},${z}\t${circle.color}\t${circle.outlineColor}\t${circle.fuzz}\t${circle.outlineThickness}\t${circle.group}\t${circle.texture}${anchoredColumn}\n`;
     });
-
-    // reversedCircles.forEach(circle => {
-    //     let x = (circle.x * coordinateMultiplier).toFixed(2);
-    //     let y = (circle.y * coordinateMultiplier).toFixed(2);
-    //     let z = circle.z.toFixed(2);
-
-    //     if (document.getElementById('transformRotation').checked) {
-    //         const transformed = applyTransform(x, y, z);
-    //         x = transformed.x.toFixed(2);
-    //         y = transformed.y.toFixed(2);
-    //         z = transformed.z.toFixed(2);
-    //     }
-
-    //     const anchoredColumn = anchored ? '\t0' : '';
-
-    //     tsvContent += `${baseBall}\t${circle.diameter}\t${x},${y},${z}\t${circle.color}\t${circle.outlineColor}\t${circle.fuzz}\t${circle.outlineThickness}\t${circle.group}\t${circle.texture}${anchoredColumn}\n`;
-    // });
 
     document.getElementById('tsvOutput').value = tsvContent;
 }
