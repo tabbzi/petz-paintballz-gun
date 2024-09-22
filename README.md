@@ -2,8 +2,7 @@
 Web app using HTML5 + Java to draw and export LNZ Paint Ballz
 
 ## To-Do
-- [ ]  Change output to comma-delimited to be very explicit!
-- [ ]  Make helper sphere less confusing
+- [ ]  Make helper sphere less confusing by projecting design onto it
 - [ ]  Make labels on draw area more clear
 - [ ]  Normalize load from LNZ to eliminate any roll / pitch / yaw transformations back to (0,0,1) (figure out that math)
 - [ ]  Remove nonfunctional function for autopopulating dropdown with color map
@@ -11,6 +10,8 @@ Web app using HTML5 + Java to draw and export LNZ Paint Ballz
 - [ ]  Add a ico and splash image of a Catz with paintball scope
 - [ ]  Add all the colors and corresponding hex colors... or handle palettes better, somehow
 - [ ]  Clear Java for any vulerabilities before hosting on FTP
+- [x]  Fix NaN floating point error when loading or outputting LNZ where normalized x, y, and z values all round (floor) to zero
+- [x]  Change output to comma-delimited to be very explicit!
 - [x]  Render fuzz on circles e.g. https://stackoverflow.com/questions/33907082/draw-squiggly-line-along-a-curve-in-javascript
 - [x]  Render no outline when -1 and render left half-circle outline when -2 e.g. https://www.kirupa.com/html5/drawing_circles_canvas.htm
 - [x]  Confirm roll yaw pitch values are correct relative to Petz
