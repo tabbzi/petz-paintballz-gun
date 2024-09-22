@@ -3,9 +3,6 @@ Web app using HTML5 + Java to draw and export LNZ Paint Ballz
 
 ## To-Do
 - [ ]  Conform value types and protect from vulnerabilities
-- [ ]  Enable scroll bar size changer
-- [ ]  Confirm roll yaw pitch values are correct relative to Petz
-- [ ]  Confirm buttons give correct roll yaw pitch values relative to Petz
 - [ ]  Make helper sphere less confusing
 - [ ]  Make labels on draw area more clear
 - [ ]  Normalize load from LNZ to eliminate any roll / pitch / yaw transformations back to (0,0,1) (figure out that math)
@@ -15,6 +12,9 @@ Web app using HTML5 + Java to draw and export LNZ Paint Ballz
 - [ ]  Render fuzz on circles e.g. https://stackoverflow.com/questions/33907082/draw-squiggly-line-along-a-curve-in-javascript
 - [ ]  Add a ico and splash image of a Catz with paintball scope
 - [ ]  Add all the colors and corresponding hex colors... or handle palettes better, somehow
+- [x]  Confirm roll yaw pitch values are correct relative to Petz
+- [x]  Confirm buttons give correct roll yaw pitch values relative to Petz
+- [x]  Enable scroll bar size changer
 - [x]  Host live version on GitHub.io
 - [x]  Remove extra rotation function
 - [x]  Add a copy button
