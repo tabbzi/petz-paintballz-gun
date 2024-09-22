@@ -142,7 +142,9 @@
     <canvas id="paintCanvas" width="500" height="500"></canvas>
 
     <div class="sphere-area">
-        <!-- Canvas for drawing the 3D Sphere -->
+        <p class="note">Your design will show here its position at origin (0,0,1)</p>
+        <p class="note">Blue dot indicates where relocated by roll/pitch/yaw</p>
+        
         <canvas id="sphereCanvas" width="300" height="300"></canvas>
 
         <p class="note">Use the sliders to rotate the sphere and visualize the 3D space.</p>
@@ -1276,6 +1278,75 @@ function conformToTSV(content) {
     return content;
 }
 
+// Function to check if the sum of the absolute values of the floors of normalized x, y, z equals zero
+function isProblematicVector(x, y, z) {
+    const normalized = normalizeVector(x, y, z);
+
+    // Check if the sum of the absolute values of the floors of normalized x, y, z equals zero
+    const sumFloors = Math.abs(Math.floor(normalized.x)) + Math.abs(Math.floor(normalized.y)) + Math.abs(Math.floor(normalized.z));
+
+    return sumFloors === 0;
+}
+
+// Function to normalize a vector
+function normalizeVector(x, y, z) {
+    const magnitude = Math.sqrt(x * x + y * y + z * z);
+
+    if (magnitude === 0) {
+        return { x: 0, y: 0, z: 0 };  // Return unnormalized vector if magnitude is zero
+    }
+
+    const invMagnitude = 1 / magnitude;
+    return {
+        x: x * invMagnitude,
+        y: y * invMagnitude,
+        z: z * invMagnitude
+    };
+}
+
+// Function to find the minimum nudge for a problematic vector
+function nudgeVectorIfNeeded(x, y, z) {
+    // Helper function to calculate absolute distances from zero after normalization
+    function getAbsNormalizedDistances(x, y, z) {
+        const normalized = normalizeVector(x, y, z);
+        return {
+            absX: Math.abs(normalized.x),
+            absY: Math.abs(normalized.y),
+            absZ: Math.abs(normalized.z),
+            normalized
+        };
+    }
+
+    // Helper function to check if the vector passes the test (non-zero floor after normalization)
+    function passesTest(x, y, z) {
+        const normalized = normalizeVector(x, y, z);
+        return (
+            Math.floor(normalized.x) !== 0 ||
+            Math.floor(normalized.y) !== 0 ||
+            Math.floor(normalized.z) !== 0
+        );
+    }
+
+    // If the vector doesn't pass the test, find the closest-to-zero component and change its sign
+    if (!passesTest(x, y, z)) {
+        console.log("Changing closest to zero to negative for vector:", x, y, z);
+
+        // Get the absolute normalized distances
+        const { absX, absY, absZ } = getAbsNormalizedDistances(x, y, z);
+
+        // Change the component closest to zero to its negative value
+        if (absX <= absY && absX <= absZ) {
+            x = -x;
+        } else if (absY <= absX && absY <= absZ) {
+            y = -y;
+        } else {
+            z = -z;
+        }
+    }
+
+    return { x, y, z };
+}
+
 // Function to load input LNZ from textarea
 function loadFromTSV() {
     // Clear the existing circles array and canvas
@@ -1297,14 +1368,13 @@ function loadFromTSV() {
     // Split the TSV content by lines
     const lines = tsvContent.trim().split('\n');
 
-    // Skip the first line if it starts with ";" or if the first field isn't a number
-    const parsedLines = lines.filter((line, index) => {
+    // Parse all lines (including index 0) that do not start with ";" and have valid numbers
+    const parsedLines = lines.filter(line => {
         const row = line.split('\t');
-        return index > 0 && !row[0].startsWith(';') && !isNaN(parseFloat(row[0]));
+        return !row[0].startsWith(';') && !isNaN(parseFloat(row[0]));
     });
 
-    // Loop through the parsed lines and reverse their order
-    //parsedLines.reverse().forEach(line => {
+    // Loop through the parsed lines in normal order
     parsedLines.forEach(line => {
         const row = line.split('\t');
 
@@ -1312,17 +1382,21 @@ function loadFromTSV() {
         if (row[0].startsWith(';') || isNaN(parseFloat(row[0]))) {
             return;
         }
-        
+
         // Extract the values based on the TSV columns
         const baseBall = row[0];
         const diameter = parseFloat(row[1]);
 
-        // const [x, y, z] = row[2].split(',').map(coord => parseFloat(coord) / coordinateMultiplier);
-        let x, y, z;
-        // Tab-delimited x, y, z should now be in row[2], row[3], row[4]
-        x = parseFloat(row[2]) / coordinateMultiplier;
-        y = parseFloat(row[3]) / coordinateMultiplier;
-        z = parseFloat(row[4]) / coordinateMultiplier;
+        // Extract x, y, z from the row and apply coordinate multiplier
+        let x = parseFloat(row[2]) / coordinateMultiplier;
+        let y = parseFloat(row[3]) / coordinateMultiplier;
+        let z = parseFloat(row[4]) / coordinateMultiplier;
+
+        // Nudge the vector if needed to avoid NaN and problematic cases
+        const nudgedVector = nudgeVectorIfNeeded(x, y, z);
+        x = nudgedVector.x;
+        y = nudgedVector.y;
+        z = nudgedVector.z;
 
         const colorValue = row[5];
         const outlineColorValue = row[6];
@@ -1340,124 +1414,44 @@ function loadFromTSV() {
         // Draw the circle on the canvas
         ctx.beginPath();
         ctx.arc(canvasX, canvasY, diameter, 0, Math.PI * 2);
-        ctx.fillStyle = getColorFromValue(colorValue);  // Set the fill color
+        ctx.fillStyle = getColorFromValue(colorValue);
         ctx.fill();
-        ctx.lineWidth = outlineThickness;
-        ctx.strokeStyle = getColorFromValue(outlineColorValue);  // Set the outline color
-        ctx.stroke();
+
+        // Outline handling based on outlineThickness value
+        if (outlineThickness === -2) {
+            ctx.beginPath();
+            ctx.arc(canvasX, canvasY, diameter, 0, Math.PI);
+            ctx.strokeStyle = getColorFromValue(outlineColorValue);
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        } else if (outlineThickness >= 0) {
+            ctx.lineWidth = outlineThickness;
+            ctx.strokeStyle = getColorFromValue(outlineColorValue);
+            ctx.stroke();
+        }
 
         // Save parsed circle data
         circles.push({
             baseBall: baseBall,
-            x: x.toFixed(2), y: y.toFixed(2), z: z, diameter: diameter, 
-            color: colorValue, fuzz: fuzz, outlineColor: outlineColorValue, 
-            outlineThickness: outlineThickness, texture: texture, group: group
+            x: x.toFixed(2),
+            y: y.toFixed(2),
+            z: z,
+            diameter: diameter,
+            color: colorValue,
+            fuzz: fuzz,
+            outlineColor: outlineColorValue,
+            outlineThickness: outlineThickness,
+            texture: texture,
+            group: group
         });
     });
+
+    // Redraw circles
+    redrawCircles();
 }
 
-// NOT YET FUNCTIONAL -- can't assume first paintball is 0,0,1 for all cases
-function loadFromTSVinferRPY() {
-    // Clear the existing circles array and canvas
-    circles = [];
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Redraw the grid first
-    drawGrid();
-
-    // Fetch the global settings (anchored and multiplier)
-    const coordinateMultiplier = parseFloat(document.getElementById('coordinateMultiplier').value);
-
-    // Get the TSV content from the textarea
-    const tsvContent = document.getElementById('tsvOutput').value;
-    
-    // Split the TSV content by lines
-    const lines = tsvContent.trim().split('\n');
-
-    // Extract the first data line (the assumed point at (0, 0, 1))
-    const firstLine = lines[1]; // The first line after the header
-    const firstRow = firstLine.split('\t');
-    const [firstX, firstY, firstZ] = firstRow[2].split(',').map(parseFloat);
-
-    // Infer the yaw and pitch from the first point's position
-    const inferredYaw = Math.atan2(firstY, firstX);
-    const inferredPitch = Math.asin(firstZ); 
-    const inferredRoll = 0;  // We assume no roll based on the first point
-
-    // Function to reverse the rotation (using the inferred yaw, pitch, and roll)
-    function reverseRotation(x, y, z, yaw, pitch, roll = 0) {
-        // Reverse roll (X-axis rotation)
-        let tempY = y * Math.cos(-roll) + z * Math.sin(-roll);
-        let tempZ = z * Math.cos(-roll) - y * Math.sin(-roll);
-        y = tempY;
-        z = tempZ;
-
-        // Reverse pitch (Y-axis rotation)
-        let tempX = x * Math.cos(-pitch) + z * Math.sin(-pitch);
-        tempZ = z * Math.cos(-pitch) - x * Math.sin(-pitch);
-        x = tempX;
-        z = tempZ;
-
-        // Reverse yaw (Z-axis rotation)
-        tempX = x * Math.cos(-yaw) - y * Math.sin(-yaw);
-        tempY = x * Math.sin(-yaw) + y * Math.cos(-yaw);
-        x = tempX;
-        y = tempY;
-
-        return { x, y, z };
-    }
-
-    // Start parsing from the second line (ignore the header)
-    const parsedLines = lines.slice(1); // Extract data lines (skipping the header)
-
-    // Loop through the parsed lines and reverse their order
-    parsedLines.reverse().forEach(line => {
-        const row = line.split('\t');
-        
-        // Extract the values based on the TSV columns
-        const baseBall = row[0];
-        const diameter = parseFloat(row[1]);
-        let [x, y, z] = row[2].split(',').map(coord => parseFloat(coord) / coordinateMultiplier);
-        const colorValue = row[3];
-        const outlineColorValue = row[4];
-        const fuzz = parseInt(row[5]);
-        const outlineThickness = parseInt(row[6]);
-        const group = parseInt(row[7]);
-        const texture = parseInt(row[8]);
-
-        // Reverse the inferred rotation for each point
-        const reversedPoint = reverseRotation(x, y, z, inferredYaw, inferredPitch, inferredRoll);
-        x = reversedPoint.x;
-        y = reversedPoint.y;
-        z = reversedPoint.z;
-
-        // Calculate actual canvas coordinates
-        const centerX = canvas.width / 2;
-        const centerY = canvas.height / 2;
-        const canvasX = (x * centerX) + centerX;
-        const canvasY = (y * centerY) + centerY;
-
-        // Draw the circle on the canvas
-        ctx.beginPath();
-        ctx.arc(canvasX, canvasY, diameter, 0, Math.PI * 2);
-        ctx.fillStyle = getColorFromValue(colorValue);  // Set the fill color
-        ctx.fill();
-        ctx.lineWidth = outlineThickness;
-        ctx.strokeStyle = getColorFromValue(outlineColorValue);  // Set the outline color
-        ctx.stroke();
-
-        // Save parsed circle data
-        circles.push({
-            baseBall: baseBall,
-            x: x.toFixed(2), y: y.toFixed(2), z: z, diameter: diameter, 
-            color: colorValue, fuzz: fuzz, outlineColor: outlineColorValue, 
-            outlineThickness: outlineThickness, texture: texture, group: group
-        });
-    });
-}
-
+// Default example LNZ content
 function loadDefaultLNZ() {
-    // Default example LNZ content
     const defaultLNZ = `;baseball\tdiameter\tdirection (x,y,z)\tcolor\toutlinecolor\tfuzz\toutline\tgroup\ttexture\tanchored
     6\t35\t0.00,0.02,1.00\t165\t244\t3\t-1\t-1\t1\t0
     6\t35\t0.00,-0.20,1.00\t165\t244\t3\t-1\t-1\t1\t0
@@ -1491,11 +1485,11 @@ function loadDefaultLNZ() {
     loadFromTSV();
 }
 
-// Display the TSV
+// Display the TSV and project circles onto the sphere
 function displayTSV() {
     const coordinateMultiplier = parseFloat(document.getElementById('coordinateMultiplier').value);
     const anchored = document.getElementById('anchored').checked;
-    
+
     // Get the global baseBall once
     let baseBall;
     const petzType = document.getElementById('petzType').value;
@@ -1505,14 +1499,16 @@ function displayTSV() {
         baseBall = document.getElementById('baseBall').value;
     }
 
+    // Prepare TSV content
     let tsvContent = ";baseball,diameter,x,y,z,color,outlinecolor,fuzz,outline,group,texture,anchored\n";
-    const reversedCircles = [...circles].reverse();
-
+    
+    // Loop through the circles array (do not reverse it) and generate TSV rows
     circles.forEach(circle => {
         let x = (circle.x * coordinateMultiplier).toFixed(2);
         let y = (circle.y * coordinateMultiplier).toFixed(2);
         let z = circle.z.toFixed(2);
 
+        // Optionally apply transformations (yaw, pitch, roll)
         if (document.getElementById('transformRotation').checked) {
             const transformed = applyTransform(x, y, z);
             x = transformed.x.toFixed(2);
@@ -1520,29 +1516,44 @@ function displayTSV() {
             z = transformed.z.toFixed(2);
         }
 
+        // Nudge the vector if needed to avoid NaN and problematic cases
+        const nudgedVector = nudgeVectorIfNeeded(x, y, z);
+        x = nudgedVector.x;
+        y = nudgedVector.y;
+        z = nudgedVector.z;
+
+        // Handle anchored column
         const anchoredColumn = anchored ? ',0' : '';
 
+        // Generate the TSV row for the circle
         tsvContent += `${baseBall},${circle.diameter},${x},${y},${z},${circle.color},${circle.outlineColor},${circle.fuzz},${circle.outlineThickness},${circle.group},${circle.texture}${anchoredColumn}\n`;
+
+        // Project the circle onto the sphere (if needed)
+        const spherePoint = projectToSphere(circle.x, circle.y);
+        drawSpherePoint(spherePoint.x, spherePoint.y, spherePoint.z, circle.diameter, circle.color);
     });
 
-    // reversedCircles.forEach(circle => {
-    //     let x = (circle.x * coordinateMultiplier).toFixed(2);
-    //     let y = (circle.y * coordinateMultiplier).toFixed(2);
-    //     let z = circle.z.toFixed(2);
-
-    //     if (document.getElementById('transformRotation').checked) {
-    //         const transformed = applyTransform(x, y, z);
-    //         x = transformed.x.toFixed(2);
-    //         y = transformed.y.toFixed(2);
-    //         z = transformed.z.toFixed(2);
-    //     }
-
-    //     const anchoredColumn = anchored ? '\t0' : '';
-
-    //     tsvContent += `${baseBall}\t${circle.diameter}\t${x},${y},${z}\t${circle.color}\t${circle.outlineColor}\t${circle.fuzz}\t${circle.outlineThickness}\t${circle.group}\t${circle.texture}${anchoredColumn}\n`;
-    // });
-
+    // Set the TSV content in the output textarea
     document.getElementById('tsvOutput').value = tsvContent;
+}
+
+// Function to project a 2D canvas point to a 3D sphere
+function projectToSphere(x, y) {
+    const r = 1; // Assuming unit sphere
+    const z = Math.sqrt(r * r - x * x - y * y);
+    return { x: x, y: y, z: z };
+}
+
+// Function to draw a point on the sphere
+function drawSpherePoint(x, y, z, diameter, color) {
+    const rotated = rotate(x, y, z);
+    const projected = project(rotated.x, rotated.y, rotated.z);
+
+    // Draw the circle on the sphere
+    sphereCtx.beginPath();
+    sphereCtx.arc(projected.x, projected.y, diameter / 2, 0, Math.PI * 2); // Adjust size by dividing by 2
+    sphereCtx.fillStyle = getColorFromValue(color);
+    sphereCtx.fill();
 }
 
 // Function to copy text from the textarea
