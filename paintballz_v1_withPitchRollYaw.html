@@ -145,7 +145,10 @@
         <!-- Canvas for drawing the 3D Sphere -->
         <canvas id="sphereCanvas" width="300" height="300"></canvas>
 
-        <!-- Controls for pitch, yaw, roll -->
+        <p class="note">Use the sliders to rotate the sphere and visualize the 3D space.</p>
+        <p class="note">Note: the red dots show face towards your view, gray dots away</p>
+        <p class="note">Latitude lines shown; starts from x=0, y=0, and z=1 (back of Petz' ball)</p>
+
         <div>
             <label for="roll">Roll: 
                 <p class="note"></p>
@@ -313,7 +316,7 @@
             </label>
         
             <label>Coordinate Multiplier: 
-                <input type="number" id="coordinateMultiplier" value="4" step="0.5">
+                <input type="number" id="coordinateMultiplier" value="2" step="0.5">
                 <p class="note">The <b>Coordinate Multiplier</b> controls spacing of Paint Ballz over Ballz.</p>
             </label>
 
@@ -322,6 +325,8 @@
             <textarea id="tsvOutput"></textarea>
 
             <button onclick="loadFromTSV()">Load from LNZ!</button>
+
+            <button onclick="loadDefaultLNZ()">Load Rubby Ducky LNZ!</button>
             
         </div>
 </div>
@@ -333,71 +338,98 @@
         const sphereCtx = sphereCanvas.getContext('2d');
         let circles = [];
 
-        // Initial roll, pitch, yaw values
-        let roll = 0, pitch = 0, yaw = 0;
+// Initial roll, pitch, yaw values
+let roll = 0, pitch = 0, yaw = 0;
 
-        // Array to store points of the sphere (latitude and longitude based)
-        const spherePoints = [];
-        const radius = 100;
+// Array to store points of the sphere (latitude and longitude based)
+const spherePoints = [];
+const radius = 100;
+const latitudeLines = []; // To store lines along latitude
 
-        // Generate points for the sphere
-        for (let lat = -Math.PI / 2; lat <= Math.PI / 2; lat += Math.PI / 12) {
-            for (let lon = 0; lon <= 2 * Math.PI; lon += Math.PI / 12) {
-                const x = Math.cos(lat) * Math.cos(lon);
-                const y = Math.cos(lat) * Math.sin(lon);
-                const z = Math.sin(lat);
-                spherePoints.push({ x, y, z });
-            }
-        }
+// Generate points for the sphere
+for (let lat = -Math.PI / 2; lat <= Math.PI / 2; lat += Math.PI / 12) {
+    let latitudeLine = [];
+    for (let lon = 0; lon <= 2 * Math.PI; lon += Math.PI / 12) {
+        const x = Math.cos(lat) * Math.cos(lon);
+        const y = Math.cos(lat) * Math.sin(lon);
+        const z = Math.sin(lat);
+        const point = { x, y, z };
+        spherePoints.push(point);
+        latitudeLine.push(point); // Add points to the current latitude line
+    }
+    latitudeLines.push(latitudeLine); // Store the latitude line
+}
 
-        function project(x, y, z) {
-            const scale = radius / (radius + z); // Simple perspective projection
-            return {
-                x: (sphereCanvas.width / 2) + x * scale * radius,
-                y: (sphereCanvas.height / 2) + y * scale * radius
-            };
-        }
+function project(x, y, z) {
+    const scale = radius / (radius + z); // Simple perspective projection
+    return {
+        x: (sphereCanvas.width / 2) + x * scale * radius,
+        y: (sphereCanvas.height / 2) + y * scale * radius
+    };
+}
 
-        // Draw the 3D sphere on the 2D canvas
-        function drawSphere() {
-            sphereCtx.clearRect(0, 0, sphereCanvas.width, sphereCanvas.height);
-            spherePoints.forEach(point => {
-                const rotated = rotate(point.x, point.y, point.z);
-                const projected = project(rotated.x, rotated.y, rotated.z);
-                
-                // Draw a small circle for each point on the sphere
-                sphereCtx.beginPath();
-                sphereCtx.arc(projected.x, projected.y, 3, 0, Math.PI * 2);
-                sphereCtx.fillStyle = rotated.z > 0 ? 'red' : 'gray'; // Front half in red, back half in gray
-                sphereCtx.fill();
-            });
+// Draw the 3D sphere on the 2D canvas
+function drawSphere() {
+    sphereCtx.clearRect(0, 0, sphereCanvas.width, sphereCanvas.height);
 
-            // Show current axis position on the sphere
-            const originProjected = project(0, 0, 1); // The "forward" point on the sphere
+    // First, draw the latitude lines
+    latitudeLines.forEach(line => {
+        for (let i = 0; i < line.length - 1; i++) {
+            const point1 = line[i];
+            const point2 = line[i + 1];
+            const rotated1 = rotate(point1.x, point1.y, point1.z);
+            const rotated2 = rotate(point2.x, point2.y, point2.z);
+            const projected1 = project(rotated1.x, rotated1.y, rotated1.z);
+            const projected2 = project(rotated2.x, rotated2.y, rotated2.z);
+
+            // Draw line between consecutive points along the latitude
             sphereCtx.beginPath();
-            sphereCtx.arc(originProjected.x, originProjected.y, 5, 0, Math.PI * 2);
-            sphereCtx.fillStyle = 'blue'; // Mark the forward point in blue
-            sphereCtx.fill();
+            sphereCtx.moveTo(projected1.x, projected1.y);
+            sphereCtx.lineTo(projected2.x, projected2.y);
+            sphereCtx.strokeStyle = 'rgba(0, 128, 255, 0.5)'; // Thinner, colored lines
+            sphereCtx.lineWidth = 1; // Thinner lines
+            sphereCtx.stroke();
         }
+    });
 
-        // Update rotations based on slider input
-        document.getElementById('roll').addEventListener('input', function () {
-            roll = parseFloat(this.value);
-            drawSphere();
-        });
+    // Now, draw the points
+    spherePoints.forEach(point => {
+        const rotated = rotate(point.x, point.y, point.z);
+        const projected = project(rotated.x, rotated.y, rotated.z);
 
-        document.getElementById('pitch').addEventListener('input', function () {
-            pitch = parseFloat(this.value);
-            drawSphere();
-        });
+        // Draw a small circle for each point on the sphere
+        sphereCtx.beginPath();
+        sphereCtx.arc(projected.x, projected.y, 3, 0, Math.PI * 2);
+        sphereCtx.fillStyle = rotated.z > 0 ? 'red' : 'gray'; // Front half in red, back half in gray
+        sphereCtx.fill();
+    });
 
-        document.getElementById('yaw').addEventListener('input', function () {
-            yaw = parseFloat(this.value);
-            drawSphere();
-        });
+    // Show current axis position on the sphere
+    const originProjected = project(0, 0, 1); // The "forward" point on the sphere
+    sphereCtx.beginPath();
+    sphereCtx.arc(originProjected.x, originProjected.y, 5, 0, Math.PI * 2);
+    sphereCtx.fillStyle = 'blue'; // Mark the forward point in blue
+    sphereCtx.fill();
+}
 
-        // Draw the sphere initially
-        drawSphere();
+// Update rotations based on slider input
+document.getElementById('roll').addEventListener('input', function () {
+    roll = parseFloat(this.value);
+    drawSphere();
+});
+
+document.getElementById('pitch').addEventListener('input', function () {
+    pitch = parseFloat(this.value);
+    drawSphere();
+});
+
+document.getElementById('yaw').addEventListener('input', function () {
+    yaw = parseFloat(this.value);
+    drawSphere();
+});
+
+// Draw the sphere initially
+drawSphere();
 
         // Transform x, y, z based on roll/pitch/yaw
         function applyTransform(x, y, z) {
@@ -907,11 +939,13 @@ function applyTransform(x, y, z) {
     return { x, y, z };
 }
     
-// Function to load data from the TSV and draw it back on the canvas
 function loadFromTSV() {
     // Clear the existing circles array and canvas
     circles = [];
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Redraw the grid first
+    drawGrid();
 
     // Fetch the global settings (anchored and multiplier)
     const coordinateMultiplier = parseFloat(document.getElementById('coordinateMultiplier').value);
@@ -923,10 +957,13 @@ function loadFromTSV() {
     const lines = tsvContent.trim().split('\n');
 
     // Start parsing from the second line (ignore the header)
-    for (let i = 1; i < lines.length; i++) {
-        const row = lines[i].split('\t');
+    const parsedLines = lines.slice(1); // Extract data lines (skipping the header)
+
+    // Loop through the parsed lines and reverse their order
+    parsedLines.reverse().forEach(line => {
+        const row = line.split('\t');
         
-        // Extract the values based on the TSV columns and reverse multiplier
+        // Extract the values based on the TSV columns
         const baseBall = row[0];
         const diameter = parseFloat(row[1]);
         const [x, y, z] = row[2].split(',').map(coord => parseFloat(coord) / coordinateMultiplier);
@@ -937,7 +974,7 @@ function loadFromTSV() {
         const group = parseInt(row[7]);
         const texture = parseInt(row[8]);
 
-        // Calculate actual canvas coordinates e.g. reverse x and y values and divide by multiplier
+        // Calculate actual canvas coordinates
         const centerX = canvas.width / 2;
         const centerY = canvas.height / 2;
         const canvasX = (x * centerX) + centerX;
@@ -959,7 +996,43 @@ function loadFromTSV() {
             color: colorValue, fuzz: fuzz, outlineColor: outlineColorValue, 
             outlineThickness: outlineThickness, texture: texture, group: group
         });
-    }
+    });
+}
+
+
+function loadDefaultLNZ() {
+    // Default example LNZ content
+    const defaultLNZ = `baseball\tdiameter\tdirection (x,y,z)\tcolor\toutlinecolor\tfuzz\toutline\tgroup\ttexture\tanchored
+6\t10\t0.36,-0.22,1.00\t33\t244\t0\t-1\t-1\t1\t0
+6\t10\t0.32,-0.12,1.00\t33\t244\t0\t-1\t-1\t1\t0
+6\t10\t0.26,-0.04,1.00\t33\t244\t0\t-1\t-1\t1\t0
+6\t10\t0.18,0.00,1.00\t33\t244\t0\t-1\t-1\t1\t0
+6\t10\t0.08,0.02,1.00\t33\t244\t0\t-1\t-1\t1\t0
+6\t10\t-0.02,-0.02,1.00\t33\t244\t0\t-1\t-1\t1\t0
+6\t10\t-0.08,-0.08,1.00\t33\t244\t0\t-1\t-1\t1\t0
+6\t5\t-0.38,-0.54,1.00\t10\t244\t0\t-1\t-1\t1\t0
+6\t10\t-0.42,-0.52,1.00\t35\t244\t0\t-1\t-1\t1\t0
+6\t20\t-0.72,-0.34,1.00\t65\t244\t0\t-1\t-1\t1\t0
+6\t20\t-0.60,-0.32,1.00\t65\t244\t0\t-1\t-1\t1\t0
+6\t20\t-0.46,-0.34,1.00\t65\t244\t0\t-1\t-1\t1\t0
+6\t25\t0.56,-0.46,1.00\t165\t244\t3\t-1\t-1\t1\t0
+6\t30\t0.40,-0.30,1.00\t165\t244\t3\t-1\t-1\t1\t0
+6\t35\t-0.42,-0.46,1.00\t165\t244\t3\t-1\t-1\t1\t0
+6\t35\t-0.24,-0.12,1.00\t165\t244\t3\t-1\t-1\t1\t0
+6\t35\t0.24,-0.10,1.00\t165\t244\t3\t-1\t-1\t1\t0
+6\t35\t0.00,-0.20,1.00\t165\t244\t3\t-1\t-1\t1\t0
+6\t35\t0.00,0.02,1.00\t165\t244\t3\t-1\t-1\t1\t0
+`;
+
+    // Set the default LNZ content into the textarea
+    document.getElementById('tsvOutput').value = defaultLNZ;
+
+    // Clear the canvas and redraw the grid first
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawGrid();
+
+    // Load the default LNZ from the TSV
+    loadFromTSV();
 }
 
 // Display the TSV
