@@ -20,7 +20,7 @@ Web app using HTML5 + Java to draw and export LNZ Paint Ballz
 - [ ]  Add documentation on how to use Paintballz Gun and warning to back up Paintballz often
 - [ ]  Render fuzz on circles e.g. https://stackoverflow.com/questions/33907082/draw-squiggly-line-along-a-curve-in-javascript
 - [ ]  Add a ico and splash image of a Catz with paintball scope
-- [ ]  Add quick ref for Babyz base ballz too
+- [x]  Add quick ref for Babyz base ballz too
 - [ ]  Add all the colors and corresponding hex colors... or handle palettes better, somehow
 
 ## License
