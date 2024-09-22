@@ -185,7 +185,7 @@
             <p class="note">These settings apply to <i>each</i> Paintballz placed!</p>
 
             <div class="form-group">        
-                <label>Diameter (% of base): <input type="number" id="diameter" value="30"></label>
+                <label>Diameter (% of base): <input type="number" id="diameter" value="30" min="1" max="100" step="1"></label>
                 <label>Color: 
                     <input list="colorOptions" id="color" name="color">
                     <datalist id="colorOptions">
@@ -921,6 +921,41 @@ canvas.addEventListener('mousemove', function(event) {
     ctx.setLineDash([5, 5]);  // Dashed line for the preview
     ctx.stroke();
     ctx.setLineDash([]);  // Reset the line dash setting
+});
+
+// Add a wheel event listener to control the diameter with the mouse wheel
+canvas.addEventListener('wheel', function(event) {
+    event.preventDefault();  // Prevent the default scrolling behavior
+
+    // Get the current diameter from the input field
+    const diameterInput = document.getElementById('diameter');
+    let diameter = parseInt(diameterInput.value);
+
+    // Adjust the diameter based on scroll direction (smooth scrolling)
+    const delta = event.deltaY > 0 ? -1 : 1; // Scroll up to increase, scroll down to decrease
+    diameter = Math.max(1, diameter + delta); // Set minimum diameter to 1
+
+    // Update the diameter input field
+    diameterInput.value = diameter;
+
+    // Redraw the hover circle immediately after changing diameter
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+
+    // Clear the canvas and redraw everything
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawGrid();
+    redrawCircles();
+
+    // Draw a new preview circle with updated diameter
+    ctx.beginPath();
+    ctx.arc(mouseX, mouseY, diameter, 0, Math.PI * 2);
+    ctx.strokeStyle = '#aaa';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([5, 5]);
+    ctx.stroke();
+    ctx.setLineDash([]); // Reset the line dash setting
 });
 
 // Remove the preview circle when the mouse leaves the canvas
