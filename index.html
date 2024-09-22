@@ -161,12 +161,15 @@
                 <input type="range" id="yaw" min="-3.14" max="3.14" step="0.01" value="0">
             </label>
 
-            <button onclick="setRotation('front')">Front</button>
-            <button onclick="setRotation('back')">Back</button>
-            <button onclick="setRotation('top')">Top</button>
-            <button onclick="setRotation('bottom')">Bottom</button>
-            <button onclick="setRotation('left')">Left</button>
-            <button onclick="setRotation('right')">Right</button>
+            <div>
+                <button onclick="setRotation('front')">Front</button>
+                <button onclick="setRotation('back')">Back</button>
+                <button onclick="setRotation('top')">Top</button>
+                <button onclick="setRotation('bottom')">Bottom</button>
+                <button onclick="setRotation('left')">Left</button>
+                <button onclick="setRotation('right')">Right</button>
+              </div>
+              
         </div>
     </div>
 
@@ -1066,35 +1069,51 @@ function setRotation(view) {
         case 'front':
             roll = 0;
             pitch = 0;
-            yaw = 0;
+            yaw = Math.PI;
             break;
         case 'back':
             roll = 0;
             pitch = 0;
-            yaw = Math.PI;
+            yaw = 0;
             break;
         case 'top':
-            roll = 0;
-            pitch = Math.PI / 2;
+            roll = Math.PI / 2;
+            pitch = 0;
             yaw = 0;
             break;
         case 'bottom':
-            roll = 0;
-            pitch = -Math.PI / 2;
+            roll = -Math.PI / 2;
+            pitch = 0;
             yaw = 0;
             break;
         case 'left':
             roll = 0;
-            pitch = 0;
-            yaw = Math.PI / 2;
+            pitch = Math.PI / 2;
+            yaw = 0;
             break;
         case 'right':
             roll = 0;
-            pitch = 0;
-            yaw = -Math.PI / 2;
+            pitch = -Math.PI / 2;
+            yaw = 0;
             break;
     }
-    drawSphere();  // Redraw the sphere with the new rotation
+
+    // Update the slider values
+    const rollSlider = document.getElementById('roll');
+    const pitchSlider = document.getElementById('pitch');
+    const yawSlider = document.getElementById('yaw');
+
+    rollSlider.value = roll;
+    pitchSlider.value = pitch;
+    yawSlider.value = yaw;
+
+    // Trigger the 'input' event on each slider to reflect the change visually
+    rollSlider.dispatchEvent(new Event('input'));
+    pitchSlider.dispatchEvent(new Event('input'));
+    yawSlider.dispatchEvent(new Event('input'));
+
+    // Redraw the sphere with the new rotation
+    drawSphere();
 }
 
 // Function to apply the transform if the checkbox is checked
@@ -1154,7 +1173,8 @@ function loadFromTSV() {
     });
 
     // Loop through the parsed lines and reverse their order
-    parsedLines.reverse().forEach(line => {
+    //parsedLines.reverse().forEach(line => {
+    parsedLines.forEach(line => {
         const row = line.split('\t');
 
         // Skip any line starting with a semicolon (;) or if the first field isn't a number
@@ -1308,25 +1328,25 @@ function loadFromTSVinferRPY() {
 function loadDefaultLNZ() {
     // Default example LNZ content
     const defaultLNZ = `;baseball\tdiameter\tdirection (x,y,z)\tcolor\toutlinecolor\tfuzz\toutline\tgroup\ttexture\tanchored
-6\t10\t0.36,-0.22,1.00\t33\t244\t0\t-1\t-1\t1\t0
-6\t10\t0.32,-0.12,1.00\t33\t244\t0\t-1\t-1\t1\t0
-6\t10\t0.26,-0.04,1.00\t33\t244\t0\t-1\t-1\t1\t0
-6\t10\t0.18,0.00,1.00\t33\t244\t0\t-1\t-1\t1\t0
-6\t10\t0.08,0.02,1.00\t33\t244\t0\t-1\t-1\t1\t0
-6\t10\t-0.02,-0.02,1.00\t33\t244\t0\t-1\t-1\t1\t0
-6\t10\t-0.08,-0.08,1.00\t33\t244\t0\t-1\t-1\t1\t0
-6\t5\t-0.38,-0.54,1.00\t10\t244\t0\t-1\t-1\t1\t0
-6\t10\t-0.42,-0.52,1.00\t35\t244\t0\t-1\t-1\t1\t0
-6\t20\t-0.72,-0.34,1.00\t65\t244\t0\t-1\t-1\t1\t0
-6\t20\t-0.60,-0.32,1.00\t65\t244\t0\t-1\t-1\t1\t0
-6\t20\t-0.46,-0.34,1.00\t65\t244\t0\t-1\t-1\t1\t0
-6\t25\t0.56,-0.46,1.00\t165\t244\t3\t-1\t-1\t1\t0
-6\t30\t0.40,-0.30,1.00\t165\t244\t3\t-1\t-1\t1\t0
-6\t35\t-0.42,-0.46,1.00\t165\t244\t3\t-1\t-1\t1\t0
-6\t35\t-0.24,-0.12,1.00\t165\t244\t3\t-1\t-1\t1\t0
-6\t35\t0.24,-0.10,1.00\t165\t244\t3\t-1\t-1\t1\t0
-6\t35\t0.00,-0.20,1.00\t165\t244\t3\t-1\t-1\t1\t0
-6\t35\t0.00,0.02,1.00\t165\t244\t3\t-1\t-1\t1\t0
+    6\t35\t0.00,0.02,1.00\t165\t244\t3\t-1\t-1\t1\t0
+    6\t35\t0.00,-0.20,1.00\t165\t244\t3\t-1\t-1\t1\t0
+    6\t35\t0.24,-0.10,1.00\t165\t244\t3\t-1\t-1\t1\t0
+    6\t35\t-0.24,-0.12,1.00\t165\t244\t3\t-1\t-1\t1\t0
+    6\t35\t-0.42,-0.46,1.00\t165\t244\t3\t-1\t-1\t1\t0
+    6\t30\t0.40,-0.30,1.00\t165\t244\t3\t-1\t-1\t1\t0
+    6\t25\t0.56,-0.46,1.00\t165\t244\t3\t-1\t-1\t1\t0
+    6\t20\t-0.46,-0.34,1.00\t65\t244\t0\t-1\t-1\t1\t0
+    6\t20\t-0.60,-0.32,1.00\t65\t244\t0\t-1\t-1\t1\t0
+    6\t20\t-0.72,-0.34,1.00\t65\t244\t0\t-1\t-1\t1\t0
+    6\t10\t-0.42,-0.52,1.00\t35\t244\t0\t-1\t-1\t1\t0
+    6\t5\t-0.38,-0.54,1.00\t10\t244\t0\t-1\t-1\t1\t0
+    6\t10\t-0.08,-0.08,1.00\t33\t244\t0\t-1\t-1\t1\t0
+    6\t10\t-0.02,-0.02,1.00\t33\t244\t0\t-1\t-1\t1\t0
+    6\t10\t0.08,0.02,1.00\t33\t244\t0\t-1\t-1\t1\t0
+    6\t10\t0.18,0.00,1.00\t33\t244\t0\t-1\t-1\t1\t0
+    6\t10\t0.26,-0.04,1.00\t33\t244\t0\t-1\t-1\t1\t0
+    6\t10\t0.32,-0.12,1.00\t33\t244\t0\t-1\t-1\t1\t0
+    6\t10\t0.36,-0.22,1.00\t33\t244\t0\t-1\t-1\t1\t0
 `;
 
     // Set the default LNZ content into the textarea
