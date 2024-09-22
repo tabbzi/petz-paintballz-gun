@@ -431,362 +431,353 @@ document.getElementById('yaw').addEventListener('input', function () {
 // Draw the sphere initially
 drawSphere();
 
-        // Transform x, y, z based on roll/pitch/yaw
-        function applyTransform(x, y, z) {
-            if (document.getElementById('transformRotation').checked) {
-                const rotated = rotate(x, y, z);
-                return { x: rotated.x, y: rotated.y, z: rotated.z };
-            }
-            return { x, y, z };
-        }
+const dogzBaseBallz = [
+    "0: L ankle", "1: L eyebrow1", "2: L eyebrow2", "3: L eyebrow3", 
+    "4: L ear1", "5: L ear2", "6: L ear3", "7: L elbow", "8: L eye", 
+    "9: L finger1", "10: L finger2", "11: L finger3", "12: L foot",
+    "13: L hand", "14: L iris", "15: L jowl", "16: L knee", "17: L nostril",
+    "18: L shoulder", "19: L hip", "20: L toe1", "21: L toe2", "22: L toe3", 
+    "23: L wrist", "24: R ankle", "25: R eyebrow1", "26: R eyebrow2", "27: R eyebrow3",
+    "28: R ear1", "29: R ear2", "30: R ear3", "31: R elbow", "32: R eye",
+    "33: R finger1", "34: R finger2", "35: R finger3", "36: R foot", "37: R hand", 
+    "38: R iris", "39: R jowl", "40: R knee", "41: R nostril", "42: R shoulder",
+    "43: R hip", "44: R toe1", "45: R toe2", "46: R toe3", "47: R wrist", 
+    "48: belly", "49: butt", "50: chest", "51: chin", "52: head", "53: jaw", 
+    "54: neck", "55: nose (bottom)", "56: snout", "57: tail1", "58: tail2", 
+    "59: tail3", "60: tail4", "61: tail5", "62: tail6", "63: tongue1", "64: tongue2", 
+    "65: Z-trans", "66: Z-orient"
+];
 
-    const dogzBaseBallz = [
-        "0: L ankle", "1: L eyebrow1", "2: L eyebrow2", "3: L eyebrow3", 
-        "4: L ear1", "5: L ear2", "6: L ear3", "7: L elbow", "8: L eye", 
-        "9: L finger1", "10: L finger2", "11: L finger3", "12: L foot",
-        "13: L hand", "14: L iris", "15: L jowl", "16: L knee", "17: L nostril",
-        "18: L shoulder", "19: L hip", "20: L toe1", "21: L toe2", "22: L toe3", 
-        "23: L wrist", "24: R ankle", "25: R eyebrow1", "26: R eyebrow2", "27: R eyebrow3",
-        "28: R ear1", "29: R ear2", "30: R ear3", "31: R elbow", "32: R eye",
-        "33: R finger1", "34: R finger2", "35: R finger3", "36: R foot", "37: R hand", 
-        "38: R iris", "39: R jowl", "40: R knee", "41: R nostril", "42: R shoulder",
-        "43: R hip", "44: R toe1", "45: R toe2", "46: R toe3", "47: R wrist", 
-        "48: belly", "49: butt", "50: chest", "51: chin", "52: head", "53: jaw", 
-        "54: neck", "55: nose (bottom)", "56: snout", "57: tail1", "58: tail2", 
-        "59: tail3", "60: tail4", "61: tail5", "62: tail6", "63: tongue1", "64: tongue2", 
-        "65: Z-trans", "66: Z-orient"
-    ];
+const catzBaseBallz = [
+    "0: ankleL", "1: ankleR", "2: belly", "3: butt", "4: cheekL", "5: cheekR", 
+    "6: chest", "7: chin", "8: earL1", "9: earL2", "10: earR1", "11: earR2", 
+    "12: elbowL", "13: elbowR", "14: eyeL", "15: eyeR", "16: fingerL1", "17: fingerL2", 
+    "18: fingerL3", "19: fingerR1", "20: fingerR2", "21: fingerR3", "22: handL", 
+    "23: handR", "24: head", "25: hipL", "26: hipR", "27: irisL", "28: irisR", 
+    "29: jaw", "30: jowlL", "31: jowlR", "32: kneeL", "33: kneeR", "34: knuckleL", 
+    "35: knuckleR", "36: neck", "37: nose", "38: shoulderL", "39: shoulderR", 
+    "40: snout", "41: soleL", "42: soleR", "43: tail1", "44: tail2", "45: tail3", 
+    "46: tail4", "47: tail5", "48: tail6", "49: toeL1", "50: toeL2", "51: toeL3", 
+    "52: toeR1", "53: toeR2", "54: toeR3", "55: tongue1", "56: tongue2", "57: whiskerL1", 
+    "58: whiskerL2", "59: whiskerL3", "60: whiskerR1", "61: whiskerR2", "62: whiskerR3", 
+    "63: wristL", "64: wristR", "65: Z-orient", "66: Z-trans"
+];
 
-    const catzBaseBallz = [
-        "0: ankleL", "1: ankleR", "2: belly", "3: butt", "4: cheekL", "5: cheekR", 
-        "6: chest", "7: chin", "8: earL1", "9: earL2", "10: earR1", "11: earR2", 
-        "12: elbowL", "13: elbowR", "14: eyeL", "15: eyeR", "16: fingerL1", "17: fingerL2", 
-        "18: fingerL3", "19: fingerR1", "20: fingerR2", "21: fingerR3", "22: handL", 
-        "23: handR", "24: head", "25: hipL", "26: hipR", "27: irisL", "28: irisR", 
-        "29: jaw", "30: jowlL", "31: jowlR", "32: kneeL", "33: kneeR", "34: knuckleL", 
-        "35: knuckleR", "36: neck", "37: nose", "38: shoulderL", "39: shoulderR", 
-        "40: snout", "41: soleL", "42: soleR", "43: tail1", "44: tail2", "45: tail3", 
-        "46: tail4", "47: tail5", "48: tail6", "49: toeL1", "50: toeL2", "51: toeL3", 
-        "52: toeR1", "53: toeR2", "54: toeR3", "55: tongue1", "56: tongue2", "57: whiskerL1", 
-        "58: whiskerL2", "59: whiskerL3", "60: whiskerR1", "61: whiskerR2", "62: whiskerR3", 
-        "63: wristL", "64: wristR", "65: Z-orient", "66: Z-trans"
-    ];
+// Color mapping for predefined colors
+const colorMap = {
+    0: '#000000',   // basic black
+    1: '#840000',   // basic dark red
+    2: '#008400',   // basic green
+    3: '#848400',   // basic yellow
+    4: '#000084',   // basic blue
+    5: '#840084',   // basic purple
+    6: '#008484',   // basic teal
+    7: '#848484',   // basic gray
+    8: '#C6C6C6',   // basic white
+    9: '#C60000',   // basic red
+    10: '#D6CEC6',
+    11: '#D6CEC6',
+    12: '#D6CEC6',
+    13: '#D6CEC6',
+    14: '#D6CEC6',
+    15: '#D6CEC6',
+    16: '#D6CEC6',
+    17: '#D6CEC6',
+    18: '#D6CEC6',
+    19: '#D6CEC6',
+    20: '#5A5A5A',
+    21: '#5A5A5A',
+    22: '#5A5A5A',
+    23: '#5A5A5A',
+    24: '#5A5A5A',
+    25: '#5A5A5A',
+    26: '#5A5A5A',
+    27: '#5A5A5A',
+    28: '#5A5A5A',
+    29: '#5A5A5A',
+    30: '#181818',
+    31: '#181818',
+    32: '#181818',
+    33: '#181818',
+    34: '#181818',
+    35: '#181818',
+    36: '#181818',
+    37: '#181818',
+    38: '#181818',
+    39: '#181818',
+    40: '#BDA57B',
+    41: '#BDA57B',
+    42: '#BDA57B',
+    43: '#BDA57B',
+    44: '#BDA57B',
+    45: '#BDA57B',
+    46: '#BDA57B',
+    47: '#BDA57B',
+    48: '#BDA57B',
+    49: '#BDA57B',
+    50: '#632918',
+    51: '#632918',
+    52: '#632918',
+    53: '#632918',
+    54: '#632918',
+    55: '#632918',
+    56: '#632918',
+    57: '#632918',
+    58: '#632918',
+    59: '#632918',
+    60: '#9C5A08',
+    61: '#9C5A08',
+    62: '#9C5A08',
+    63: '#9C5A08',
+    64: '#9C5A08',
+    65: '#9C5A08',
+    66: '#9C5A08',
+    67: '#9C5A08',
+    68: '#9C5A08',
+    69: '#9C5A08',
+    70: '#D68C9C',
+    71: '#D68C9C',
+    72: '#D68C9C',
+    73: '#D68C9C',
+    74: '#D68C9C',
+    75: '#D68C9C',
+    76: '#D68C9C',
+    77: '#D68C9C',
+    78: '#D68C9C',
+    79: '#D68C9C',
+    80: '#942100',
+    81: '#942100',
+    82: '#942100',
+    83: '#942100',
+    84: '#942100',
+    85: '#942100',
+    86: '#942100',
+    87: '#942100',
+    88: '#942100',
+    89: '#942100',
+    90: '#522908',
+    91: '#522908',
+    92: '#522908',
+    93: '#522908',
+    94: '#522908',
+    95: '#522908',
+    96: '#522908',
+    97: '#522908',
+    98: '#522908',
+    99: '#522908',
+    100: '#947331',
+    101: '#947331',
+    102: '#947331',
+    103: '#947331',
+    104: '#947331',
+    105: '#947331',
+    106: '#947331',
+    107: '#947331',
+    108: '#947331',
+    109: '#947331',
+    110: '#4A525A',
+    111: '#4A525A',
+    112: '#4A525A',
+    113: '#4A525A',
+    114: '#4A525A',
+    115: '#4A525A',
+    116: '#4A525A',
+    117: '#4A525A',
+    118: '#4A525A',
+    119: '#4A525A',
+    120: '#8C7B63',
+    121: '#8C7B63',
+    122: '#8C7B63',
+    123: '#8C7B63',
+    124: '#8C7B63',
+    125: '#8C7B63',
+    126: '#8C7B63',
+    127: '#8C7B63',
+    128: '#8C7B63',
+    129: '#8C7B63',
+    130: '#107B18',
+    131: '#107B18',
+    132: '#107B18',
+    133: '#107B18',
+    134: '#107B18',
+    135: '#107B18',
+    136: '#107B18',
+    137: '#107B18',
+    138: '#107B18',
+    139: '#107B18',
+    140: '#2939B5',
+    141: '#2939B5',
+    142: '#2939B5',
+    143: '#2939B5',
+    144: '#2939B5',
+    145: '#2939B5',
+    146: '#2939B5',
+    147: '#2939B5',
+    148: '#2939B5',
+    149: '#2939B5',
+    150: '#6BC6FF',
+    151: '#6BC6FF',
+    152: '#6BC6FF',
+    153: '#6BC6FF',
+    154: '#6BC6FF',
+    155: '#6BC6FF',
+    156: '#6BC6FF',
+    157: '#6BC6FF',
+    158: '#6BC6FF',
+    159: '#6BC6FF',
+    160: '#C6C608',
+    161: '#C6C608',
+    162: '#C6C608',
+    163: '#C6C608',
+    164: '#C6C608',
+    165: '#C6C608',
+    166: '#C6C608',
+    167: '#C6C608',
+    168: '#C6C608',
+    169: '#C6C608',
+    170: '#73A5B5',
+    171: '#73A5B5',
+    172: '#73A5B5',
+    173: '#73A5B5',
+    174: '#73A5B5',
+    175: '#73A5B5',
+    176: '#73A5B5',
+    177: '#73A5B5',
+    178: '#73A5B5',
+    179: '#73A5B5',
+    180: '#A56B5A',
+    181: '#A56B5A',
+    182: '#A56B5A',
+    183: '#A56B5A',
+    184: '#A56B5A',
+    185: '#A56B5A',
+    186: '#A56B5A',
+    187: '#A56B5A',
+    188: '#A56B5A',
+    189: '#A56B5A',
+    190: '#395A63',
+    191: '#395A63',
+    192: '#395A63',
+    193: '#395A63',
+    194: '#395A63',
+    195: '#395A63',
+    196: '#395A63',
+    197: '#395A63',
+    198: '#395A63',
+    199: '#395A63',
+};
 
-    // Color mapping for predefined colors
-    const colorMap = {
-        0: '#000000',   // basic black
-        1: '#840000',   // basic dark red
-        2: '#008400',   // basic green
-        3: '#848400',   // basic yellow
-        4: '#000084',   // basic blue
-        5: '#840084',   // basic purple
-        6: '#008484',   // basic teal
-        7: '#848484',   // basic gray
-        8: '#C6C6C6',   // basic white
-        9: '#C60000',   // basic red
-        10: '#D6CEC6',
-        11: '#D6CEC6',
-        12: '#D6CEC6',
-        13: '#D6CEC6',
-        14: '#D6CEC6',
-        15: '#D6CEC6',
-        16: '#D6CEC6',
-        17: '#D6CEC6',
-        18: '#D6CEC6',
-        19: '#D6CEC6',
-        20: '#5A5A5A',
-        21: '#5A5A5A',
-        22: '#5A5A5A',
-        23: '#5A5A5A',
-        24: '#5A5A5A',
-        25: '#5A5A5A',
-        26: '#5A5A5A',
-        27: '#5A5A5A',
-        28: '#5A5A5A',
-        29: '#5A5A5A',
-        30: '#181818',
-        31: '#181818',
-        32: '#181818',
-        33: '#181818',
-        34: '#181818',
-        35: '#181818',
-        36: '#181818',
-        37: '#181818',
-        38: '#181818',
-        39: '#181818',
-        40: '#BDA57B',
-        41: '#BDA57B',
-        42: '#BDA57B',
-        43: '#BDA57B',
-        44: '#BDA57B',
-        45: '#BDA57B',
-        46: '#BDA57B',
-        47: '#BDA57B',
-        48: '#BDA57B',
-        49: '#BDA57B',
-        50: '#632918',
-        51: '#632918',
-        52: '#632918',
-        53: '#632918',
-        54: '#632918',
-        55: '#632918',
-        56: '#632918',
-        57: '#632918',
-        58: '#632918',
-        59: '#632918',
-        60: '#9C5A08',
-        61: '#9C5A08',
-        62: '#9C5A08',
-        63: '#9C5A08',
-        64: '#9C5A08',
-        65: '#9C5A08',
-        66: '#9C5A08',
-        67: '#9C5A08',
-        68: '#9C5A08',
-        69: '#9C5A08',
-        70: '#D68C9C',
-        71: '#D68C9C',
-        72: '#D68C9C',
-        73: '#D68C9C',
-        74: '#D68C9C',
-        75: '#D68C9C',
-        76: '#D68C9C',
-        77: '#D68C9C',
-        78: '#D68C9C',
-        79: '#D68C9C',
-        80: '#942100',
-        81: '#942100',
-        82: '#942100',
-        83: '#942100',
-        84: '#942100',
-        85: '#942100',
-        86: '#942100',
-        87: '#942100',
-        88: '#942100',
-        89: '#942100',
-        90: '#522908',
-        91: '#522908',
-        92: '#522908',
-        93: '#522908',
-        94: '#522908',
-        95: '#522908',
-        96: '#522908',
-        97: '#522908',
-        98: '#522908',
-        99: '#522908',
-        100: '#947331',
-        101: '#947331',
-        102: '#947331',
-        103: '#947331',
-        104: '#947331',
-        105: '#947331',
-        106: '#947331',
-        107: '#947331',
-        108: '#947331',
-        109: '#947331',
-        110: '#4A525A',
-        111: '#4A525A',
-        112: '#4A525A',
-        113: '#4A525A',
-        114: '#4A525A',
-        115: '#4A525A',
-        116: '#4A525A',
-        117: '#4A525A',
-        118: '#4A525A',
-        119: '#4A525A',
-        120: '#8C7B63',
-        121: '#8C7B63',
-        122: '#8C7B63',
-        123: '#8C7B63',
-        124: '#8C7B63',
-        125: '#8C7B63',
-        126: '#8C7B63',
-        127: '#8C7B63',
-        128: '#8C7B63',
-        129: '#8C7B63',
-        130: '#107B18',
-        131: '#107B18',
-        132: '#107B18',
-        133: '#107B18',
-        134: '#107B18',
-        135: '#107B18',
-        136: '#107B18',
-        137: '#107B18',
-        138: '#107B18',
-        139: '#107B18',
-        140: '#2939B5',
-        141: '#2939B5',
-        142: '#2939B5',
-        143: '#2939B5',
-        144: '#2939B5',
-        145: '#2939B5',
-        146: '#2939B5',
-        147: '#2939B5',
-        148: '#2939B5',
-        149: '#2939B5',
-        150: '#6BC6FF',
-        151: '#6BC6FF',
-        152: '#6BC6FF',
-        153: '#6BC6FF',
-        154: '#6BC6FF',
-        155: '#6BC6FF',
-        156: '#6BC6FF',
-        157: '#6BC6FF',
-        158: '#6BC6FF',
-        159: '#6BC6FF',
-        160: '#C6C608',
-        161: '#C6C608',
-        162: '#C6C608',
-        163: '#C6C608',
-        164: '#C6C608',
-        165: '#C6C608',
-        166: '#C6C608',
-        167: '#C6C608',
-        168: '#C6C608',
-        169: '#C6C608',
-        170: '#73A5B5',
-        171: '#73A5B5',
-        172: '#73A5B5',
-        173: '#73A5B5',
-        174: '#73A5B5',
-        175: '#73A5B5',
-        176: '#73A5B5',
-        177: '#73A5B5',
-        178: '#73A5B5',
-        179: '#73A5B5',
-        180: '#A56B5A',
-        181: '#A56B5A',
-        182: '#A56B5A',
-        183: '#A56B5A',
-        184: '#A56B5A',
-        185: '#A56B5A',
-        186: '#A56B5A',
-        187: '#A56B5A',
-        188: '#A56B5A',
-        189: '#A56B5A',
-        190: '#395A63',
-        191: '#395A63',
-        192: '#395A63',
-        193: '#395A63',
-        194: '#395A63',
-        195: '#395A63',
-        196: '#395A63',
-        197: '#395A63',
-        198: '#395A63',
-        199: '#395A63',
-    };
+// Populate dropdown using colorMap
+const colorSelect = document.getElementById('color');
+colorSelect.innerHTML = '';
+for (let key in colorMap) {
+    let option = document.createElement('option');
+    option.value = key;
+    option.style.backgroundColor = colorMap[key];
+    option.text = `${key} (${colorMap[key]})`;
+    colorSelect.appendChild(option);
+}
 
-    // Populate dropdown using colorMap
-    const colorSelect = document.getElementById('color');
-    colorSelect.innerHTML = '';
-    for (let key in colorMap) {
-        let option = document.createElement('option');
-        option.value = key;
-        option.style.backgroundColor = colorMap[key];
-        option.text = `${key} (${colorMap[key]})`;
-        colorSelect.appendChild(option);
+// Function to get hex colors based on color value selected
+function getColorFromValue(value) {
+    return colorMap[value] || '#000000';
+}
+
+// Update dropdowns for Catz or Dogz selection
+function updateBaseBallDropdown() {
+    const petzType = document.getElementById('petzType').value;
+    const baseBallInput = document.getElementById('baseBall');
+    const baseBallDatalist = document.getElementById('baseBallOptions');
+    const addBallLabel = document.getElementById('addBallLabel');
+    const baseBallLabel = document.getElementById('baseBallLabel');
+
+    // Clear existing datalist options
+    baseBallDatalist.innerHTML = '';
+
+    if (petzType === 'dogz') {
+        baseBallInput.style.display = 'inline';
+        baseBallLabel.style.display = 'inline';
+        addBallLabel.style.display = 'none';
+
+        // Populate datalist for Dogz
+        dogzBaseBallz.forEach((ball, index) => {
+            baseBallDatalist.innerHTML += `<option value="${index}">${ball}</option>`;
+        });
+    } else if (petzType === 'catz') {
+        baseBallInput.style.display = 'inline';
+        baseBallLabel.style.display = 'inline';
+        addBallLabel.style.display = 'none';
+
+        // Populate datalist for Catz
+        catzBaseBallz.forEach((ball, index) => {
+            baseBallDatalist.innerHTML += `<option value="${index}">${ball}</option>`;
+        });
+    } else if (petzType === 'addballz') {
+        baseBallInput.style.display = 'none';
+        baseBallLabel.style.display = 'none';
+        addBallLabel.style.display = 'inline';
     }
+}
 
-    // Function to get hex colors based on color value selected
-    function getColorFromValue(value) {
-        return colorMap[value] || '#000000';
-    }
+// Set default to Add Ballz on page load
+window.onload = function() {
+    document.getElementById('petzType').value = 'addballz';
+    updateBaseBallDropdown();
+}
 
-    // Update dropdowns for Catz or Dogz selection
-    function updateBaseBallDropdown() {
-        const petzType = document.getElementById('petzType').value;
-        const baseBallInput = document.getElementById('baseBall');
-        const baseBallDatalist = document.getElementById('baseBallOptions');
-        const addBallLabel = document.getElementById('addBallLabel');
-        const baseBallLabel = document.getElementById('baseBallLabel');
+// Canvas grid
+function drawGrid() {
+    const gridSpacing = 50; // Set spacing between grid lines
+    const textOffset = 15; // Set offset for text labels
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
 
-        // Clear existing datalist options
-        baseBallDatalist.innerHTML = '';
+    // Fetch the global coordinate multiplier
+    const coordinateMultiplier = parseFloat(document.getElementById('coordinateMultiplier').value);
 
-        if (petzType === 'dogz') {
-            baseBallInput.style.display = 'inline';
-            baseBallLabel.style.display = 'inline';
-            addBallLabel.style.display = 'none';
-
-            // Populate datalist for Dogz
-            dogzBaseBallz.forEach((ball, index) => {
-                baseBallDatalist.innerHTML += `<option value="${index}">${ball}</option>`;
-            });
-        } else if (petzType === 'catz') {
-            baseBallInput.style.display = 'inline';
-            baseBallLabel.style.display = 'inline';
-            addBallLabel.style.display = 'none';
-
-            // Populate datalist for Catz
-            catzBaseBallz.forEach((ball, index) => {
-                baseBallDatalist.innerHTML += `<option value="${index}">${ball}</option>`;
-            });
-        } else if (petzType === 'addballz') {
-            baseBallInput.style.display = 'none';
-            baseBallLabel.style.display = 'none';
-            addBallLabel.style.display = 'inline';
-        }
-    }
-
-    // Set default to Add Ballz on page load
-    window.onload = function() {
-        document.getElementById('petzType').value = 'addballz';
-        updateBaseBallDropdown();
-    }
-
-    // Canvas grid
-    function drawGrid() {
-        const gridSpacing = 50; // Set spacing between grid lines
-        const textOffset = 15; // Set offset for text labels
-        const centerX = canvas.width / 2;
-        const centerY = canvas.height / 2;
-
-        // Fetch the global coordinate multiplier
-        const coordinateMultiplier = parseFloat(document.getElementById('coordinateMultiplier').value);
-
-        // Draw vertical grid lines and labels
-        ctx.beginPath();
-        ctx.strokeStyle = '#888'; // Light gray for grid lines
-        ctx.lineWidth = 1;
-        for (let x = 0; x <= canvas.width; x += gridSpacing) {
-            ctx.moveTo(x, 0);
-            ctx.lineTo(x, canvas.height);
-            ctx.stroke();
-
-            // Label the x-axis based on the multiplier, converting back to coordinate system
-            const labelValueX = ((x - centerX) / centerX * coordinateMultiplier).toFixed(2);
-            ctx.fillStyle = '#888'; // Color for axis labels
-            ctx.font = '12px Arial';
-            ctx.fillText(labelValueX, x + 2, centerY + textOffset);
-        }
-
-        // Draw horizontal grid lines and labels
-        ctx.beginPath();
-        for (let y = 0; y <= canvas.height; y += gridSpacing) {
-            ctx.moveTo(0, y);
-            ctx.lineTo(canvas.width, y);
-            ctx.stroke();
-
-            // Label the y-axis based on the multiplier, converting back to coordinate system
-            const labelValueY = ((centerY - y) / centerY * coordinateMultiplier).toFixed(2);
-            ctx.fillText(labelValueY, centerX + textOffset, y - 2);
-        }
-
-        // Draw axes lines (X and Y)
-        ctx.beginPath();
-        ctx.strokeStyle = '#555'; // Darker color for axes
-        ctx.lineWidth = 2;
-
-        // Vertical axis (Y-axis)
-        ctx.moveTo(centerX, 0);
-        ctx.lineTo(centerX, canvas.height);
+    // Draw vertical grid lines and labels
+    ctx.beginPath();
+    ctx.strokeStyle = '#888'; // Light gray for grid lines
+    ctx.lineWidth = 1;
+    for (let x = 0; x <= canvas.width; x += gridSpacing) {
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
         ctx.stroke();
 
-        // Horizontal axis (X-axis)
-        ctx.moveTo(0, centerY);
-        ctx.lineTo(canvas.width, centerY);
-        ctx.stroke();
+        // Label the x-axis based on the multiplier, converting back to coordinate system
+        const labelValueX = ((x - centerX) / centerX * coordinateMultiplier).toFixed(2);
+        ctx.fillStyle = '#888'; // Color for axis labels
+        ctx.font = '12px Arial';
+        ctx.fillText(labelValueX, x + 2, centerY + textOffset);
     }
+
+    // Draw horizontal grid lines and labels
+    ctx.beginPath();
+    for (let y = 0; y <= canvas.height; y += gridSpacing) {
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+
+        // Label the y-axis based on the multiplier, converting back to coordinate system
+        const labelValueY = ((centerY - y) / centerY * coordinateMultiplier).toFixed(2);
+        ctx.fillText(labelValueY, centerX + textOffset, y - 2);
+    }
+
+    // Draw axes lines (X and Y)
+    ctx.beginPath();
+    ctx.strokeStyle = '#555'; // Darker color for axes
+    ctx.lineWidth = 2;
+
+    // Vertical axis (Y-axis)
+    ctx.moveTo(centerX, 0);
+    ctx.lineTo(centerX, canvas.height);
+    ctx.stroke();
+
+    // Horizontal axis (X-axis)
+    ctx.moveTo(0, centerY);
+    ctx.lineTo(canvas.width, centerY);
+    ctx.stroke();
+}
 
 // Redraw grid when multiplier changes
 document.getElementById('coordinateMultiplier').addEventListener('input', function() {
@@ -1042,7 +1033,7 @@ function displayTSV() {
     const anchored = document.getElementById('anchored').checked;
 
     // Prepare the header for the TSV
-    let tsvContent = "baseball\tdiameter\tdirection (x,y,z)\tcolor\toutlinecolor\tfuzz\toutline\tgroup\ttexture\tanchored\n";
+    let tsvContent = ";baseball\tdiameter\tdirection (x,y,z)\tcolor\toutlinecolor\tfuzz\toutline\tgroup\ttexture\tanchored\n";
 
     // Reverse so that first Paintballz placed appear first in the LNZ
     const reversedCircles = [...circles].reverse();
