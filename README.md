@@ -7,7 +7,7 @@ Web app using HTML5 + Java to draw and export LNZ Paint Ballz
 - [x]  Remove extra rotation function
 - [x]  Add a copy button
 - [x]  Add a hover cursor circle to see where placing
-- [ ]  Add a delete circle functionality
+- [x]  Add a delete circle functionality
 - [ ]  Check for correct roll / pitch / yaw
 - [x]  Add preset roll yaw pitch for centered on back top front right left bottom of ball with visual guide
 - [x]  Allow comma-delimited LNZ input in addition to tab-delimited (or just remove commas from input)
