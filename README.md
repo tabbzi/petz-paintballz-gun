@@ -2,6 +2,7 @@
 Web app using HTML5 + Java to draw and export LNZ Paint Ballz
 
 ## To-Do
+- [ ]  Conform value types and protect from vulnerabilities
 - [ ]  Host live version on GitHub.io
 - [x]  Remove extra rotation function
 - [ ]  Add a copy button
@@ -15,10 +16,12 @@ Web app using HTML5 + Java to draw and export LNZ Paint Ballz
 - [ ]  Remove nonfunctional function for autopopulating dropdown with color map
 - [ ]  Move base ballz to global properties
 - [ ]  Render no outline when -1 and render left half-circle outline when -2 e.g. https://www.kirupa.com/html5/drawing_circles_canvas.htm
-- [ ]  remove transform that happens during initial draw (comment out see what it does)
+- [ ]  Remove transform that happens during initial draw (comment out see what it does)
 - [ ]  Add documentation on how to use Paintballz Gun and warning to back up Paintballz often
 - [ ]  Render fuzz on circles e.g. https://stackoverflow.com/questions/33907082/draw-squiggly-line-along-a-curve-in-javascript
 - [ ]  Add a ico and splash image of a Catz with paintball scope
+- [ ]  Add quick ref for Babyz base ballz too
+- [ ]  Add all the colors and corresponding hex colors... or handle palettes better, somehow
 
 ## License
 
