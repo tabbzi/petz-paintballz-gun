@@ -5,13 +5,17 @@ Load the [live demo](https://tabbzi.github.io/petz-paintballz-gun/) here!
 
 ## To-Do
 - [ ]  Fix sizing inconsistencies
+- [ ]  Add all the colors and corresponding hex colors for all games... or handle palettes better, somehow
+- [ ]  Add a tracker to change order or delete circles manually
+- [ ]  Add a palette that can be set up and then swapped through using tab or to specific options using numbers
+- [ ]  Allow local image to be uploaded as background
+- [ ]  Perfect parameters
 - [ ]  Figure out why tattoos on PWS sometimes don't work due to NaN floating point error
 - [ ]  Make labels on draw area more clear
 - [ ]  Normalize load from LNZ to eliminate any roll / pitch / yaw transformations back to (0,0,1) (figure out that math)
 - [ ]  Remove nonfunctional function for autopopulating dropdown with color map
 - [ ]  Add documentation on how to use Paintballz Gun and warning to back up Paintballz often
 - [ ]  Add a ico and splash image of a Catz with paintball scope
-- [ ]  Add all the colors and corresponding hex colors... or handle palettes better, somehow
 - [ ]  Clear Java for any vulerabilities before hosting on FTP
 - [x]  Make helper sphere less confusing by projecting design onto it
 - [x]  Add light mode / dark mode toggle
