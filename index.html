@@ -1472,7 +1472,7 @@
         tsvContent = conformToTSV(tsvContent);
 
         // Split the TSV content by lines
-        const lines = tsvContent.trim().split('\n');
+        const lines = tsvContent.trim().split('\n').reverse();
 
         // Parse all lines (including index 0) that do not start with ";" and have valid numbers
         const parsedLines = lines.filter(line => {
@@ -1606,9 +1606,9 @@
         }
 
         // Prepare TSV content
-        let tsvContent = ";baseball,diameter,x,y,z,color,outlinecolor,fuzz,outline,group,texture,anchored\n";
+        let tsvContent = ";\n";
         
-        // Loop through the circles array (do not reverse it) and generate TSV rows
+        // Loop through the circles array and generate TSV rows
         circles.forEach(circle => {
             let x = (circle.x * coordinateMultiplier).toFixed(2);
             let y = (circle.y * coordinateMultiplier).toFixed(2);
@@ -1639,8 +1639,15 @@
             drawSpherePoint(spherePoint.x, spherePoint.y, spherePoint.z, circle.diameter, circle.color);
         });
 
+        // Reverse TSV rows        
+        tsvContent = tsvContent.split('\n').reverse().join('\n');
+
+        // Put last row back at top
+        let tsvContentOut = ";baseball,diameter,x,y,z,color,outlinecolor,fuzz,outline,group,texture,anchored";
+        tsvContentOut += tsvContent;
+
         // Set the TSV content in the output textarea
-        document.getElementById('tsvOutput').value = tsvContent;
+        document.getElementById('tsvOutput').value = tsvContentOut;
     }
 
     // Function to project a 2D canvas point to a 3D sphere
