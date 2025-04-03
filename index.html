@@ -246,7 +246,7 @@
 
 <body class="dark-mode">
     <h1>Petz Paintballz Gun</h1>
-    <h2>v1.0</h2>
+    <h2>v2.0</h2>
     <p>A handy web app for placing and exporting LNZ Paint Ballz!</p>
     <p>- Kathleen @ <a href="https://www.tabbloza.com/petz">Tabbloza</a></p>
 
@@ -595,18 +595,273 @@
                 }
             });
 
-            // Load reshade.act on first load
-            async function loadDefaultPalette() {
-                try {
-                    const response = await fetch('reshade.act');
-                    const blob = await response.blob();
-                    const file = new File([blob], 'reshade.act');
-                    const palette = await parsePaletteFile(file);
-                    applyPalette(palette);
-                } catch (e) {
-                    console.error('Failed to load default palette:', e);
+            const defaultPalette = [
+                    [255, 255, 255],
+                    [128, 0, 0],
+                    [0, 128, 0],
+                    [128, 128, 0],
+                    [0, 0, 128],
+                    [128, 0, 128],
+                    [0, 128, 128],
+                    [192, 192, 192],
+                    [192, 204, 216],
+                    [0, 0, 0],
+                    [231, 226, 221],
+                    [226, 220, 215],
+                    [221, 215, 210],
+                    [215, 209, 204],
+                    [210, 204, 199],
+                    [205, 198, 193],
+                    [200, 193, 188],
+                    [194, 187, 182],
+                    [189, 182, 177],
+                    [184, 176, 171],
+                    [117, 117, 117],
+                    [112, 112, 112],
+                    [107, 107, 107],
+                    [102, 102, 102],
+                    [97, 97, 97],
+                    [92, 92, 92],
+                    [87, 87, 87],
+                    [82, 82, 82],
+                    [77, 77, 77],
+                    [69, 69, 69],
+                    [66, 66, 66],
+                    [61, 61, 61],
+                    [54, 54, 54],
+                    [48, 48, 48],
+                    [41, 41, 41],
+                    [36, 36, 36],
+                    [28, 28, 28],
+                    [23, 23, 23],
+                    [15, 15, 15],
+                    [7, 7, 7],
+                    [220, 194, 150],
+                    [214, 186, 143],
+                    [208, 179, 137],
+                    [202, 171, 130],
+                    [196, 164, 124],
+                    [190, 156, 117],
+                    [184, 149, 111],
+                    [178, 141, 104],
+                    [172, 134, 98],
+                    [166, 126, 91],
+                    [135, 65, 34],
+                    [127, 60, 33],
+                    [120, 54, 31],
+                    [112, 49, 30],
+                    [104, 43, 28],
+                    [97, 38, 27],
+                    [89, 32, 25],
+                    [81, 27, 24],
+                    [74, 21, 22],
+                    [66, 16, 21],
+                    [180, 115, 22],
+                    [179, 110, 20],
+                    [176, 102, 17],
+                    [170, 94, 14],
+                    [167, 87, 12],
+                    [160, 79, 8],
+                    [157, 72, 7],
+                    [149, 64, 4],
+                    [146, 57, 2],
+                    [138, 48, 0],
+                    [240, 158, 183],
+                    [236, 152, 181],
+                    [231, 146, 182],
+                    [225, 137, 180],
+                    [219, 132, 180],
+                    [214, 128, 179],
+                    [205, 121, 177],
+                    [199, 117, 177],
+                    [191, 115, 176],
+                    [180, 110, 171],
+                    [168, 41, 1],
+                    [162, 37, 4],
+                    [156, 34, 7],
+                    [149, 30, 9],
+                    [143, 27, 12],
+                    [137, 23, 15],
+                    [131, 20, 18],
+                    [124, 16, 20],
+                    [118, 13, 23],
+                    [112, 9, 26],
+                    [107, 74, 12],
+                    [106, 68, 12],
+                    [101, 59, 11],
+                    [96, 52, 11],
+                    [91, 44, 11],
+                    [86, 38, 11],
+                    [82, 32, 10],
+                    [77, 27, 10],
+                    [72, 21, 9],
+                    [66, 16, 9],
+                    [166, 138, 56],
+                    [168, 137, 56],
+                    [163, 129, 56],
+                    [159, 123, 56],
+                    [154, 116, 55],
+                    [150, 110, 54],
+                    [145, 104, 54],
+                    [141, 98, 53],
+                    [136, 93, 53],
+                    [131, 87, 52],
+                    [98, 112, 125],
+                    [93, 105, 118],
+                    [87, 99, 112],
+                    [82, 92, 105],
+                    [77, 86, 99],
+                    [71, 79, 92],
+                    [66, 73, 86],
+                    [61, 66, 79],
+                    [55, 60, 73],
+                    [50, 53, 66],
+                    [154, 142, 115],
+                    [150, 137, 110],
+                    [142, 128, 103],
+                    [136, 121, 99],
+                    [127, 112, 92],
+                    [121, 106, 88],
+                    [112, 97, 81],
+                    [106, 91, 77],
+                    [98, 82, 71],
+                    [88, 74, 65],
+                    [66, 182, 68],
+                    [60, 174, 62],
+                    [52, 162, 54],
+                    [44, 150, 46],
+                    [36, 137, 38],
+                    [36, 128, 32],
+                    [35, 114, 26],
+                    [36, 99, 20],
+                    [33, 85, 15],
+                    [32, 69, 11],
+                    [17, 89, 223],
+                    [16, 80, 209],
+                    [15, 69, 194],
+                    [14, 61, 180],
+                    [12, 51, 166],
+                    [11, 37, 152],
+                    [10, 22, 138],
+                    [9, 11, 124],
+                    [14, 7, 110],
+                    [19, 6, 96],
+                    [216, 240, 255],
+                    [172, 224, 255],
+                    [153, 214, 255],
+                    [130, 202, 255],
+                    [117, 182, 232],
+                    [104, 192, 255],
+                    [81, 150, 220],
+                    [24, 156, 206],
+                    [86, 139, 185],
+                    [30, 137, 169],
+                    [235, 237, 167],
+                    [234, 235, 144],
+                    [209, 204, 119],
+                    [247, 244, 0],
+                    [237, 232, 50],
+                    [198, 198, 12],
+                    [195, 195, 52],
+                    [159, 162, 23],
+                    [159, 159, 67],
+                    [110, 122, 46],
+                    [255, 255, 255],
+                    [192, 228, 231],
+                    [172, 198, 213],
+                    [167, 167, 177],
+                    [160, 160, 168],
+                    [116, 160, 182],
+                    [119, 158, 180],
+                    [122, 156, 179],
+                    [125, 154, 178],
+                    [128, 152, 176],
+                    [226, 190, 172],
+                    [213, 147, 144],
+                    [215, 118, 110],
+                    [184, 115, 103],
+                    [159, 119, 115],
+                    [162, 106, 93],
+                    [137, 100, 88],
+                    [152, 87, 77],
+                    [106, 69, 66],
+                    [90, 60, 49],
+                    [114, 158, 140],
+                    [0, 128, 128],
+                    [66, 122, 117],
+                    [0, 128, 128],
+                    [57, 120, 96],
+                    [61, 90, 99],
+                    [38, 88, 71],
+                    [33, 65, 43],
+                    [18, 57, 48],
+                    [255, 255, 255],
+                    [255, 255, 255],
+                    [244, 246, 216],
+                    [233, 216, 194],
+                    [44, 95, 89],
+                    [211, 244, 197],
+                    [196, 211, 159],
+                    [255, 199, 26],
+                    [176, 184, 155],
+                    [175, 177, 119],
+                    [165, 148, 142],
+                    [172, 169, 143],
+                    [215, 160, 20],
+                    [198, 127, 8],
+                    [202, 110, 70],
+                    [121, 142, 97],
+                    [153, 126, 77],
+                    [128, 128, 128],
+                    [101, 155, 42],
+                    [0, 203, 22],
+                    [167, 108, 57],
+                    [255, 66, 0],
+                    [151, 100, 66],
+                    [153, 101, 42],
+                    [221, 52, 106],
+                    [41, 68, 117],
+                    [88, 105, 181],
+                    [66, 107, 132],
+                    [80, 100, 128],
+                    [117, 89, 74],
+                    [254, 24, 20],
+                    [110, 92, 43],
+                    [156, 66, 57],
+                    [184, 50, 66],
+                    [136, 68, 66],
+                    [85, 68, 127],
+                    [126, 140, 134],
+                    [207, 16, 12],
+                    [146, 25, 20],
+                    [255, 0, 254],
+                    [17, 40, 14],
+                    [13, 16, 41],
+                    [0, 0, 0],
+                    [0, 0, 0],
+                    [0, 0, 0],
+                    [0, 0, 0],
+                    [255, 255, 255],
+                    [80, 100, 128],
+                    [0, 0, 0],
+                    [128, 128, 128],
+                    [255, 0, 0],
+                    [0, 255, 0],
+                    [255, 255, 0],
+                    [0, 0, 255],
+                    [255, 0, 255],
+                    [0, 255, 255],
+                    [0, 0, 0]
+                ];
+
+            // Load default palette
+            function loadDefaultPalette() {
+                    if (typeof defaultPalette !== 'undefined') {
+                        applyPalette(defaultPalette);
+                    } else {
+                        console.warn("Default palette not found.");
+                    }
                 }
-            }
 
             async function parsePaletteFile(file) {
                 const buffer = await file.arrayBuffer();
@@ -653,6 +908,20 @@
                 return palette.slice(0, 256); // Cap at 256 colors
             }
 
+            // Print palette (debugging)
+            function printPalette(palette) {
+                    const output = palette.map(rgb => `[${rgb[0]}, ${rgb[1]}, ${rgb[2]}]`).join(',\n');
+                    const container = document.createElement('pre');
+                    container.style.whiteSpace = 'pre-wrap';
+                    container.style.background = '#111';
+                    container.style.padding = '1em';
+                    container.style.border = '1px solid #666';
+                    container.style.color = '#0f0';
+                    container.textContent = `const defaultPalette = [\n${output}\n];`;
+
+                    document.body.appendChild(container);
+                }
+
             // Apply palette to datalist inputs and populate colorMap
             function applyPalette(palette) {
                 const colorDatalist = document.getElementById('colorOptions');
@@ -660,6 +929,7 @@
                 colorDatalist.innerHTML = '';
                 outlineDatalist.innerHTML = '';
                 colorMap = {};
+                //printPalette(palette);
 
                 palette.forEach(([r, g, b], index) => {
                     const rgb = `rgb(${r},${g},${b})`;
@@ -804,109 +1074,62 @@
                 drawGrid();
             };
 
-            // Render circles with representative texture, outline, and fuzz
-            function drawTexturedWigglyCircle(x, y, diameter, colorValue, outlineColorValue, outlineThickness, fuzz, texture) {
-                const radius = diameter / 2;
+            // (new) Render circles in pixely style with representative texture, outline, and fuzz
+            function drawPixelCircles(cx, cy, diameter, colorValue, outlineColorValue, outlineThickness, fuzz, texture) {
+                    const pixelSize = 2;
+                    const radius = diameter / 2;
+                    const fillColor = getColorFromValue(colorValue);
+                    const outlineColor = getColorFromValue(outlineColorValue);
 
-                // Fill the circle with the selected background color
-                ctx.beginPath();
-                ctx.arc(x, y, radius, 0, Math.PI * 2);
-                ctx.fillStyle = getColorFromValue(colorValue); // Circle's background color
-                ctx.fill();
+                    for (let dx = -radius - outlineThickness; dx <= radius + outlineThickness; dx++) {
+                        for (let dy = -radius - outlineThickness; dy <= radius + outlineThickness; dy++) {
+                            const hash = ((dx * 73856093) ^ (dy * 19349663)) & 255;
+                            const rand = (hash / 255 - 0.5);
+                            const fuzzedRadius = radius + rand * fuzz;
 
-                // Handle texture patterns (1: vertical stripes, 2: horizontal stripes, 3: polka dots)
-                if (texture > 0) {
-                    ctx.save();  // Save the current context state
+                            const dist = Math.sqrt(dx * dx + dy * dy);
+                            const isFill = dist <= fuzzedRadius;
+                            const isOutline = dist > fuzzedRadius && dist <= fuzzedRadius + outlineThickness;
 
-                    // Create the pattern based on the texture value
-                    const pattern = getTexturePattern(ctx, texture);  // This function should return a pattern
-                    if (pattern) {
-                        ctx.fillStyle = pattern;
-                        ctx.beginPath();
-                        ctx.arc(x, y, radius, 0, Math.PI * 2);
-                        ctx.fill();  // Apply the pattern fill
-                    }
+                            const px = Math.round(cx + dx * pixelSize);
+                            const py = Math.round(cy + dy * pixelSize);
 
-                    ctx.restore();  // Restore the original context state after filling the texture
-                }
+                            if (isFill) {
+                                ctx.fillStyle = fillColor;
+                                ctx.fillRect(px, py, pixelSize, pixelSize);
 
-                // Handle special cases for outlineThickness
-                if (outlineThickness === -2) {
-                    // Render a half-outline
-                    ctx.beginPath();
-                    ctx.arc(x, y, radius, 0, Math.PI); // Half circle (half outline)
-                    ctx.strokeStyle = getColorFromValue(outlineColorValue);
-                    ctx.lineWidth = 1; // Thin line for half-outline
-                    ctx.stroke();
-                } else if (outlineThickness > 0 || outlineThickness <= -1) {
-                    // Draw the wiggly outline if fuzz > 0 and positive outlineThickness
-                    const actualOutlineColor = (outlineThickness <= 0 && outlineThickness !== -2) ? getColorFromValue(colorValue) : getColorFromValue(outlineColorValue);
-
-                    if (fuzz > 0) {
-                        const segments = 100;
-                        const wiggleAmount = fuzz * 0.5;  // Increase wiggle with fuzz value
-
-                        ctx.beginPath();
-                        for (let i = 0; i <= segments; i++) {
-                            const angle = (i / segments) * Math.PI * 2;
-                            const wiggle = Math.sin(i * 5) * wiggleAmount;
-
-                            // Calculate current x, y based on wiggled radius
-                            const currentRadius = radius + wiggle;
-                            const offsetX = x + Math.cos(angle) * currentRadius;
-                            const offsetY = y + Math.sin(angle) * currentRadius;
-
-                            if (i === 0) {
-                                ctx.moveTo(offsetX, offsetY);
-                            } else {
-                                ctx.lineTo(offsetX, offsetY);
+                                if (texture && getTextureValue(px, py, texture)) {
+                                    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                                    ctx.fillRect(px, py, pixelSize, pixelSize);
+                                }
+                            } else if (outlineThickness > 0 && isOutline) {
+                                ctx.fillStyle = outlineColor;
+                                ctx.fillRect(px, py, pixelSize, pixelSize);
                             }
                         }
-                        ctx.closePath();
-                        ctx.lineWidth = Math.abs(outlineThickness) > 0 ? outlineThickness : 1;  // For fuzz, we'll still use 1px outline if outlineThickness is <= 0
-                        ctx.strokeStyle = actualOutlineColor;
-                        ctx.stroke();
-                    } else {
-                        // Regular outline without fuzz
-                        ctx.beginPath();
-                        ctx.arc(x, y, radius, 0, Math.PI * 2);
-                        ctx.lineWidth = outlineThickness;
-                        ctx.strokeStyle = actualOutlineColor;
-                        ctx.stroke();
                     }
                 }
-            }
 
             // Function to generate patterns based on texture value with transparency
-            function getTexturePattern(ctx, texture) {
-                const patternCanvas = document.createElement('canvas');
-                patternCanvas.width = 10;
-                patternCanvas.height = 10;
-                const patternCtx = patternCanvas.getContext('2d');
-
-                // Set the transparency with rgba (25% opacity)
-                const transparentWhite = 'rgba(255, 255, 255, 0.25)';
-
+            function getTextureValue(x, y, texture) {
                 switch (texture) {
                     case 1: // Vertical stripes
-                        patternCtx.fillStyle = transparentWhite;
-                        patternCtx.fillRect(2, 0, 2, 10);  // Vertical stripe
-                        break;
+                        return (Math.floor(x / 4) % 2 === 0);
                     case 2: // Horizontal stripes
-                        patternCtx.fillStyle = transparentWhite;
-                        patternCtx.fillRect(0, 2, 10, 2);  // Horizontal stripe
-                        break;
-                    case 3: // Polka dots
-                        patternCtx.fillStyle = transparentWhite;
-                        patternCtx.beginPath();
-                        patternCtx.arc(5, 5, 2, 0, Math.PI * 2);
-                        patternCtx.fill();
-                        break;
+                        return (Math.floor(y / 4) % 2 === 0);
+                    case 3: // Dotted squares
+                        return (Math.floor(x / 6) % 2 === 0 && Math.floor(y / 6) % 2 === 0);
+                    case 4: // Mini checkers
+                        return ((Math.floor(x / 4) + Math.floor(y / 4)) % 2 === 0);
+                    case 5: // Mega checkers
+                        return Math.sin(x * 0.2) + Math.cos(y * 0.2) > 0;
+                    case 6: // Snakescales
+                        return ((Math.floor(x / 4) - Math.floor(y / 2)) % 2 === 0);
+                    case 7: // Fishscales
+                        return ((Math.floor(x / 2) - Math.floor(y / 3)) % 2 === 0);
                     default:
-                        return null;  // No pattern for other values
+                        return false;
                 }
-
-                return ctx.createPattern(patternCanvas, 'repeat');
             }
 
             // Function to redraw all circles after grid is drawn
@@ -922,7 +1145,7 @@
                     let y = (circle.y * centerY) + centerY;
 
                     // Draw the circle fill and wiggly outline based on the fuzz and texture value
-                    drawTexturedWigglyCircle(
+                    drawPixelCircles(
                         x, y, circle.diameter, circle.color, circle.outlineColor,
                         circle.outlineThickness, circle.fuzz, circle.texture
                     );
@@ -953,7 +1176,7 @@
                 const texture = parseInt(document.getElementById('texture').value);
 
                 // Use the same function as for the final circle, but just draw the outline for preview
-                drawTexturedWigglyCircle(mouseX, mouseY, diameter, colorValue, outlineColor, outlineThickness, fuzz, texture);
+                drawPixelCircles(mouseX, mouseY, diameter, colorValue, outlineColor, outlineThickness, fuzz, texture);
             });
 
             // Add a wheel event listener to control the diameter with the mouse wheel
@@ -988,7 +1211,7 @@
                 const fuzz = parseInt(document.getElementById('fuzz').value);
                 const texture = parseInt(document.getElementById('texture').value);
 
-                drawTexturedWigglyCircle(mouseX, mouseY, diameter, colorValue, outlineColor, outlineThickness, fuzz, texture);
+                drawPixelCircles(mouseX, mouseY, diameter, colorValue, outlineColor, outlineThickness, fuzz, texture);
             });
 
             // Remove the preview circle when the mouse leaves the canvas
@@ -1053,7 +1276,7 @@
                     const group = parseInt(document.getElementById('group').value);
 
                     // Draw the circle fill and wiggly outline based on the fuzz and texture value
-                    drawTexturedWigglyCircle(clickX, clickY, diameter, colorValue, outlineColorValue, outlineThickness, fuzz, texture);
+                    drawPixelCircles(clickX, clickY, diameter, colorValue, outlineColorValue, outlineThickness, fuzz, texture);
 
                     // Save circle data
                     circles.push({
@@ -1364,6 +1587,15 @@
             // Default example LNZ content
             function loadDefaultLNZ() {
                 const defaultLNZ = `;baseball\tdiameter\tdirection (x,y,z)\tcolor\toutlinecolor\tfuzz\toutline\tgroup\ttexture\tanchored
+        6\t5\t-0.38,-0.54,1.00\t10\t244\t0\t-1\t-1\t1\t0
+        6\t10\t-0.42,-0.52,1.00\t35\t244\t0\t-1\t-1\t1\t0
+        6\t10\t-0.08,-0.08,1.00\t33\t244\t0\t-1\t-1\t1\t0
+        6\t10\t-0.02,-0.02,1.00\t33\t244\t0\t-1\t-1\t1\t0
+        6\t10\t0.08,0.02,1.00\t33\t244\t0\t-1\t-1\t1\t0
+        6\t10\t0.18,0.00,1.00\t33\t244\t0\t-1\t-1\t1\t0
+        6\t10\t0.26,-0.04,1.00\t33\t244\t0\t-1\t-1\t1\t0
+        6\t10\t0.32,-0.12,1.00\t33\t244\t0\t-1\t-1\t1\t0
+        6\t10\t0.36,-0.22,1.00\t33\t244\t0\t-1\t-1\t1\t0
         6\t35\t0.00,0.02,1.00\t165\t244\t3\t-1\t-1\t1\t0
         6\t35\t0.00,-0.20,1.00\t165\t244\t3\t-1\t-1\t1\t0
         6\t35\t0.24,-0.10,1.00\t165\t244\t3\t-1\t-1\t1\t0
@@ -1374,15 +1606,6 @@
         6\t20\t-0.46,-0.34,1.00\t65\t244\t0\t-1\t-1\t1\t0
         6\t20\t-0.60,-0.32,1.00\t65\t244\t0\t-1\t-1\t1\t0
         6\t20\t-0.72,-0.34,1.00\t65\t244\t0\t-1\t-1\t1\t0
-        6\t10\t-0.42,-0.52,1.00\t35\t244\t0\t-1\t-1\t1\t0
-        6\t5\t-0.38,-0.54,1.00\t10\t244\t0\t-1\t-1\t1\t0
-        6\t10\t-0.08,-0.08,1.00\t33\t244\t0\t-1\t-1\t1\t0
-        6\t10\t-0.02,-0.02,1.00\t33\t244\t0\t-1\t-1\t1\t0
-        6\t10\t0.08,0.02,1.00\t33\t244\t0\t-1\t-1\t1\t0
-        6\t10\t0.18,0.00,1.00\t33\t244\t0\t-1\t-1\t1\t0
-        6\t10\t0.26,-0.04,1.00\t33\t244\t0\t-1\t-1\t1\t0
-        6\t10\t0.32,-0.12,1.00\t33\t244\t0\t-1\t-1\t1\t0
-        6\t10\t0.36,-0.22,1.00\t33\t244\t0\t-1\t-1\t1\t0
     `;
 
                 // Set the default LNZ content into the textarea
