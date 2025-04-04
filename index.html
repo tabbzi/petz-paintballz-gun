@@ -9,7 +9,7 @@
     <style>
         body {
             font-family: 'Press Start 2P';
-            font-size: 10px;
+            font-size: 1.0em;
             background-color: #2f2f2f;
             color: #e0e0e0;
             margin: 5px;
@@ -18,17 +18,19 @@
 
         .note {
             font-family: 'Roboto Mono';
-            font-size: 8px;
+            font-size: 0.8em;
             color: #e0e0e0;
         }
 
         h1 {
+            font-size: 1.2em;
             color: #ffffff;
             text-align: center;
             text-shadow: 2px 2px 4px #000000;
         }
 
         h2 {
+            font-size: 1.1em;
             color: #ffffff;
             text-align: center;
             text-shadow: 2px 2px 4px #000000;
@@ -64,6 +66,7 @@
             flex-direction: column;
             margin-right: 10px;
             padding: 10px;
+            width: 60%;
         }
 
         canvas {
@@ -74,21 +77,20 @@
 
         .control-panel {
             margin-top: 10px;
-            margin-right: 10px;
-            padding: 5px;
             color: #bdbdbd;
+            width: 35%;
         }
 
         select,
         input,
         button {
             font-family: 'Press Start 2P';
-            font-size: 8px;
+            font-size: 0.6em;
             background-color: #616161;
             color: #ffffff;
             border: 2px solid #757575;
-            padding: 8px;
-            margin: 5px;
+            padding: 10px;
+            margin: 10px;
             border-radius: 5px;
             outline: none;
             box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
@@ -114,12 +116,12 @@
             border: 3px solid #616161;
             border-radius: 10px;
             padding: 10px;
-            font-size: 12px;
+            font-size: 0.8em;
             font-family: 'Roboto Mono';
             box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8);
         }
 
-        /* Scrollbar style */
+        /* === Scrollbar === */
         textarea::-webkit-scrollbar {
             width: 10px;
         }
@@ -135,7 +137,7 @@
         }
 
 
-        /* Dark Mode */
+        /* === Dark Mode === */
         .dark-mode {
             background-color: #2f2f2f;
             color: #e0e0e0;
@@ -189,7 +191,7 @@
             border: 3px solid #616161;
         }
 
-        /* Light Mode */
+        /* === Light Mode === */
         .light-mode {
             background-color: #f2f2f2;
             color: #2f2f2f;
@@ -246,7 +248,7 @@
 
 <body class="dark-mode">
     <h1>Petz Paintballz Gun</h1>
-    <h2>v2.0</h2>
+    <h2>v2.1</h2>
     <p>A handy web app for placing and exporting LNZ Paint Ballz!</p>
     <p>- Kathleen @ <a href="https://www.tabbloza.com/petz">Tabbloza</a></p>
 
@@ -254,19 +256,15 @@
 
     <div class="container">
         <div class="drawing-area">
-
+            <h2>Draw your design!</h2>
             <canvas id="paintCanvas" width="500" height="500"></canvas>
 
             <div class="sphere-area">
-                <p class="note">Your design will show here its position at origin (0,0,1)</p>
-                <p class="note">Blue dot indicates where relocated by roll/pitch/yaw</p>
-
+                <h2>Rotate your design...</h2>
                 <canvas id="sphereCanvas" width="300" height="300"></canvas>
-
-                <p class="note">Use the sliders to rotate the sphere and visualize the 3D space.</p>
-                <p class="note">Note: the red dots show face towards your view, gray dots away</p>
-                <p class="note">Latitude lines shown; starts from x=0, y=0, and z=1 (back of Petz' ball)</p>
-
+            
+                <p class="note">Use the sliders to rotate the sphere and visualize the 3D space. The blue dot shows the face of the base ballz on which your design will be placed. By default, design is on the <b>Back</b> of its base ballz. Adjust the sliders or press the quick buttons to rotate design to different regions.</p>
+            
                 <div>
                     <label for="roll">Roll:
                         <p class="note"></p>
@@ -289,1511 +287,1540 @@
                     </div>
                 </div>
             </div>
-
         </div>
 
-        <div class="container">
-            <div class="control-panel">
-                <label>Palette File:
-                    <input type="file" id="paletteFileInput" accept=".act,.pal,.bmp,.png">
-                </label>
-                <label for="deleteMode">Delete Mode</label>
-                <input type="checkbox" id="deleteMode">
+        <div class="control-panel">
+            <h2>Controls</h2>
+            <label>Palette File:
+                <input type="file" id="paletteFileInput" accept=".act,.pal,.bmp,.png">
+            </label>
+            <label for="deleteMode">Delete Mode</label>
+            <input type="checkbox" id="deleteMode">
 
-                <h3>Paintballz Properties</h3>
+            <h3>Paintballz Properties</h3>
 
-                <p class="note">These settings apply to <i>each</i> Paintballz placed!</p>
+            <p class="note">These settings apply to <i>each</i> Paintballz placed!</p>
 
-                <div class="form-group">
-                    <label>Diameter (% of base): <input type="number" id="diameter" value="30" min="1" max="100"
-                            step="1"></label>
-                    <label>Color:
-                        <input list="colorOptions" value="15" id="color" name="color">
-                        <datalist id="colorOptions"></datalist>
-                    </label>
-
-                    <label>Fuzz: <input type="number" id="fuzz" value="0"></label>
-
-                    <label>Outline Color:
-                        <input list="outlineColorOptions" value="244" id="outlineColor" name="outlineColor">
-                        <datalist id="outlineColorOptions"></datalist>
-                    </label>
-
-                    <label>Outline Thickness: <input type="number" id="outlineThickness" value="-1"></label>
-                    <label>Texture: <input type="number" id="texture" value="1"></label>
-                    <label>Group: <input type="number" id="group" value="-1"></label>
-                </div>
-
-                <h3>Global Properties</h3>
-
-                <p class="note">These settings apply to <i>all</i> output Paintballz!</p>
-
-                <label>Select Petz Type:
-                    <select id="petzType" onchange="updateBaseBallDropdown()">
-                        <option value="dogz">Dogz</option>
-                        <option value="catz">Catz</option>
-                        <option value="babyz">Babyz</option>
-                        <option value="addballz" selected>Add Ballz</option>
-                    </select>
+            <div class="form-group">
+                <label>Diameter (% of base): <input type="number" id="diameter" value="30" min="1" max="100"
+                        step="1"></label>
+                <label>Color:
+                    <input list="colorOptions" value="15" id="color" name="color">
+                    <datalist id="colorOptions"></datalist>
                 </label>
 
-                <label id="baseBallLabel" style="display: none;">Base Ballz #:
-                    <input list="baseBallOptions" id="baseBall" style="display:none;">
-                    <datalist id="baseBallOptions"></datalist>
+                <label>Fuzz: <input type="number" id="fuzz" value="0"></label>
+
+                <label>Outline Color:
+                    <input list="outlineColorOptions" value="244" id="outlineColor" name="outlineColor">
+                    <datalist id="outlineColorOptions"></datalist>
                 </label>
 
-                <label id="addBallLabel">Add Ballz #: <input type="number" id="addBallNumber" min="67"
-                        value="67"></label>
-
-                <label>Transform for Roll/Pitch/Yaw:
-                    <input type="checkbox" id="transformRotation">
-                </label>
-
-                <label>Anchored:
-                    <input type="checkbox" id="anchored" checked>
-                </label>
-
-                <label>Coordinate Multiplier:
-                    <input type="number" id="coordinateMultiplier" value="2" step="0.5">
-                    <p class="note">The <b>Coordinate Multiplier</b> controls spacing of Paint Ballz over Ballz.</p>
-                </label>
-
-                <button onclick="displayTSV()">Display LNZ!</button>
-
-                <textarea id="tsvOutput"></textarea>
-
-                <button id="copyTextButton">Copy LNZ code</button>
-
-                <button onclick="loadFromTSV()">Load from LNZ</button>
-
-                <button onclick="loadDefaultLNZ()">Load example Rubby Ducky LNZ!</button>
-
+                <label>Outline Thickness: <input type="number" id="outlineThickness" value="-1"></label>
+                <label>Texture: <input type="number" id="texture" value="1"></label>
+                <label>Group: <input type="number" id="group" value="-1"></label>
             </div>
+
+            <h3>Global Properties</h3>
+
+            <p class="note">These settings apply to <i>all</i> output Paintballz!</p>
+
+            <label>Select Petz Type:
+                <select id="petzType" onchange="updateBaseBallDropdown()">
+                    <option value="dogz">Dogz</option>
+                    <option value="catz">Catz</option>
+                    <option value="babyz">Babyz</option>
+                    <option value="addballz" selected>Add Ballz</option>
+                </select>
+            </label>
+
+            <label id="baseBallLabel" style="display: none;">Base Ballz #:
+                <input list="baseBallOptions" id="baseBall" style="display:none;">
+                <datalist id="baseBallOptions"></datalist>
+            </label>
+
+            <label id="addBallLabel">Add Ballz #: <input type="number" id="addBallNumber" min="67"
+                    value="67"></label>
+
+            <label>Transform for Roll/Pitch/Yaw:
+                <p class="note">rotates design around base ballz</p>
+                <input type="checkbox" id="transformRotation">
+            </label>
+
+            <label>UV Projection:
+                <input type="checkbox" id="UVProjection">
+            </label>
+
+            <label>Anchored:
+                <input type="checkbox" id="anchored" checked>
+            </label>
+
+            <label>Coordinate Multiplier:
+                <input type="number" id="coordinateMultiplier" value="2" step="0.5">
+                <p class="note">The <b>Coordinate Multiplier</b> controls spacing of Paint Ballz over Ballz.</p>
+            </label>
+
+            <button onclick="displayTSV()">Display LNZ!</button>
+
+            <textarea id="tsvOutput"></textarea>
+
+            <button id="copyTextButton">Copy LNZ code</button>
+
+            <button onclick="loadFromTSV()">Load from LNZ</button>
+
+            <button onclick="loadDefaultLNZ()">Load example Rubby Ducky LNZ!</button>
+
         </div>
+    </div>
 
-        <script>
-            window.addEventListener('DOMContentLoaded', () => {
-                document.getElementById('petzType').value = 'addballz';
-                updateBaseBallDropdown();     // Initialize base ball dropdown
-                loadDefaultPalette();         // Load reshade.act on page load
-                drawGrid();                   // Draw the canvas grid
-                redrawCircles();              // If anything was previously saved
-            });
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('petzType').value = 'addballz';
+            updateBaseBallDropdown();     // Initialize base ball dropdown
+            loadDefaultPalette();         // Load reshade.act on page load
+            drawGrid();                   // Draw the canvas grid
+            redrawCircles();              // If anything was previously saved
+        });
 
-            const toggleButton = document.getElementById('toggleMode');
-            const bodyElement = document.body;
+        const toggleButton = document.getElementById('toggleMode');
+        const bodyElement = document.body;
 
-            toggleButton.addEventListener('click', function () {
-                // Toggle between dark and light mode
-                if (bodyElement.classList.contains('dark-mode')) {
-                    bodyElement.classList.remove('dark-mode');
-                    bodyElement.classList.add('light-mode');
-                    toggleButton.textContent = 'Switch to Dark Mode';
-                } else {
-                    bodyElement.classList.remove('light-mode');
-                    bodyElement.classList.add('dark-mode');
-                    toggleButton.textContent = 'Switch to Light Mode';
-                }
-            });
-
-            const canvas = document.getElementById('paintCanvas');
-            const sphereCanvas = document.getElementById('sphereCanvas');
-            const ctx = canvas.getContext('2d');
-            ctx.imageSmoothingEnabled = false; // disable anti-aliasing
-            const sphereCtx = sphereCanvas.getContext('2d');
-            sphereCtx.imageSmoothingEnabled = false;
-            let circles = [];
-
-            // Initial roll, pitch, yaw values
-            let roll = 0, pitch = 0, yaw = 0;
-
-            // Array to store points of the sphere (latitude and longitude based)
-            const spherePoints = [];
-            const radius = 100;
-            const latitudeLines = []; // To store lines along latitude
-
-            // Generate points for the sphere
-            for (let lat = -Math.PI / 2; lat <= Math.PI / 2; lat += Math.PI / 12) {
-                let latitudeLine = [];
-                for (let lon = 0; lon <= 2 * Math.PI; lon += Math.PI / 12) {
-                    const x = Math.cos(lat) * Math.cos(lon);
-                    const y = Math.cos(lat) * Math.sin(lon);
-                    const z = Math.sin(lat);
-                    const point = { x, y, z };
-                    spherePoints.push(point);
-                    latitudeLine.push(point); // Add points to the current latitude line
-                }
-                latitudeLines.push(latitudeLine); // Store the latitude line
+        toggleButton.addEventListener('click', function () {
+            // Toggle between dark and light mode
+            if (bodyElement.classList.contains('dark-mode')) {
+                bodyElement.classList.remove('dark-mode');
+                bodyElement.classList.add('light-mode');
+                toggleButton.textContent = 'Switch to Dark Mode';
+            } else {
+                bodyElement.classList.remove('light-mode');
+                bodyElement.classList.add('dark-mode');
+                toggleButton.textContent = 'Switch to Light Mode';
             }
+        });
 
-            function project(x, y, z) {
-                const scale = radius / (radius + z); // Simple perspective projection
-                return {
-                    x: (sphereCanvas.width / 2) + x * scale * radius,
-                    y: (sphereCanvas.height / 2) + y * scale * radius
+        const canvas = document.getElementById('paintCanvas');
+        const sphereCanvas = document.getElementById('sphereCanvas');
+        const ctx = canvas.getContext('2d');
+        ctx.imageSmoothingEnabled = false; // disable anti-aliasing
+        const sphereCtx = sphereCanvas.getContext('2d');
+        sphereCtx.imageSmoothingEnabled = false;
+        let circles = [];
+
+        // Initial roll, pitch, yaw values
+        let roll = 0, pitch = 0, yaw = 0;
+
+        // Array to store points of the sphere (latitude and longitude based)
+        const spherePoints = [];
+        const radius = 100;
+        const latitudeLines = []; // To store lines along latitude
+
+        // Generate points for the sphere
+        for (let lat = -Math.PI / 2; lat <= Math.PI / 2; lat += Math.PI / 12) {
+            let latitudeLine = [];
+            for (let lon = 0; lon <= 2 * Math.PI; lon += Math.PI / 12) {
+                const x = Math.cos(lat) * Math.cos(lon);
+                const y = Math.cos(lat) * Math.sin(lon);
+                const z = Math.sin(lat);
+                const point = { x, y, z };
+                spherePoints.push(point);
+                latitudeLine.push(point); // Add points to the current latitude line
+            }
+            latitudeLines.push(latitudeLine); // Store the latitude line
+        }
+
+        function project(x, y, z) {
+            const scale = radius / (radius + z); // Simple perspective projection
+            return {
+                x: (sphereCanvas.width / 2) + x * scale * radius,
+                y: (sphereCanvas.height / 2) + y * scale * radius
+            };
+        }
+
+        // Draw the 3D sphere on the 2D canvas
+        function drawSphere() {
+                sphereCtx.clearRect(0, 0, sphereCanvas.width, sphereCanvas.height);
+
+                const hemisphereColor = (x, y, z) => {
+                    if (z > 0.5) return 'rgba(255, 0, 0, 0.15)';     // front
+                    if (z < -0.5) return 'rgba(0, 255, 0, 0.15)';    // back
+                    if (x > 0.5) return 'rgba(255, 255, 0, 0.15)';    // left
+                    if (x < -0.5) return 'rgba(0, 255, 255, 0.15)';   // right
+                    if (y > 0.5) return 'rgba(255, 0, 255, 0.15)';    // top
+                    if (y < -0.5) return 'rgba(255, 255, 255, 0.15)'; // bottom
+                    return null;
                 };
-            }
 
-            // Draw the 3D sphere on the 2D canvas
-            function drawSphere() {
-                    sphereCtx.clearRect(0, 0, sphereCanvas.width, sphereCanvas.height);
+                const faceLabels = [
+                    { label: 'BACK (+Z)', x: 0, y: 0, z: 1 },
+                    { label: 'FRONT (–Z)', x: 0, y: 0, z: -1 },
+                    { label: 'LEFT (+X)', x: 1, y: 0, z: 0 },
+                    { label: 'RIGHT (–X)', x: -1, y: 0, z: 0 },
+                    { label: 'BOTTOM (+Y)', x: 0, y: 1, z: 0 },
+                    { label: 'TOP (–Y)', x: 0, y: -1, z: 0 },
+                ];
 
-                    const hemisphereColor = (x, y, z) => {
-                        if (z > 0.5) return 'rgba(255, 0, 0, 0.15)';     // front
-                        if (z < -0.5) return 'rgba(0, 255, 0, 0.15)';    // back
-                        if (x > 0.5) return 'rgba(255, 255, 0, 0.15)';    // left
-                        if (x < -0.5) return 'rgba(0, 255, 255, 0.15)';   // right
-                        if (y > 0.5) return 'rgba(255, 0, 255, 0.15)';    // top
-                        if (y < -0.5) return 'rgba(255, 255, 255, 0.15)'; // bottom
-                        return null;
-                    };
-
-                    const faceLabels = [
-                        { label: 'BACK (+Z)', x: 0, y: 0, z: 1 },
-                        { label: 'FRONT (–Z)', x: 0, y: 0, z: -1 },
-                        { label: 'LEFT (+X)', x: 1, y: 0, z: 0 },
-                        { label: 'RIGHT (–X)', x: -1, y: 0, z: 0 },
-                        { label: 'BOTTOM (+Y)', x: 0, y: 1, z: 0 },
-                        { label: 'TOP (–Y)', x: 0, y: -1, z: 0 },
-                    ];
-
-                    // Fill hemispheres
-                    for (let lat = -Math.PI / 2; lat <= Math.PI / 2; lat += Math.PI / 24) {
-                        for (let lon = 0; lon <= 2 * Math.PI; lon += Math.PI / 24) {
-                            const x = Math.cos(lat) * Math.cos(lon);
-                            const y = Math.cos(lat) * Math.sin(lon);
-                            const z = Math.sin(lat);
-                            const rotated = rotate(x, y, z);
-                            const projected = project(rotated.x, rotated.y, rotated.z);
-                            const color = hemisphereColor(rotated.x, rotated.y, rotated.z);
-                            if (color) {
-                                sphereCtx.fillStyle = color;
-                                sphereCtx.fillRect(projected.x - 2, projected.y - 2, 4, 4);
-                            }
+                // Fill hemispheres
+                for (let lat = -Math.PI / 2; lat <= Math.PI / 2; lat += Math.PI / 24) {
+                    for (let lon = 0; lon <= 2 * Math.PI; lon += Math.PI / 24) {
+                        const x = Math.cos(lat) * Math.cos(lon);
+                        const y = Math.cos(lat) * Math.sin(lon);
+                        const z = Math.sin(lat);
+                        const rotated = rotate(x, y, z);
+                        const projected = project(rotated.x, rotated.y, rotated.z);
+                        const color = hemisphereColor(rotated.x, rotated.y, rotated.z);
+                        if (color) {
+                            sphereCtx.fillStyle = color;
+                            sphereCtx.fillRect(projected.x - 2, projected.y - 2, 4, 4);
                         }
                     }
+                }
 
-                    // Draw latitude lines
-                    latitudeLines.forEach(line => {
-                        for (let i = 0; i < line.length - 1; i++) {
-                            const point1 = line[i];
-                            const point2 = line[i + 1];
-                            const rotated1 = rotate(point1.x, point1.y, point1.z);
-                            const rotated2 = rotate(point2.x, point2.y, point2.z);
-                            const projected1 = project(rotated1.x, rotated1.y, rotated1.z);
-                            const projected2 = project(rotated2.x, rotated2.y, rotated2.z);
+                // Draw latitude lines
+                latitudeLines.forEach(line => {
+                    for (let i = 0; i < line.length - 1; i++) {
+                        const point1 = line[i];
+                        const point2 = line[i + 1];
+                        const rotated1 = rotate(point1.x, point1.y, point1.z);
+                        const rotated2 = rotate(point2.x, point2.y, point2.z);
+                        const projected1 = project(rotated1.x, rotated1.y, rotated1.z);
+                        const projected2 = project(rotated2.x, rotated2.y, rotated2.z);
 
+                        sphereCtx.beginPath();
+                        sphereCtx.moveTo(projected1.x, projected1.y);
+                        sphereCtx.lineTo(projected2.x, projected2.y);
+                        sphereCtx.strokeStyle = 'rgba(0, 128, 255, 0.5)';
+                        sphereCtx.lineWidth = 1;
+                        sphereCtx.stroke();
+                    }
+                });
+
+                // Draw longitude lines
+                const lonStep = Math.PI / 12;
+                for (let lon = 0; lon <= 2 * Math.PI; lon += lonStep) {
+                    let lastProjected = null;
+                    for (let lat = -Math.PI / 2; lat <= Math.PI / 2; lat += Math.PI / 36) {
+                        const x = Math.cos(lat) * Math.cos(lon);
+                        const y = Math.cos(lat) * Math.sin(lon);
+                        const z = Math.sin(lat);
+                        const rotated = rotate(x, y, z);
+                        const projected = project(rotated.x, rotated.y, rotated.z);
+
+                        if (lastProjected) {
                             sphereCtx.beginPath();
-                            sphereCtx.moveTo(projected1.x, projected1.y);
-                            sphereCtx.lineTo(projected2.x, projected2.y);
-                            sphereCtx.strokeStyle = 'rgba(0, 128, 255, 0.5)';
+                            sphereCtx.moveTo(lastProjected.x, lastProjected.y);
+                            sphereCtx.lineTo(projected.x, projected.y);
+                            sphereCtx.strokeStyle = 'rgba(0, 128, 255, 0.3)';
                             sphereCtx.lineWidth = 1;
                             sphereCtx.stroke();
                         }
-                    });
-
-                    // Draw longitude lines
-                    const lonStep = Math.PI / 12;
-                    for (let lon = 0; lon <= 2 * Math.PI; lon += lonStep) {
-                        let lastProjected = null;
-                        for (let lat = -Math.PI / 2; lat <= Math.PI / 2; lat += Math.PI / 36) {
-                            const x = Math.cos(lat) * Math.cos(lon);
-                            const y = Math.cos(lat) * Math.sin(lon);
-                            const z = Math.sin(lat);
-                            const rotated = rotate(x, y, z);
-                            const projected = project(rotated.x, rotated.y, rotated.z);
-
-                            if (lastProjected) {
-                                sphereCtx.beginPath();
-                                sphereCtx.moveTo(lastProjected.x, lastProjected.y);
-                                sphereCtx.lineTo(projected.x, projected.y);
-                                sphereCtx.strokeStyle = 'rgba(0, 128, 255, 0.3)';
-                                sphereCtx.lineWidth = 1;
-                                sphereCtx.stroke();
-                            }
-                            lastProjected = projected;
-                        }
+                        lastProjected = projected;
                     }
+                }
 
-                    // Draw paintballz
-                     const centerX = sphereCanvas.width / 2;
-                    const centerY = sphereCanvas.height / 2;
-                    const coordMult = parseFloat(document.getElementById('coordinateMultiplier').value);
+                // Draw paintballz
+                    const centerX = sphereCanvas.width / 2;
+                const centerY = sphereCanvas.height / 2;
+                const coordMult = parseFloat(document.getElementById('coordinateMultiplier').value);
 
-                    circles.forEach(ball => {
-                        const { x, y, z } = rotate(ball.x * coordMult, ball.y * coordMult, ball.z * coordMult);
-                        const { x: px, y: py } = project(x, y, z);
-                        const screenRadius = ball.diameter * 0.5;
-                        sphereCtx.beginPath();
-                        sphereCtx.arc(px, py, screenRadius, 0, Math.PI * 2);
-                        sphereCtx.fillStyle = getColorFromValue(ball.color);
-                        sphereCtx.fill();
-                    });
-
-                    // Floating face labels
-                    sphereCtx.font = '8px Roboto Mono';
-                    sphereCtx.fillStyle = 'white';
-                    sphereCtx.textAlign = 'center';
-                    faceLabels.forEach(face => {
-                    if (face.z > -0.2) { // only show labels on or near front
-                        const proj = project(face.x, face.y, face.z);
-                        sphereCtx.fillText(face.label, proj.x, proj.y);
-                    }
-                });
-
-                    // Blue forward dot
-                    const originProjected = project(...Object.values(rotate(0, 0, 1)));
+                circles.forEach(ball => {
+                    const { x, y, z } = rotate(ball.x * coordMult, ball.y * coordMult, ball.z * coordMult);
+                    const { x: px, y: py } = project(x, y, z);
+                    const screenRadius = ball.diameter * 0.5;
                     sphereCtx.beginPath();
-                    sphereCtx.arc(originProjected.x, originProjected.y, 5, 0, Math.PI * 2);
-                    sphereCtx.fillStyle = 'blue';
+                    sphereCtx.arc(px, py, screenRadius, 0, Math.PI * 2);
+                    sphereCtx.fillStyle = getColorFromValue(ball.color);
                     sphereCtx.fill();
-                }
-
-
-            // Update rotations based on slider input
-            document.getElementById('roll').addEventListener('input', function () {
-                roll = parseFloat(this.value);
-                drawSphere();
-            });
-
-            document.getElementById('pitch').addEventListener('input', function () {
-                pitch = parseFloat(this.value);
-                drawSphere();
-            });
-
-            document.getElementById('yaw').addEventListener('input', function () {
-                yaw = parseFloat(this.value);
-                drawSphere();
-            });
-
-            // Draw the sphere initially
-            drawSphere();
-
-            const dogzBaseBallz = [
-                "0: L ankle", "1: L eyebrow1", "2: L eyebrow2", "3: L eyebrow3",
-                "4: L ear1", "5: L ear2", "6: L ear3", "7: L elbow", "8: L eye",
-                "9: L finger1", "10: L finger2", "11: L finger3", "12: L foot",
-                "13: L hand", "14: L iris", "15: L jowl", "16: L knee", "17: L nostril",
-                "18: L shoulder", "19: L hip", "20: L toe1", "21: L toe2", "22: L toe3",
-                "23: L wrist", "24: R ankle", "25: R eyebrow1", "26: R eyebrow2", "27: R eyebrow3",
-                "28: R ear1", "29: R ear2", "30: R ear3", "31: R elbow", "32: R eye",
-                "33: R finger1", "34: R finger2", "35: R finger3", "36: R foot", "37: R hand",
-                "38: R iris", "39: R jowl", "40: R knee", "41: R nostril", "42: R shoulder",
-                "43: R hip", "44: R toe1", "45: R toe2", "46: R toe3", "47: R wrist",
-                "48: belly", "49: butt", "50: chest", "51: chin", "52: head", "53: jaw",
-                "54: neck", "55: nose (bottom)", "56: snout", "57: tail1", "58: tail2",
-                "59: tail3", "60: tail4", "61: tail5", "62: tail6", "63: tongue1", "64: tongue2",
-                "65: Z-trans", "66: Z-orient"
-            ];
-
-            const catzBaseBallz = [
-                "0: ankleL", "1: ankleR", "2: belly", "3: butt", "4: cheekL", "5: cheekR",
-                "6: chest", "7: chin", "8: earL1", "9: earL2", "10: earR1", "11: earR2",
-                "12: elbowL", "13: elbowR", "14: eyeL", "15: eyeR", "16: fingerL1", "17: fingerL2",
-                "18: fingerL3", "19: fingerR1", "20: fingerR2", "21: fingerR3", "22: handL",
-                "23: handR", "24: head", "25: hipL", "26: hipR", "27: irisL", "28: irisR",
-                "29: jaw", "30: jowlL", "31: jowlR", "32: kneeL", "33: kneeR", "34: knuckleL",
-                "35: knuckleR", "36: neck", "37: nose", "38: shoulderL", "39: shoulderR",
-                "40: snout", "41: soleL", "42: soleR", "43: tail1", "44: tail2", "45: tail3",
-                "46: tail4", "47: tail5", "48: tail6", "49: toeL1", "50: toeL2", "51: toeL3",
-                "52: toeR1", "53: toeR2", "54: toeR3", "55: tongue1", "56: tongue2", "57: whiskerL1",
-                "58: whiskerL2", "59: whiskerL3", "60: whiskerR1", "61: whiskerR2", "62: whiskerR3",
-                "63: wristL", "64: wristR", "65: Z-orient", "66: Z-trans"
-            ];
-
-            const babyzBaseBallz = [
-                "0: ankleL", "1: ankleR",
-                "2: archL", "3: archR",
-                "4: belly",
-                "5: bigtoeL", "6: bigtoeR",
-                "7: bridge",
-                "8: cheekL", "9: cheekR",
-                "10: chestL", "11: chestR",
-                "12: chin1", "13: chin2", "14: chin3", "15: chin4",
-                "16: ear1L", "17: ear1R",
-                "18: ear2L", "19: ear2R",
-                "20: ear3L", "21: ear3R",
-                "22: ear4L", "23: ear4R",
-                "24: ear5L", "25: ear5R",
-                "26: ear6L", "27: ear6R",
-                "28: earcenterL", "29: earcenterR",
-                "30: elbowL", "31: elbowR",
-                "32: extra1", "33: extra2", "34: extra3",
-                "35: eyeL", "36: eyeR",
-                "37: eyebrow1L", "38: eyebrow1R", "39: eyebrow2L", "40: eyebrow2R",
-                "41: eyebrow3L", "42: eyebrow3R", "43: eyebrow4L", "44: eyebrow4R",
-                "45: eyebrow5L", "46: eyebrow5R",
-                "47: finger_index1L", "48: finger_index1R",
-                "49: finger_index2L", "50: finger_index2R",
-                "51: finger_middle1L", "52: finger_middle1R",
-                "53: finger_middle2L", "54: finger_middle2R",
-                "55: finger_pinky1L", "56: finger_pinky1R",
-                "57: finger_pinky2L", "58: finger_pinky2R",
-                "59: football1L", "60: football1R",
-                "61: football2L", "62: football2R",
-                "63: head",
-                "64: heelL", "65: heelR",
-                "66: hipL", "67: hipR",
-                "68: irisL", "69: irisR",
-                "70: jock",
-                "71: kneeL", "72: kneeR",
-                "73: lowerLip1", "74: lowerLip2", "75: lowerLip3", "76: lowerLip4", "77: lowerLip5", "78: lowerLip6",
-                "79: mouthTopL", "80: mouthTopR",
-                "81: neck",
-                "82: nose1", "83: nose2", "84: nosemiddle", "85: nostrilL", "86: nostrilR",
-                "87: origin",
-                "88: palm1L", "89: palm1R", "90: palm2L", "91: palm2R", "92: palm3L", "93: palm3R",
-                "94: shoulderL", "95: shoulderR",
-                "96: templeL", "97: templeR",
-                "98: thumb1L", "99: thumb1R", "100: thumb2L", "101: thumb2R",
-                "102: toe_indexL", "103: toe_indexR", "104: toe_middleL", "105: toe_middleR", "106: toe_pinkyL", "107: toe_pinkyR",
-                "108: tongue1",
-                "109: underchin",
-                "110: upperLip1", "111: upperLip2", "112: upperLip3", "113: upperLip4", "114: upperLip5", "115: upperLip6",
-                "116: wristL", "117: wristR",
-                "118: zorient",
-                "119: ztrans"
-            ];
-
-            // Define colorMap globally for use in drawing and value lookup
-            let colorMap = {};
-
-            // Load palette file selected by user
-            document.getElementById('paletteFileInput').addEventListener('change', async (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const palette = await parsePaletteFile(file);
-                    applyPalette(palette);
-                }
-            });
-
-            const defaultPalette = [
-                    [255, 255, 255],
-                    [128, 0, 0],
-                    [0, 128, 0],
-                    [128, 128, 0],
-                    [0, 0, 128],
-                    [128, 0, 128],
-                    [0, 128, 128],
-                    [192, 192, 192],
-                    [192, 204, 216],
-                    [0, 0, 0],
-                    [231, 226, 221],
-                    [226, 220, 215],
-                    [221, 215, 210],
-                    [215, 209, 204],
-                    [210, 204, 199],
-                    [205, 198, 193],
-                    [200, 193, 188],
-                    [194, 187, 182],
-                    [189, 182, 177],
-                    [184, 176, 171],
-                    [117, 117, 117],
-                    [112, 112, 112],
-                    [107, 107, 107],
-                    [102, 102, 102],
-                    [97, 97, 97],
-                    [92, 92, 92],
-                    [87, 87, 87],
-                    [82, 82, 82],
-                    [77, 77, 77],
-                    [69, 69, 69],
-                    [66, 66, 66],
-                    [61, 61, 61],
-                    [54, 54, 54],
-                    [48, 48, 48],
-                    [41, 41, 41],
-                    [36, 36, 36],
-                    [28, 28, 28],
-                    [23, 23, 23],
-                    [15, 15, 15],
-                    [7, 7, 7],
-                    [220, 194, 150],
-                    [214, 186, 143],
-                    [208, 179, 137],
-                    [202, 171, 130],
-                    [196, 164, 124],
-                    [190, 156, 117],
-                    [184, 149, 111],
-                    [178, 141, 104],
-                    [172, 134, 98],
-                    [166, 126, 91],
-                    [135, 65, 34],
-                    [127, 60, 33],
-                    [120, 54, 31],
-                    [112, 49, 30],
-                    [104, 43, 28],
-                    [97, 38, 27],
-                    [89, 32, 25],
-                    [81, 27, 24],
-                    [74, 21, 22],
-                    [66, 16, 21],
-                    [180, 115, 22],
-                    [179, 110, 20],
-                    [176, 102, 17],
-                    [170, 94, 14],
-                    [167, 87, 12],
-                    [160, 79, 8],
-                    [157, 72, 7],
-                    [149, 64, 4],
-                    [146, 57, 2],
-                    [138, 48, 0],
-                    [240, 158, 183],
-                    [236, 152, 181],
-                    [231, 146, 182],
-                    [225, 137, 180],
-                    [219, 132, 180],
-                    [214, 128, 179],
-                    [205, 121, 177],
-                    [199, 117, 177],
-                    [191, 115, 176],
-                    [180, 110, 171],
-                    [168, 41, 1],
-                    [162, 37, 4],
-                    [156, 34, 7],
-                    [149, 30, 9],
-                    [143, 27, 12],
-                    [137, 23, 15],
-                    [131, 20, 18],
-                    [124, 16, 20],
-                    [118, 13, 23],
-                    [112, 9, 26],
-                    [107, 74, 12],
-                    [106, 68, 12],
-                    [101, 59, 11],
-                    [96, 52, 11],
-                    [91, 44, 11],
-                    [86, 38, 11],
-                    [82, 32, 10],
-                    [77, 27, 10],
-                    [72, 21, 9],
-                    [66, 16, 9],
-                    [166, 138, 56],
-                    [168, 137, 56],
-                    [163, 129, 56],
-                    [159, 123, 56],
-                    [154, 116, 55],
-                    [150, 110, 54],
-                    [145, 104, 54],
-                    [141, 98, 53],
-                    [136, 93, 53],
-                    [131, 87, 52],
-                    [98, 112, 125],
-                    [93, 105, 118],
-                    [87, 99, 112],
-                    [82, 92, 105],
-                    [77, 86, 99],
-                    [71, 79, 92],
-                    [66, 73, 86],
-                    [61, 66, 79],
-                    [55, 60, 73],
-                    [50, 53, 66],
-                    [154, 142, 115],
-                    [150, 137, 110],
-                    [142, 128, 103],
-                    [136, 121, 99],
-                    [127, 112, 92],
-                    [121, 106, 88],
-                    [112, 97, 81],
-                    [106, 91, 77],
-                    [98, 82, 71],
-                    [88, 74, 65],
-                    [66, 182, 68],
-                    [60, 174, 62],
-                    [52, 162, 54],
-                    [44, 150, 46],
-                    [36, 137, 38],
-                    [36, 128, 32],
-                    [35, 114, 26],
-                    [36, 99, 20],
-                    [33, 85, 15],
-                    [32, 69, 11],
-                    [17, 89, 223],
-                    [16, 80, 209],
-                    [15, 69, 194],
-                    [14, 61, 180],
-                    [12, 51, 166],
-                    [11, 37, 152],
-                    [10, 22, 138],
-                    [9, 11, 124],
-                    [14, 7, 110],
-                    [19, 6, 96],
-                    [216, 240, 255],
-                    [172, 224, 255],
-                    [153, 214, 255],
-                    [130, 202, 255],
-                    [117, 182, 232],
-                    [104, 192, 255],
-                    [81, 150, 220],
-                    [24, 156, 206],
-                    [86, 139, 185],
-                    [30, 137, 169],
-                    [235, 237, 167],
-                    [234, 235, 144],
-                    [209, 204, 119],
-                    [247, 244, 0],
-                    [237, 232, 50],
-                    [198, 198, 12],
-                    [195, 195, 52],
-                    [159, 162, 23],
-                    [159, 159, 67],
-                    [110, 122, 46],
-                    [255, 255, 255],
-                    [192, 228, 231],
-                    [172, 198, 213],
-                    [167, 167, 177],
-                    [160, 160, 168],
-                    [116, 160, 182],
-                    [119, 158, 180],
-                    [122, 156, 179],
-                    [125, 154, 178],
-                    [128, 152, 176],
-                    [226, 190, 172],
-                    [213, 147, 144],
-                    [215, 118, 110],
-                    [184, 115, 103],
-                    [159, 119, 115],
-                    [162, 106, 93],
-                    [137, 100, 88],
-                    [152, 87, 77],
-                    [106, 69, 66],
-                    [90, 60, 49],
-                    [114, 158, 140],
-                    [0, 128, 128],
-                    [66, 122, 117],
-                    [0, 128, 128],
-                    [57, 120, 96],
-                    [61, 90, 99],
-                    [38, 88, 71],
-                    [33, 65, 43],
-                    [18, 57, 48],
-                    [255, 255, 255],
-                    [255, 255, 255],
-                    [244, 246, 216],
-                    [233, 216, 194],
-                    [44, 95, 89],
-                    [211, 244, 197],
-                    [196, 211, 159],
-                    [255, 199, 26],
-                    [176, 184, 155],
-                    [175, 177, 119],
-                    [165, 148, 142],
-                    [172, 169, 143],
-                    [215, 160, 20],
-                    [198, 127, 8],
-                    [202, 110, 70],
-                    [121, 142, 97],
-                    [153, 126, 77],
-                    [128, 128, 128],
-                    [101, 155, 42],
-                    [0, 203, 22],
-                    [167, 108, 57],
-                    [255, 66, 0],
-                    [151, 100, 66],
-                    [153, 101, 42],
-                    [221, 52, 106],
-                    [41, 68, 117],
-                    [88, 105, 181],
-                    [66, 107, 132],
-                    [80, 100, 128],
-                    [117, 89, 74],
-                    [254, 24, 20],
-                    [110, 92, 43],
-                    [156, 66, 57],
-                    [184, 50, 66],
-                    [136, 68, 66],
-                    [85, 68, 127],
-                    [126, 140, 134],
-                    [207, 16, 12],
-                    [146, 25, 20],
-                    [255, 0, 254],
-                    [17, 40, 14],
-                    [13, 16, 41],
-                    [0, 0, 0],
-                    [0, 0, 0],
-                    [0, 0, 0],
-                    [0, 0, 0],
-                    [255, 255, 255],
-                    [80, 100, 128],
-                    [0, 0, 0],
-                    [128, 128, 128],
-                    [255, 0, 0],
-                    [0, 255, 0],
-                    [255, 255, 0],
-                    [0, 0, 255],
-                    [255, 0, 255],
-                    [0, 255, 255],
-                    [0, 0, 0]
-                ];
-
-            // Load default palette
-            function loadDefaultPalette() {
-                    if (typeof defaultPalette !== 'undefined') {
-                        applyPalette(defaultPalette);
-                    } else {
-                        console.warn("Default palette not found.");
-                    }
-                }
-
-            async function parsePaletteFile(file) {
-                const buffer = await file.arrayBuffer();
-                const ext = file.name.split('.').pop().toLowerCase();
-                const bytes = new Uint8Array(buffer);
-                let palette = [];
-
-                if (ext === 'act' || ext === 'pal') {
-                    // ACT/PAL: 768 bytes = 256 colors × 3 bytes
-                    if (bytes.length < 768) {
-                        console.error("ACT/PAL file too short, should be 768 bytes");
-                        return [];
-                    }
-                    for (let i = 0; i < 768; i += 3) {
-                        palette.push([bytes[i], bytes[i + 1], bytes[i + 2]]);
-                    }
-                } else if (ext === 'bmp') {
-                    // BMP: Palette starts after 54 bytes (14 header + 40 DIB) for 8-bit indexed BMP
-                    // Each color is 4 bytes: B G R 00
-                    const bmpHeaderSize = 54;
-                    if (bytes.length < bmpHeaderSize + 256 * 4) {
-                        console.error("BMP file too small for full palette");
-                        return [];
-                    }
-                    for (let i = bmpHeaderSize; i < bmpHeaderSize + 256 * 4; i += 4) {
-                        palette.push([bytes[i + 2], bytes[i + 1], bytes[i]]);
-                    }
-                } else if (ext === 'png') {
-                    // PNG: Find PLTE chunk after 8-byte PNG signature
-                    let offset = 8;
-                    while (offset < bytes.length) {
-                        const length = (bytes[offset] << 24) | (bytes[offset + 1] << 16) | (bytes[offset + 2] << 8) | bytes[offset + 3];
-                        const type = String.fromCharCode(...bytes.slice(offset + 4, offset + 8));
-                        if (type === 'PLTE') {
-                            for (let i = offset + 8; i < offset + 8 + length; i += 3) {
-                                palette.push([bytes[i], bytes[i + 1], bytes[i + 2]]);
-                            }
-                            break;
-                        }
-                        offset += 8 + length + 4;
-                    }
-                }
-
-                return palette.slice(0, 256); // Cap at 256 colors
-            }
-
-            // Print palette (debugging)
-            function printPalette(palette) {
-                    const output = palette.map(rgb => `[${rgb[0]}, ${rgb[1]}, ${rgb[2]}]`).join(',\n');
-                    const container = document.createElement('pre');
-                    container.style.whiteSpace = 'pre-wrap';
-                    container.style.background = '#111';
-                    container.style.padding = '1em';
-                    container.style.border = '1px solid #666';
-                    container.style.color = '#0f0';
-                    container.textContent = `const defaultPalette = [\n${output}\n];`;
-
-                    document.body.appendChild(container);
-                }
-
-            // Apply palette to datalist inputs and populate colorMap
-            function applyPalette(palette) {
-                const colorDatalist = document.getElementById('colorOptions');
-                const outlineDatalist = document.getElementById('outlineColorOptions');
-                colorDatalist.innerHTML = '';
-                outlineDatalist.innerHTML = '';
-                colorMap = {};
-                //printPalette(palette);
-
-                palette.forEach(([r, g, b], index) => {
-                    const rgb = `rgb(${r},${g},${b})`;
-                    colorMap[index] = rgb;
-
-                    const option = document.createElement('option');
-                    option.label = `${index} (${rgb})`;
-                    option.style.backgroundColor = rgb;
-
-                    const outlineOption = option.cloneNode(true);
-                    outlineOption.style.backgroundColor = rgb;
-
-                    colorDatalist.appendChild(option);
-                    outlineDatalist.appendChild(outlineOption);
-                });
-            }
-
-            // Lookup function for drawing/rendering
-            function getColorFromValue(value) {
-                const index = parseInt(value);
-                return colorMap[index] || 'rgb(0,0,0)';
-            }
-
-            document.getElementById('color').addEventListener('input', function () {
-                const val = parseInt(this.value);
-                const rgb = colorMap[val];
-                if (rgb) this.style.backgroundColor = rgb;
-            });
-
-            document.getElementById('outlineColor').addEventListener('input', function () {
-                const val = parseInt(this.value);
-                const rgb = colorMap[val];
-                if (rgb) this.style.backgroundColor = rgb;
-            });
-
-            // Update dropdowns for Catz or Dogz selection
-            function updateBaseBallDropdown() {
-                const petzType = document.getElementById('petzType').value;
-                const baseBallInput = document.getElementById('baseBall');
-                const baseBallDatalist = document.getElementById('baseBallOptions');
-                const addBallLabel = document.getElementById('addBallLabel');
-                const baseBallLabel = document.getElementById('baseBallLabel');
-
-                // Clear existing datalist options
-                baseBallDatalist.innerHTML = '';
-
-                if (petzType === 'dogz') {
-                    baseBallInput.style.display = 'inline';
-                    baseBallLabel.style.display = 'inline';
-                    addBallLabel.style.display = 'none';
-
-                    // Populate datalist for Dogz
-                    dogzBaseBallz.forEach((ball, index) => {
-                        baseBallDatalist.innerHTML += `<option value="${index}">${ball}</option>`;
-                    });
-                } else if (petzType === 'catz') {
-                    baseBallInput.style.display = 'inline';
-                    baseBallLabel.style.display = 'inline';
-                    addBallLabel.style.display = 'none';
-
-                    // Populate datalist for Catz
-                    catzBaseBallz.forEach((ball, index) => {
-                        baseBallDatalist.innerHTML += `<option value="${index}">${ball}</option>`;
-                    });
-                } else if (petzType === 'babyz') {
-                    baseBallInput.style.display = 'inline';
-                    baseBallLabel.style.display = 'inline';
-                    addBallLabel.style.display = 'none';
-
-                    // Populate datalist for Babyz
-                    babyzBaseBallz.forEach((ball, index) => {
-                        baseBallDatalist.innerHTML += `<option value="${index}">${ball}</option>`;
-                    });
-                } else if (petzType === 'addballz') {
-                    baseBallInput.style.display = 'none';
-                    baseBallLabel.style.display = 'none';
-                    addBallLabel.style.display = 'inline';
-                }
-            }
-
-            // Canvas grid
-            function drawGrid() {
-                const gridSpacing = 50; // Set spacing between grid lines
-                const textOffset = 15; // Set offset for text labels
-                const centerX = canvas.width / 2;
-                const centerY = canvas.height / 2;
-
-                // Fetch the global coordinate multiplier
-                const coordinateMultiplier = parseFloat(document.getElementById('coordinateMultiplier').value);
-
-                // Draw vertical grid lines and labels
-                ctx.beginPath();
-                ctx.strokeStyle = '#888'; // Light gray for grid lines
-                ctx.lineWidth = 1;
-                for (let x = 0; x <= canvas.width; x += gridSpacing) {
-                    ctx.moveTo(x, 0);
-                    ctx.lineTo(x, canvas.height);
-                    ctx.stroke();
-
-                    // Label the x-axis based on the multiplier, converting back to coordinate system
-                    const labelValueX = ((x - centerX) / centerX * coordinateMultiplier).toFixed(2);
-                    ctx.fillStyle = '#888'; // Color for axis labels
-                    ctx.font = '12px Arial';
-                    ctx.fillText(labelValueX, x + 2, centerY + textOffset);
-                }
-
-                // Draw horizontal grid lines and labels
-                ctx.beginPath();
-                for (let y = 0; y <= canvas.height; y += gridSpacing) {
-                    ctx.moveTo(0, y);
-                    ctx.lineTo(canvas.width, y);
-                    ctx.stroke();
-
-                    // Label the y-axis based on the multiplier, converting back to coordinate system
-                    const labelValueY = ((centerY - y) / centerY * coordinateMultiplier).toFixed(2);
-                    ctx.fillText(labelValueY, centerX + textOffset, y - 2);
-                }
-
-                // Draw axes lines (X and Y)
-                ctx.beginPath();
-                ctx.strokeStyle = '#555'; // Darker color for axes
-                ctx.lineWidth = 2;
-
-                // Vertical axis (Y-axis)
-                ctx.moveTo(centerX, 0);
-                ctx.lineTo(centerX, canvas.height);
-                ctx.stroke();
-
-                // Horizontal axis (X-axis)
-                ctx.moveTo(0, centerY);
-                ctx.lineTo(canvas.width, centerY);
-                ctx.stroke();
-            }
-
-            // Redraw grid when multiplier changes
-            document.getElementById('coordinateMultiplier').addEventListener('input', function () {
-                drawGrid();
-            });
-
-            // Also draw the grid when page loads
-            window.onload = function () {
-                drawGrid();
-            };
-
-            // (new) Render circles in pixely style with representative texture, outline, and fuzz
-            function drawPixelCircles(cx, cy, diameter, colorValue, outlineColorValue, outlineThickness, fuzz, texture) {
-                const pixelSize = 2;
-                const radius = diameter / 2;
-                const fillColor = getColorFromValue(colorValue);
-                const outlineColor = getColorFromValue(outlineColorValue);
-
-                const isFullOutline = outlineThickness > 0;
-                const isLeftOutline = outlineThickness === 0;
-                const isRightOutline = outlineThickness === -2;
-                const isNoOutline = outlineThickness === -1;
-
-                const effectiveOutlineThickness = isFullOutline ? outlineThickness : (isLeftOutline || isRightOutline ? 1 : 0);
-
-                for (let dx = -radius - effectiveOutlineThickness; dx <= radius + effectiveOutlineThickness; dx++) {
-                    for (let dy = -radius - effectiveOutlineThickness; dy <= radius + effectiveOutlineThickness; dy++) {
-                        // Stable hash-based fuzz
-                        const hash = ((dx * 73856093) ^ (dy * 19349663)) & 255;
-                        const rand = (hash / 255 - 0.5);
-                        const fuzzedRadius = radius + rand * fuzz;
-
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-                        const isFill = dist <= fuzzedRadius;
-                        const isOutline = dist > fuzzedRadius && dist <= fuzzedRadius + effectiveOutlineThickness;
-
-                        const px = Math.round(cx + dx * pixelSize);
-                        const py = Math.round(cy + dy * pixelSize);
-
-                        if (isFill) {
-                            ctx.fillStyle = fillColor;
-                            ctx.fillRect(px, py, pixelSize, pixelSize);
-
-                            if (texture && getTextureValue(px, py, texture)) {
-                                ctx.fillStyle = 'rgba(255,255,255,0.3)';
-                                ctx.fillRect(px, py, pixelSize, pixelSize);
-                            }
-                        } else if (isOutline) {
-                            // Determine angle to classify left/right
-                            const angle = Math.atan2(dy, dx); // radians: -π to π
-                            const isLeftHalf = angle > Math.PI / 2 || angle < -Math.PI / 2;
-                            const isRightHalf = angle >= -Math.PI / 2 && angle <= Math.PI / 2;
-
-                            const shouldDraw =
-                                isFullOutline ||
-                                (isLeftOutline && isLeftHalf) ||
-                                (isRightOutline && isRightHalf);
-
-                            if (shouldDraw) {
-                                ctx.fillStyle = outlineColor;
-                                ctx.fillRect(px, py, pixelSize, pixelSize);
-                            }
-                        }
-                    }
-                }
-            }
-
-            // Function to generate patterns based on texture value with transparency
-            function getTextureValue(x, y, texture) {
-                switch (texture) {
-                    case 1: // Vertical stripes
-                        return (Math.floor(x / 4) % 2 === 0);
-                    case 2: // Horizontal stripes
-                        return (Math.floor(y / 4) % 2 === 0);
-                    case 3: // Dotted squares
-                        return (Math.floor(x / 6) % 2 === 0 && Math.floor(y / 6) % 2 === 0);
-                    case 4: // Mini checkers
-                        return ((Math.floor(x / 4) + Math.floor(y / 4)) % 2 === 0);
-                    case 5: // Mega checkers
-                        return Math.sin(x * 0.2) + Math.cos(y * 0.2) > 0;
-                    case 6: // Snakescales
-                        return ((Math.floor(x / 4) - Math.floor(y / 2)) % 2 === 0);
-                    case 7: // Fishscales
-                        return ((Math.floor(x / 2) - Math.floor(y / 3)) % 2 === 0);
-                    default:
-                        return false;
-                }
-            }
-
-            // Function to redraw all circles after grid is drawn
-            function redrawCircles() {
-                const centerX = canvas.width / 2;
-                const centerY = canvas.height / 2;
-
-                const coordinateMultiplier = parseFloat(document.getElementById('coordinateMultiplier').value);
-
-                // Loop through and redraw each circle
-                circles.forEach(circle => {
-                    let x = (circle.x * centerX) + centerX;
-                    let y = (circle.y * centerY) + centerY;
-
-                    // Draw the circle fill and wiggly outline based on the fuzz and texture value
-                    drawPixelCircles(
-                        x, y, circle.diameter, circle.color, circle.outlineColor,
-                        circle.outlineThickness, circle.fuzz, circle.texture
-                    );
-                });
-            }
-
-            // Track mouse movement to display a preview circle on hover
-            canvas.addEventListener('mousemove', function (event) {
-                const rect = canvas.getBoundingClientRect();
-                const centerX = canvas.width / 2;
-                const centerY = canvas.height / 2;
-                const mouseX = event.clientX - rect.left;
-                const mouseY = event.clientY - rect.top;
-
-                // Clear the canvas before drawing the preview
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                // Redraw the grid and existing circles
-                drawGrid();
-                redrawCircles();
-
-                // Get the current diameter from the input field for hover preview
-                const diameter = parseInt(document.getElementById('diameter').value);
-                const colorValue = document.getElementById('color').value;
-                const outlineColor = document.getElementById('outlineColor').value;
-                const outlineThickness = parseInt(document.getElementById('outlineThickness').value);
-                const fuzz = parseInt(document.getElementById('fuzz').value);
-                const texture = parseInt(document.getElementById('texture').value);
-
-                // Use the same function as for the final circle, but just draw the outline for preview
-                drawPixelCircles(mouseX, mouseY, diameter, colorValue, outlineColor, outlineThickness, fuzz, texture);
-            });
-
-            // Add a wheel event listener to control the diameter with the mouse wheel
-            canvas.addEventListener('wheel', function (event) {
-                event.preventDefault();  // Prevent the default scrolling behavior
-
-                // Get the current diameter from the input field
-                const diameterInput = document.getElementById('diameter');
-                let diameter = parseInt(diameterInput.value);
-
-                // Adjust the diameter based on scroll direction (smooth scrolling)
-                const delta = event.deltaY > 0 ? -1 : 1; // Scroll up to increase, scroll down to decrease
-                diameter = Math.max(1, diameter + delta); // Set minimum diameter to 1
-
-                // Update the diameter input field
-                diameterInput.value = diameter;
-
-                // Redraw the hover circle immediately after changing diameter
-                const rect = canvas.getBoundingClientRect();
-                const mouseX = event.clientX - rect.left;
-                const mouseY = event.clientY - rect.top;
-
-                // Clear the canvas and redraw everything
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                drawGrid();
-                redrawCircles();
-
-                // Draw a new preview circle with updated diameter using the same function
-                const colorValue = document.getElementById('color').value;
-                const outlineColor = document.getElementById('outlineColor').value;
-                const outlineThickness = parseInt(document.getElementById('outlineThickness').value);
-                const fuzz = parseInt(document.getElementById('fuzz').value);
-                const texture = parseInt(document.getElementById('texture').value);
-
-                drawPixelCircles(mouseX, mouseY, diameter, colorValue, outlineColor, outlineThickness, fuzz, texture);
-            });
-
-            // Remove the preview circle when the mouse leaves the canvas
-            canvas.addEventListener('mouseout', function () {
-                // Clear the canvas
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                // Redraw the grid and existing circles
-                drawGrid();
-                redrawCircles();
-            });
-
-            // Handle click event to draw or delete on the canvas
-            canvas.addEventListener('click', function (event) {
-                const rect = canvas.getBoundingClientRect();
-                const centerX = canvas.width / 2;
-                const centerY = canvas.height / 2;
-                const clickX = event.clientX - rect.left;
-                const clickY = event.clientY - rect.top;
-
-                // Check if delete mode is active
-                const deleteMode = document.getElementById('deleteMode').checked;
-
-                if (deleteMode) {
-                    // Try to find and delete the circle that was clicked on
-                    let circleToDelete = null;
-                    for (let i = 0; i < circles.length; i++) {
-                        const circle = circles[i];
-                        const canvasX = (circle.x * centerX) + centerX;
-                        const canvasY = (circle.y * centerY) + centerY;
-
-                        // Calculate the distance between the click and the center of the circle
-                        const distance = Math.sqrt((clickX - canvasX) ** 2 + (clickY - canvasY) ** 2);
-                        if (distance <= circle.diameter) {
-                            // The click is inside this circle
-                            circleToDelete = i;
-                            break;
-                        }
-                    }
-
-                    if (circleToDelete !== null) {
-                        // Remove the circle from the array
-                        circles.splice(circleToDelete, 1);
-
-                        // Redraw the grid and remaining circles
-                        ctx.clearRect(0, 0, canvas.width, canvas.height);
-                        drawGrid();
-                        redrawCircles();
-                    }
-                } else {
-                    // Normalize x, y with respect to the center of the canvas (without applying multiplier)
-                    let x = (clickX - centerX) / centerX;  // Positive x = left on ballz, negative x = right on ballz, WHEN z = 1
-                    let y = (clickY - centerY) / centerY;  // Positive y = down on ballz, negative y = up on ballz, WHEN z = 1
-                    const z = 1;  // z is set to 1 initially, then gets transformed based on the roll/pitch/yaw values
-
-                    const diameter = parseInt(document.getElementById('diameter').value);
-                    const colorValue = document.getElementById('color').value;
-                    const outlineColorValue = document.getElementById('outlineColor').value;
-                    const outlineThickness = parseInt(document.getElementById('outlineThickness').value);
-                    const fuzz = parseInt(document.getElementById('fuzz').value);
-                    const texture = parseInt(document.getElementById('texture').value);
-                    const group = parseInt(document.getElementById('group').value);
-
-                    // Draw the circle fill and wiggly outline based on the fuzz and texture value
-                    drawPixelCircles(clickX, clickY, diameter, colorValue, outlineColorValue, outlineThickness, fuzz, texture);
-
-                    // Save circle data
-                    circles.push({
-                        x: x.toFixed(2), y: y.toFixed(2), z: z, diameter: diameter,
-                        color: colorValue, fuzz: fuzz, outlineColor: outlineColorValue,
-                        outlineThickness: outlineThickness, texture: texture, group: group
-                    });
-                }
-            });
-
-            // Ensure the grid is redrawn whenever the multiplier changes
-            document.getElementById('coordinateMultiplier').addEventListener('input', function () {
-                // Clear the canvas
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                // Draw the grid and then redraw all circles
-                drawGrid();
-                redrawCircles();
-            });
-
-            // Function to rotate a point (x, y, z) by the current yaw, pitch, and roll values (order matters!)
-            function rotate(x, y, z) {
-                // Apply yaw (Z-axis)
-                let tempX = x * Math.cos(yaw) - y * Math.sin(yaw);
-                let tempY = x * Math.sin(yaw) + y * Math.cos(yaw);
-                x = tempX;
-                y = tempY;
-
-                // Apply pitch (Y-axis)
-                let tempZ = z * Math.cos(pitch) - x * Math.sin(pitch);
-                tempX = z * Math.sin(pitch) + x * Math.cos(pitch);
-                z = tempZ;
-                x = tempX;
-
-                // Apply roll (X-axis)
-                tempY = y * Math.cos(roll) - z * Math.sin(roll);
-                tempZ = y * Math.sin(roll) + z * Math.cos(roll);
-                y = tempY;
-                z = tempZ;
-
-                return { x, y, z };
-            }
-
-            // Function to reverse the rotation applied to a point (x, y, z) when yaw and pitch inferred
-            function reverseRotation(x, y, z, yaw, pitch, roll = 0) {
-                // Reverse roll (X-axis rotation) - assuming no significant roll from the first point
-                let tempY = y * Math.cos(-roll) + z * Math.sin(-roll);
-                let tempZ = z * Math.cos(-roll) - y * Math.sin(-roll);
-                y = tempY;
-                z = tempZ;
-
-                // Reverse pitch (Y-axis rotation)
-                let tempX = x * Math.cos(-pitch) + z * Math.sin(-pitch);
-                tempZ = z * Math.cos(-pitch) - x * Math.sin(-pitch);
-                x = tempX;
-                z = tempZ;
-
-                // Reverse yaw (Z-axis rotation)
-                tempX = x * Math.cos(-yaw) - y * Math.sin(-yaw);
-                tempY = x * Math.sin(-yaw) + y * Math.cos(-yaw);
-                x = tempX;
-                y = tempY;
-
-                return { x, y, z };
-            }
-
-            // Function to set roll, pitch, and yaw based on face button
-            function setRotation(view) {
-                switch (view) {
-                    case 'front':
-                        roll = 0;
-                        pitch = Math.PI;
-                        yaw = 0;
-                        break;
-                    case 'back':
-                        roll = 0;
-                        pitch = 0;
-                        yaw = 0;
-                        break;
-                    case 'top':
-                        roll = -Math.PI / 2;
-                        pitch = Math.PI;
-                        yaw = 0;
-                        break;
-                    case 'bottom':
-                        roll = Math.PI / 2;
-                        pitch = Math.PI;
-                        yaw = 0;
-                        break;
-                    case 'left':
-                        roll = 0;
-                        pitch = Math.PI / 2;
-                        yaw = 0;
-                        break;
-                    case 'right':
-                        roll = 0;
-                        pitch = -Math.PI / 2;
-                        yaw = 0;
-                        break;
-                }
-
-                // Update the slider values
-                const rollSlider = document.getElementById('roll');
-                const pitchSlider = document.getElementById('pitch');
-                const yawSlider = document.getElementById('yaw');
-
-                rollSlider.value = roll;
-                pitchSlider.value = pitch;
-                yawSlider.value = yaw;
-
-                // Trigger the 'input' event on each slider to reflect the change visually
-                rollSlider.dispatchEvent(new Event('input'));
-                pitchSlider.dispatchEvent(new Event('input'));
-                yawSlider.dispatchEvent(new Event('input'));
-
-                // Redraw the sphere with the new rotation
-                drawSphere();
-            }
-
-            // Function to apply the transform if the checkbox is checked
-            function applyTransform(x, y, z) {
-                if (document.getElementById('transformRotation').checked) {
-                    const rotated = rotate(x, y, z);
-                    return { x: rotated.x, y: rotated.y, z: rotated.z };
-                }
-                return { x, y, z };
-            }
-
-            // Function to clean and conform input to proper TSV format
-            function conformToTSV(content) {
-                // Initial input log
-                console.log("Original content:", content);
-
-                // Replace occurrences of commas followed by spaces with tabs
-                content = content.replace(/,\s+/g, '\t');
-                console.log("After replacing commas followed by spaces:", content);
-
-                // Replace commas followed by tabs with tabs (in case commas were used inconsistently)
-                content = content.replace(/,\t+/g, '\t');
-                console.log("After replacing commas followed by tabs:", content);
-
-                // Replace any remaining commas with tabs (if input uses only commas as a delimiter)
-                content = content.replace(/,/g, '\t');
-                console.log("After replacing remaining commas:", content);
-
-                return content;
-            }
-
-            // Function to check if the sum of the absolute values of the floors of normalized x, y, z equals zero
-            function isProblematicVector(x, y, z) {
-                const normalized = normalizeVector(x, y, z);
-
-                // Check if the sum of the absolute values of the floors of normalized x, y, z equals zero
-                const sumFloors = Math.abs(Math.floor(normalized.x)) + Math.abs(Math.floor(normalized.y)) + Math.abs(Math.floor(normalized.z));
-
-                return sumFloors === 0;
-            }
-
-            // Function to normalize a vector
-            function normalizeVector(x, y, z) {
-                const magnitude = Math.sqrt(x * x + y * y + z * z);
-
-                if (magnitude === 0) {
-                    return { x: 0, y: 0, z: 0 };  // Return unnormalized vector if magnitude is zero
-                }
-
-                const invMagnitude = 1 / magnitude;
-                return {
-                    x: x * invMagnitude,
-                    y: y * invMagnitude,
-                    z: z * invMagnitude
-                };
-            }
-
-            // Function to find the minimum nudge for a problematic vector
-            function nudgeVectorIfNeeded(x, y, z) {
-                const threshold = 0.01; // Avoid very small numbers
-                const minNudge = 0.1;   // A nudge that helps push coordinates away from zero
-
-                // Detect if two or more coordinates are too close to zero
-                let zeroCount = (Math.abs(x) < threshold ? 1 : 0) +
-                    (Math.abs(y) < threshold ? 1 : 0) +
-                    (Math.abs(z) < threshold ? 1 : 0);
-
-                // If two or more coordinates are near zero, adjust them
-                if (zeroCount >= 2) {
-                    // Prioritize nudging the smallest one or the one closest to zero
-                    if (Math.abs(x) < threshold) {
-                        x = (x < 0 ? -minNudge : minNudge);
-                    } else if (Math.abs(y) < threshold) {
-                        y = (y < 0 ? -minNudge : minNudge);
-                    } else if (Math.abs(z) < threshold) {
-                        z = (z < 0 ? -minNudge : minNudge);
-                    }
-                }
-
-                // Ensure no combination of x, y, z results in (0, 0, 0)
-                if (x === 0 && y === 0 && z === 0) {
-                    x = minNudge;
-                }
-
-                return { x, y, z };
-            }
-
-            // Function to load input LNZ from textarea
-            function loadFromTSV() {
-                // Clear the existing circles array and canvas
-                circles = [];
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                // Redraw the grid first
-                drawGrid();
-
-                // Fetch the global settings (anchored and multiplier)
-                const coordinateMultiplier = parseFloat(document.getElementById('coordinateMultiplier').value);
-
-                // Get the TSV content from the textarea
-                let tsvContent = document.getElementById('tsvOutput').value;
-
-                // Conform input to proper TSV format
-                tsvContent = conformToTSV(tsvContent);
-
-                // Split the TSV content by lines
-                const lines = tsvContent.trim().split('\n').reverse();
-
-                // Parse all lines (including index 0) that do not start with ";" and have valid numbers
-                const parsedLines = lines.filter(line => {
-                    const row = line.split('\t');
-                    return !row[0].startsWith(';') && !isNaN(parseFloat(row[0]));
                 });
 
-                // Loop through the parsed lines in normal order
-                parsedLines.forEach(line => {
-                    const row = line.split('\t');
-
-                    // Skip any line starting with a semicolon (;) or if the first field isn't a number
-                    if (row[0].startsWith(';') || isNaN(parseFloat(row[0]))) {
-                        return;
-                    }
-
-                    // Extract the values based on the TSV columns
-                    const baseBall = row[0];
-                    const diameter = parseFloat(row[1]);
-
-                    // Extract x, y, z from the row and apply coordinate multiplier
-                    let x = parseFloat(row[2]) / coordinateMultiplier;
-                    let y = parseFloat(row[3]) / coordinateMultiplier;
-                    let z = parseFloat(row[4]) / coordinateMultiplier;
-
-                    // Nudge the vector if needed to avoid NaN and problematic cases
-                    const nudgedVector = nudgeVectorIfNeeded(x, y, z);
-                    x = nudgedVector.x;
-                    y = nudgedVector.y;
-                    z = nudgedVector.z;
-
-                    const colorValue = row[5];
-                    const outlineColorValue = row[6];
-                    const fuzz = parseInt(row[7]);
-                    const outlineThickness = parseInt(row[8]);
-                    const group = parseInt(row[9]);
-                    const texture = parseInt(row[10]);
-
-                    // Calculate actual canvas coordinates
-                    const centerX = canvas.width / 2;
-                    const centerY = canvas.height / 2;
-                    const canvasX = (x * centerX) + centerX;
-                    const canvasY = (y * centerY) + centerY;
-
-                    // Draw the circle on the canvas
-                    ctx.beginPath();
-                    ctx.arc(canvasX, canvasY, diameter, 0, Math.PI * 2);
-                    ctx.fillStyle = getColorFromValue(colorValue);
-                    ctx.fill();
-
-                    // Outline handling based on outlineThickness value
-                    if (outlineThickness === -2) {
-                        ctx.beginPath();
-                        ctx.arc(canvasX, canvasY, diameter, 0, Math.PI);
-                        ctx.strokeStyle = getColorFromValue(outlineColorValue);
-                        ctx.lineWidth = 1;
-                        ctx.stroke();
-                    } else if (outlineThickness >= 0) {
-                        ctx.lineWidth = outlineThickness;
-                        ctx.strokeStyle = getColorFromValue(outlineColorValue);
-                        ctx.stroke();
-                    }
-
-                    // Save parsed circle data
-                    circles.push({
-                        baseBall: baseBall,
-                        x: x.toFixed(2),
-                        y: y.toFixed(2),
-                        z: z,
-                        diameter: diameter,
-                        color: colorValue,
-                        fuzz: fuzz,
-                        outlineColor: outlineColorValue,
-                        outlineThickness: outlineThickness,
-                        texture: texture,
-                        group: group
-                    });
-                });
-
-                // Redraw circles
-                redrawCircles();
-            }
-
-            // Default example LNZ content
-            function loadDefaultLNZ() {
-                const defaultLNZ = `;baseball\tdiameter\tdirection (x,y,z)\tcolor\toutlinecolor\tfuzz\toutline\tgroup\ttexture\tanchored
-        6\t5\t-0.38,-0.54,1.00\t10\t244\t0\t-1\t-1\t1\t0
-        6\t10\t-0.42,-0.52,1.00\t35\t244\t0\t-1\t-1\t1\t0
-        6\t10\t-0.08,-0.08,1.00\t33\t244\t0\t-1\t-1\t1\t0
-        6\t10\t-0.02,-0.02,1.00\t33\t244\t0\t-1\t-1\t1\t0
-        6\t10\t0.08,0.02,1.00\t33\t244\t0\t-1\t-1\t1\t0
-        6\t10\t0.18,0.00,1.00\t33\t244\t0\t-1\t-1\t1\t0
-        6\t10\t0.26,-0.04,1.00\t33\t244\t0\t-1\t-1\t1\t0
-        6\t10\t0.32,-0.12,1.00\t33\t244\t0\t-1\t-1\t1\t0
-        6\t10\t0.36,-0.22,1.00\t33\t244\t0\t-1\t-1\t1\t0
-        6\t35\t0.00,0.02,1.00\t165\t244\t3\t-1\t-1\t1\t0
-        6\t35\t0.00,-0.20,1.00\t165\t244\t3\t-1\t-1\t1\t0
-        6\t35\t0.24,-0.10,1.00\t165\t244\t3\t-1\t-1\t1\t0
-        6\t35\t-0.24,-0.12,1.00\t165\t244\t3\t-1\t-1\t1\t0
-        6\t35\t-0.42,-0.46,1.00\t165\t244\t3\t-1\t-1\t1\t0
-        6\t30\t0.40,-0.30,1.00\t165\t244\t3\t-1\t-1\t1\t0
-        6\t25\t0.56,-0.46,1.00\t165\t244\t3\t-1\t-1\t1\t0
-        6\t20\t-0.46,-0.34,1.00\t65\t244\t0\t-1\t-1\t1\t0
-        6\t20\t-0.60,-0.32,1.00\t65\t244\t0\t-1\t-1\t1\t0
-        6\t20\t-0.72,-0.34,1.00\t65\t244\t0\t-1\t-1\t1\t0
-    `;
-
-                // Set the default LNZ content into the textarea
-                document.getElementById('tsvOutput').value = defaultLNZ;
-
-                // Clear the canvas and redraw the grid first
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                drawGrid();
-
-                // Load the default LNZ from the TSV
-                loadFromTSV();
-            }
-
-            // Display the TSV and project circles onto the sphere
-            function displayTSV() {
-                const coordinateMultiplier = parseFloat(document.getElementById('coordinateMultiplier').value);
-                const anchored = document.getElementById('anchored').checked;
-
-                // Get the global baseBall once
-                let baseBall;
-                const petzType = document.getElementById('petzType').value;
-                if (petzType === 'addballz') {
-                    baseBall = document.getElementById('addBallNumber').value;
-                } else {
-                    baseBall = document.getElementById('baseBall').value;
+                // Floating face labels
+                sphereCtx.font = '8px Roboto Mono';
+                sphereCtx.fillStyle = 'white';
+                sphereCtx.textAlign = 'center';
+                faceLabels.forEach(face => {
+                if (face.z > -0.2) { // only show labels on or near front
+                    const proj = project(face.x, face.y, face.z);
+                    sphereCtx.fillText(face.label, proj.x, proj.y);
                 }
+            });
 
-                // Prepare TSV content
-                let tsvContent = ";\n";
-
-                // Loop through the circles array and generate TSV rows
-                circles.forEach(circle => {
-                    let x = (circle.x * coordinateMultiplier).toFixed(2);
-                    let y = (circle.y * coordinateMultiplier).toFixed(2);
-                    let z = circle.z.toFixed(2);
-
-                    // Optionally apply transformations (yaw, pitch, roll)
-                    if (document.getElementById('transformRotation').checked) {
-                        const transformed = applyTransform(x, y, z);
-                        x = transformed.x.toFixed(2);
-                        y = transformed.y.toFixed(2);
-                        z = transformed.z.toFixed(2);
-                    }
-
-                    // Nudge the vector if needed to avoid NaN and problematic cases
-                    const nudgedVector = nudgeVectorIfNeeded(x, y, z);
-                    x = nudgedVector.x;
-                    y = nudgedVector.y;
-                    z = nudgedVector.z;
-
-                    // Handle anchored column
-                    const anchoredColumn = anchored ? ',0' : '';
-
-                    // Generate the TSV row for the circle
-                    tsvContent += `${baseBall},${circle.diameter},${x},${y},${z},${circle.color},${circle.outlineColor},${circle.fuzz},${circle.outlineThickness},${circle.group},${circle.texture}${anchoredColumn}\n`;
-                });
-
-                // Reverse TSV rows        
-                tsvContent = tsvContent.split('\n').reverse().join('\n');
-
-                // Put last row back at top
-                let tsvContentOut = ";baseball,diameter,x,y,z,color,outlinecolor,fuzz,outline,group,texture,anchored";
-                tsvContentOut += tsvContent;
-
-                // Set the TSV content in the output textarea
-                document.getElementById('tsvOutput').value = tsvContentOut;
-            }
-
-            // Function to project a 2D canvas point to a 3D sphere
-            function projectToSphere(x, y) {
-                const r = 1; // Assuming unit sphere
-                const z = Math.sqrt(r * r - x * x - y * y);
-                return { x: x, y: y, z: z };
-            }
-
-            // Function to draw a point on the sphere
-            function drawSpherePoint(x, y, z, diameter, color) {
-                const rotated = rotate(x, y, z);
-                const projected = project(rotated.x, rotated.y, rotated.z);
-
-                // Draw the circle on the sphere
+                // Blue forward dot
+                const originProjected = project(...Object.values(rotate(0, 0, 1)));
                 sphereCtx.beginPath();
-                sphereCtx.arc(projected.x, projected.y, diameter / 2, 0, Math.PI * 2); // Adjust size by dividing by 2
-                sphereCtx.fillStyle = getColorFromValue(color);
+                sphereCtx.arc(originProjected.x, originProjected.y, 5, 0, Math.PI * 2);
+                sphereCtx.fillStyle = 'blue';
                 sphereCtx.fill();
             }
 
-            // Function to copy text from the textarea
-            document.getElementById('copyTextButton').addEventListener('click', function () {
-                const tsvOutput = document.getElementById('tsvOutput');
-                tsvOutput.select();
-                document.execCommand('copy'); // Copy the selected text to clipboard
-                alert('Copied to clipboard');
+
+        // Update rotations based on slider input
+        document.getElementById('roll').addEventListener('input', function () {
+            roll = parseFloat(this.value);
+            drawSphere();
+        });
+
+        document.getElementById('pitch').addEventListener('input', function () {
+            pitch = parseFloat(this.value);
+            drawSphere();
+        });
+
+        document.getElementById('yaw').addEventListener('input', function () {
+            yaw = parseFloat(this.value);
+            drawSphere();
+        });
+
+        // Draw the sphere initially
+        drawSphere();
+
+        const dogzBaseBallz = [
+            "0: L ankle", "1: L eyebrow1", "2: L eyebrow2", "3: L eyebrow3",
+            "4: L ear1", "5: L ear2", "6: L ear3", "7: L elbow", "8: L eye",
+            "9: L finger1", "10: L finger2", "11: L finger3", "12: L foot",
+            "13: L hand", "14: L iris", "15: L jowl", "16: L knee", "17: L nostril",
+            "18: L shoulder", "19: L hip", "20: L toe1", "21: L toe2", "22: L toe3",
+            "23: L wrist", "24: R ankle", "25: R eyebrow1", "26: R eyebrow2", "27: R eyebrow3",
+            "28: R ear1", "29: R ear2", "30: R ear3", "31: R elbow", "32: R eye",
+            "33: R finger1", "34: R finger2", "35: R finger3", "36: R foot", "37: R hand",
+            "38: R iris", "39: R jowl", "40: R knee", "41: R nostril", "42: R shoulder",
+            "43: R hip", "44: R toe1", "45: R toe2", "46: R toe3", "47: R wrist",
+            "48: belly", "49: butt", "50: chest", "51: chin", "52: head", "53: jaw",
+            "54: neck", "55: nose (bottom)", "56: snout", "57: tail1", "58: tail2",
+            "59: tail3", "60: tail4", "61: tail5", "62: tail6", "63: tongue1", "64: tongue2",
+            "65: Z-trans", "66: Z-orient"
+        ];
+
+        const catzBaseBallz = [
+            "0: ankleL", "1: ankleR", "2: belly", "3: butt", "4: cheekL", "5: cheekR",
+            "6: chest", "7: chin", "8: earL1", "9: earL2", "10: earR1", "11: earR2",
+            "12: elbowL", "13: elbowR", "14: eyeL", "15: eyeR", "16: fingerL1", "17: fingerL2",
+            "18: fingerL3", "19: fingerR1", "20: fingerR2", "21: fingerR3", "22: handL",
+            "23: handR", "24: head", "25: hipL", "26: hipR", "27: irisL", "28: irisR",
+            "29: jaw", "30: jowlL", "31: jowlR", "32: kneeL", "33: kneeR", "34: knuckleL",
+            "35: knuckleR", "36: neck", "37: nose", "38: shoulderL", "39: shoulderR",
+            "40: snout", "41: soleL", "42: soleR", "43: tail1", "44: tail2", "45: tail3",
+            "46: tail4", "47: tail5", "48: tail6", "49: toeL1", "50: toeL2", "51: toeL3",
+            "52: toeR1", "53: toeR2", "54: toeR3", "55: tongue1", "56: tongue2", "57: whiskerL1",
+            "58: whiskerL2", "59: whiskerL3", "60: whiskerR1", "61: whiskerR2", "62: whiskerR3",
+            "63: wristL", "64: wristR", "65: Z-orient", "66: Z-trans"
+        ];
+
+        const babyzBaseBallz = [
+            "0: ankleL", "1: ankleR",
+            "2: archL", "3: archR",
+            "4: belly",
+            "5: bigtoeL", "6: bigtoeR",
+            "7: bridge",
+            "8: cheekL", "9: cheekR",
+            "10: chestL", "11: chestR",
+            "12: chin1", "13: chin2", "14: chin3", "15: chin4",
+            "16: ear1L", "17: ear1R",
+            "18: ear2L", "19: ear2R",
+            "20: ear3L", "21: ear3R",
+            "22: ear4L", "23: ear4R",
+            "24: ear5L", "25: ear5R",
+            "26: ear6L", "27: ear6R",
+            "28: earcenterL", "29: earcenterR",
+            "30: elbowL", "31: elbowR",
+            "32: extra1", "33: extra2", "34: extra3",
+            "35: eyeL", "36: eyeR",
+            "37: eyebrow1L", "38: eyebrow1R", "39: eyebrow2L", "40: eyebrow2R",
+            "41: eyebrow3L", "42: eyebrow3R", "43: eyebrow4L", "44: eyebrow4R",
+            "45: eyebrow5L", "46: eyebrow5R",
+            "47: finger_index1L", "48: finger_index1R",
+            "49: finger_index2L", "50: finger_index2R",
+            "51: finger_middle1L", "52: finger_middle1R",
+            "53: finger_middle2L", "54: finger_middle2R",
+            "55: finger_pinky1L", "56: finger_pinky1R",
+            "57: finger_pinky2L", "58: finger_pinky2R",
+            "59: football1L", "60: football1R",
+            "61: football2L", "62: football2R",
+            "63: head",
+            "64: heelL", "65: heelR",
+            "66: hipL", "67: hipR",
+            "68: irisL", "69: irisR",
+            "70: jock",
+            "71: kneeL", "72: kneeR",
+            "73: lowerLip1", "74: lowerLip2", "75: lowerLip3", "76: lowerLip4", "77: lowerLip5", "78: lowerLip6",
+            "79: mouthTopL", "80: mouthTopR",
+            "81: neck",
+            "82: nose1", "83: nose2", "84: nosemiddle", "85: nostrilL", "86: nostrilR",
+            "87: origin",
+            "88: palm1L", "89: palm1R", "90: palm2L", "91: palm2R", "92: palm3L", "93: palm3R",
+            "94: shoulderL", "95: shoulderR",
+            "96: templeL", "97: templeR",
+            "98: thumb1L", "99: thumb1R", "100: thumb2L", "101: thumb2R",
+            "102: toe_indexL", "103: toe_indexR", "104: toe_middleL", "105: toe_middleR", "106: toe_pinkyL", "107: toe_pinkyR",
+            "108: tongue1",
+            "109: underchin",
+            "110: upperLip1", "111: upperLip2", "112: upperLip3", "113: upperLip4", "114: upperLip5", "115: upperLip6",
+            "116: wristL", "117: wristR",
+            "118: zorient",
+            "119: ztrans"
+        ];
+
+        // Define colorMap globally for use in drawing and value lookup
+        let colorMap = {};
+
+        // Load palette file selected by user
+        document.getElementById('paletteFileInput').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const palette = await parsePaletteFile(file);
+                applyPalette(palette);
+            }
+        });
+
+        const defaultPalette = [
+                [255, 255, 255],
+                [128, 0, 0],
+                [0, 128, 0],
+                [128, 128, 0],
+                [0, 0, 128],
+                [128, 0, 128],
+                [0, 128, 128],
+                [192, 192, 192],
+                [192, 204, 216],
+                [0, 0, 0],
+                [231, 226, 221],
+                [226, 220, 215],
+                [221, 215, 210],
+                [215, 209, 204],
+                [210, 204, 199],
+                [205, 198, 193],
+                [200, 193, 188],
+                [194, 187, 182],
+                [189, 182, 177],
+                [184, 176, 171],
+                [117, 117, 117],
+                [112, 112, 112],
+                [107, 107, 107],
+                [102, 102, 102],
+                [97, 97, 97],
+                [92, 92, 92],
+                [87, 87, 87],
+                [82, 82, 82],
+                [77, 77, 77],
+                [69, 69, 69],
+                [66, 66, 66],
+                [61, 61, 61],
+                [54, 54, 54],
+                [48, 48, 48],
+                [41, 41, 41],
+                [36, 36, 36],
+                [28, 28, 28],
+                [23, 23, 23],
+                [15, 15, 15],
+                [7, 7, 7],
+                [220, 194, 150],
+                [214, 186, 143],
+                [208, 179, 137],
+                [202, 171, 130],
+                [196, 164, 124],
+                [190, 156, 117],
+                [184, 149, 111],
+                [178, 141, 104],
+                [172, 134, 98],
+                [166, 126, 91],
+                [135, 65, 34],
+                [127, 60, 33],
+                [120, 54, 31],
+                [112, 49, 30],
+                [104, 43, 28],
+                [97, 38, 27],
+                [89, 32, 25],
+                [81, 27, 24],
+                [74, 21, 22],
+                [66, 16, 21],
+                [180, 115, 22],
+                [179, 110, 20],
+                [176, 102, 17],
+                [170, 94, 14],
+                [167, 87, 12],
+                [160, 79, 8],
+                [157, 72, 7],
+                [149, 64, 4],
+                [146, 57, 2],
+                [138, 48, 0],
+                [240, 158, 183],
+                [236, 152, 181],
+                [231, 146, 182],
+                [225, 137, 180],
+                [219, 132, 180],
+                [214, 128, 179],
+                [205, 121, 177],
+                [199, 117, 177],
+                [191, 115, 176],
+                [180, 110, 171],
+                [168, 41, 1],
+                [162, 37, 4],
+                [156, 34, 7],
+                [149, 30, 9],
+                [143, 27, 12],
+                [137, 23, 15],
+                [131, 20, 18],
+                [124, 16, 20],
+                [118, 13, 23],
+                [112, 9, 26],
+                [107, 74, 12],
+                [106, 68, 12],
+                [101, 59, 11],
+                [96, 52, 11],
+                [91, 44, 11],
+                [86, 38, 11],
+                [82, 32, 10],
+                [77, 27, 10],
+                [72, 21, 9],
+                [66, 16, 9],
+                [166, 138, 56],
+                [168, 137, 56],
+                [163, 129, 56],
+                [159, 123, 56],
+                [154, 116, 55],
+                [150, 110, 54],
+                [145, 104, 54],
+                [141, 98, 53],
+                [136, 93, 53],
+                [131, 87, 52],
+                [98, 112, 125],
+                [93, 105, 118],
+                [87, 99, 112],
+                [82, 92, 105],
+                [77, 86, 99],
+                [71, 79, 92],
+                [66, 73, 86],
+                [61, 66, 79],
+                [55, 60, 73],
+                [50, 53, 66],
+                [154, 142, 115],
+                [150, 137, 110],
+                [142, 128, 103],
+                [136, 121, 99],
+                [127, 112, 92],
+                [121, 106, 88],
+                [112, 97, 81],
+                [106, 91, 77],
+                [98, 82, 71],
+                [88, 74, 65],
+                [66, 182, 68],
+                [60, 174, 62],
+                [52, 162, 54],
+                [44, 150, 46],
+                [36, 137, 38],
+                [36, 128, 32],
+                [35, 114, 26],
+                [36, 99, 20],
+                [33, 85, 15],
+                [32, 69, 11],
+                [17, 89, 223],
+                [16, 80, 209],
+                [15, 69, 194],
+                [14, 61, 180],
+                [12, 51, 166],
+                [11, 37, 152],
+                [10, 22, 138],
+                [9, 11, 124],
+                [14, 7, 110],
+                [19, 6, 96],
+                [216, 240, 255],
+                [172, 224, 255],
+                [153, 214, 255],
+                [130, 202, 255],
+                [117, 182, 232],
+                [104, 192, 255],
+                [81, 150, 220],
+                [24, 156, 206],
+                [86, 139, 185],
+                [30, 137, 169],
+                [235, 237, 167],
+                [234, 235, 144],
+                [209, 204, 119],
+                [247, 244, 0],
+                [237, 232, 50],
+                [198, 198, 12],
+                [195, 195, 52],
+                [159, 162, 23],
+                [159, 159, 67],
+                [110, 122, 46],
+                [255, 255, 255],
+                [192, 228, 231],
+                [172, 198, 213],
+                [167, 167, 177],
+                [160, 160, 168],
+                [116, 160, 182],
+                [119, 158, 180],
+                [122, 156, 179],
+                [125, 154, 178],
+                [128, 152, 176],
+                [226, 190, 172],
+                [213, 147, 144],
+                [215, 118, 110],
+                [184, 115, 103],
+                [159, 119, 115],
+                [162, 106, 93],
+                [137, 100, 88],
+                [152, 87, 77],
+                [106, 69, 66],
+                [90, 60, 49],
+                [114, 158, 140],
+                [0, 128, 128],
+                [66, 122, 117],
+                [0, 128, 128],
+                [57, 120, 96],
+                [61, 90, 99],
+                [38, 88, 71],
+                [33, 65, 43],
+                [18, 57, 48],
+                [255, 255, 255],
+                [255, 255, 255],
+                [244, 246, 216],
+                [233, 216, 194],
+                [44, 95, 89],
+                [211, 244, 197],
+                [196, 211, 159],
+                [255, 199, 26],
+                [176, 184, 155],
+                [175, 177, 119],
+                [165, 148, 142],
+                [172, 169, 143],
+                [215, 160, 20],
+                [198, 127, 8],
+                [202, 110, 70],
+                [121, 142, 97],
+                [153, 126, 77],
+                [128, 128, 128],
+                [101, 155, 42],
+                [0, 203, 22],
+                [167, 108, 57],
+                [255, 66, 0],
+                [151, 100, 66],
+                [153, 101, 42],
+                [221, 52, 106],
+                [41, 68, 117],
+                [88, 105, 181],
+                [66, 107, 132],
+                [80, 100, 128],
+                [117, 89, 74],
+                [254, 24, 20],
+                [110, 92, 43],
+                [156, 66, 57],
+                [184, 50, 66],
+                [136, 68, 66],
+                [85, 68, 127],
+                [126, 140, 134],
+                [207, 16, 12],
+                [146, 25, 20],
+                [255, 0, 254],
+                [17, 40, 14],
+                [13, 16, 41],
+                [0, 0, 0],
+                [0, 0, 0],
+                [0, 0, 0],
+                [0, 0, 0],
+                [255, 255, 255],
+                [80, 100, 128],
+                [0, 0, 0],
+                [128, 128, 128],
+                [255, 0, 0],
+                [0, 255, 0],
+                [255, 255, 0],
+                [0, 0, 255],
+                [255, 0, 255],
+                [0, 255, 255],
+                [0, 0, 0]
+            ];
+
+        // Load default palette
+        function loadDefaultPalette() {
+                if (typeof defaultPalette !== 'undefined') {
+                    applyPalette(defaultPalette);
+                } else {
+                    console.warn("Default palette not found.");
+                }
+            }
+
+        async function parsePaletteFile(file) {
+            const buffer = await file.arrayBuffer();
+            const ext = file.name.split('.').pop().toLowerCase();
+            const bytes = new Uint8Array(buffer);
+            let palette = [];
+
+            if (ext === 'act' || ext === 'pal') {
+                // ACT/PAL: 768 bytes = 256 colors × 3 bytes
+                if (bytes.length < 768) {
+                    console.error("ACT/PAL file too short, should be 768 bytes");
+                    return [];
+                }
+                for (let i = 0; i < 768; i += 3) {
+                    palette.push([bytes[i], bytes[i + 1], bytes[i + 2]]);
+                }
+            } else if (ext === 'bmp') {
+                // BMP: Palette starts after 54 bytes (14 header + 40 DIB) for 8-bit indexed BMP
+                // Each color is 4 bytes: B G R 00
+                const bmpHeaderSize = 54;
+                if (bytes.length < bmpHeaderSize + 256 * 4) {
+                    console.error("BMP file too small for full palette");
+                    return [];
+                }
+                for (let i = bmpHeaderSize; i < bmpHeaderSize + 256 * 4; i += 4) {
+                    palette.push([bytes[i + 2], bytes[i + 1], bytes[i]]);
+                }
+            } else if (ext === 'png') {
+                // PNG: Find PLTE chunk after 8-byte PNG signature
+                let offset = 8;
+                while (offset < bytes.length) {
+                    const length = (bytes[offset] << 24) | (bytes[offset + 1] << 16) | (bytes[offset + 2] << 8) | bytes[offset + 3];
+                    const type = String.fromCharCode(...bytes.slice(offset + 4, offset + 8));
+                    if (type === 'PLTE') {
+                        for (let i = offset + 8; i < offset + 8 + length; i += 3) {
+                            palette.push([bytes[i], bytes[i + 1], bytes[i + 2]]);
+                        }
+                        break;
+                    }
+                    offset += 8 + length + 4;
+                }
+            }
+
+            return palette.slice(0, 256); // Cap at 256 colors
+        }
+
+        // Print palette (debugging)
+        function printPalette(palette) {
+                const output = palette.map(rgb => `[${rgb[0]}, ${rgb[1]}, ${rgb[2]}]`).join(',\n');
+                const container = document.createElement('pre');
+                container.style.whiteSpace = 'pre-wrap';
+                container.style.background = '#111';
+                container.style.padding = '1em';
+                container.style.border = '1px solid #666';
+                container.style.color = '#0f0';
+                container.textContent = `const defaultPalette = [\n${output}\n];`;
+
+                document.body.appendChild(container);
+            }
+
+        // Apply palette to datalist inputs and populate colorMap
+        function applyPalette(palette) {
+            const colorDatalist = document.getElementById('colorOptions');
+            const outlineDatalist = document.getElementById('outlineColorOptions');
+            colorDatalist.innerHTML = '';
+            outlineDatalist.innerHTML = '';
+            colorMap = {};
+            //printPalette(palette);
+
+            palette.forEach(([r, g, b], index) => {
+                const rgb = `rgb(${r},${g},${b})`;
+                colorMap[index] = rgb;
+
+                const option = document.createElement('option');
+                option.label = `${index} (${rgb})`;
+                option.style.backgroundColor = rgb;
+
+                const outlineOption = option.cloneNode(true);
+                outlineOption.style.backgroundColor = rgb;
+
+                colorDatalist.appendChild(option);
+                outlineDatalist.appendChild(outlineOption);
+            });
+        }
+
+        // Lookup function for drawing/rendering
+        function getColorFromValue(value) {
+            const index = parseInt(value);
+            return colorMap[index] || 'rgb(0,0,0)';
+        }
+
+        document.getElementById('color').addEventListener('input', function () {
+            const val = parseInt(this.value);
+            const rgb = colorMap[val];
+            if (rgb) this.style.backgroundColor = rgb;
+        });
+
+        document.getElementById('outlineColor').addEventListener('input', function () {
+            const val = parseInt(this.value);
+            const rgb = colorMap[val];
+            if (rgb) this.style.backgroundColor = rgb;
+        });
+
+        // Update dropdowns for Catz or Dogz selection
+        function updateBaseBallDropdown() {
+            const petzType = document.getElementById('petzType').value;
+            const baseBallInput = document.getElementById('baseBall');
+            const baseBallDatalist = document.getElementById('baseBallOptions');
+            const addBallLabel = document.getElementById('addBallLabel');
+            const baseBallLabel = document.getElementById('baseBallLabel');
+
+            // Clear existing datalist options
+            baseBallDatalist.innerHTML = '';
+
+            if (petzType === 'dogz') {
+                baseBallInput.style.display = 'inline';
+                baseBallLabel.style.display = 'inline';
+                addBallLabel.style.display = 'none';
+
+                // Populate datalist for Dogz
+                dogzBaseBallz.forEach((ball, index) => {
+                    baseBallDatalist.innerHTML += `<option value="${index}">${ball}</option>`;
+                });
+            } else if (petzType === 'catz') {
+                baseBallInput.style.display = 'inline';
+                baseBallLabel.style.display = 'inline';
+                addBallLabel.style.display = 'none';
+
+                // Populate datalist for Catz
+                catzBaseBallz.forEach((ball, index) => {
+                    baseBallDatalist.innerHTML += `<option value="${index}">${ball}</option>`;
+                });
+            } else if (petzType === 'babyz') {
+                baseBallInput.style.display = 'inline';
+                baseBallLabel.style.display = 'inline';
+                addBallLabel.style.display = 'none';
+
+                // Populate datalist for Babyz
+                babyzBaseBallz.forEach((ball, index) => {
+                    baseBallDatalist.innerHTML += `<option value="${index}">${ball}</option>`;
+                });
+            } else if (petzType === 'addballz') {
+                baseBallInput.style.display = 'none';
+                baseBallLabel.style.display = 'none';
+                addBallLabel.style.display = 'inline';
+            }
+        }
+
+        // Canvas grid
+        function drawGrid() {
+            const gridSpacing = 50; // Set spacing between grid lines
+            const textOffset = 15; // Set offset for text labels
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+
+            // Fetch the global coordinate multiplier
+            const coordinateMultiplier = parseFloat(document.getElementById('coordinateMultiplier').value);
+
+            // Draw vertical grid lines and labels
+            ctx.beginPath();
+            ctx.strokeStyle = '#888'; // Light gray for grid lines
+            ctx.lineWidth = 1;
+            for (let x = 0; x <= canvas.width; x += gridSpacing) {
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+
+                // Label the x-axis based on the multiplier, converting back to coordinate system
+                const labelValueX = ((x - centerX) / centerX * coordinateMultiplier).toFixed(2);
+                ctx.fillStyle = '#888'; // Color for axis labels
+                ctx.font = '12px Arial';
+                ctx.fillText(labelValueX, x + 2, centerY + textOffset);
+            }
+
+            // Draw horizontal grid lines and labels
+            ctx.beginPath();
+            for (let y = 0; y <= canvas.height; y += gridSpacing) {
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+
+                // Label the y-axis based on the multiplier, converting back to coordinate system
+                const labelValueY = ((centerY - y) / centerY * coordinateMultiplier).toFixed(2);
+                ctx.fillText(labelValueY, centerX + textOffset, y - 2);
+            }
+
+            // Draw axes lines (X and Y)
+            ctx.beginPath();
+            ctx.strokeStyle = '#555'; // Darker color for axes
+            ctx.lineWidth = 2;
+
+            // Vertical axis (Y-axis)
+            ctx.moveTo(centerX, 0);
+            ctx.lineTo(centerX, canvas.height);
+            ctx.stroke();
+
+            // Horizontal axis (X-axis)
+            ctx.moveTo(0, centerY);
+            ctx.lineTo(canvas.width, centerY);
+            ctx.stroke();
+        }
+
+        // Redraw grid when multiplier changes
+        document.getElementById('coordinateMultiplier').addEventListener('input', function () {
+            drawGrid();
+        });
+
+        // Draw the grid when page loads
+        window.onload = function () {
+            drawGrid();
+        };
+
+        // Render pixelated circles with design settings
+        function drawPixelCircles(cx, cy, diameter, colorValue, outlineColorValue, outlineThickness, fuzz, texture) {
+            const pixelSize = 2;
+            const radius = diameter / 2;
+            const fillColor = getColorFromValue(colorValue);
+            const outlineColor = getColorFromValue(outlineColorValue);
+
+            const isFullOutline = outlineThickness > 0;
+            const isLeftOutline = outlineThickness === 0;
+            const isRightOutline = outlineThickness === -2;
+            const isNoOutline = outlineThickness === -1;
+
+            const effectiveOutlineThickness = isFullOutline ? outlineThickness : (isLeftOutline || isRightOutline ? 1 : 0);
+
+            for (let dx = -radius - effectiveOutlineThickness; dx <= radius + effectiveOutlineThickness; dx++) {
+                for (let dy = -radius - effectiveOutlineThickness; dy <= radius + effectiveOutlineThickness; dy++) {
+                    // Stable hash-based fuzz
+                    const hash = ((dx * 73856093) ^ (dy * 19349663)) & 255;
+                    const rand = (hash / 255 - 0.5);
+                    const fuzzedRadius = radius + rand * fuzz;
+
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    const isFill = dist <= fuzzedRadius;
+                    const isOutline = dist > fuzzedRadius && dist <= fuzzedRadius + effectiveOutlineThickness;
+
+                    const px = Math.round(cx + dx * pixelSize);
+                    const py = Math.round(cy + dy * pixelSize);
+
+                    if (isFill) {
+                        ctx.fillStyle = fillColor;
+                        ctx.fillRect(px, py, pixelSize, pixelSize);
+
+                        if (texture && getTextureValue(px, py, texture)) {
+                            ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                            ctx.fillRect(px, py, pixelSize, pixelSize);
+                        }
+                    } else if (isOutline) {
+                        // Determine angle to classify left/right
+                        const angle = Math.atan2(dy, dx); // radians: -π to π
+                        const isLeftHalf = angle > Math.PI / 2 || angle < -Math.PI / 2;
+                        const isRightHalf = angle >= -Math.PI / 2 && angle <= Math.PI / 2;
+
+                        const shouldDraw =
+                            isFullOutline ||
+                            (isLeftOutline && isLeftHalf) ||
+                            (isRightOutline && isRightHalf);
+
+                        if (shouldDraw) {
+                            ctx.fillStyle = outlineColor;
+                            ctx.fillRect(px, py, pixelSize, pixelSize);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Function to generate patterns based on texture value with transparency
+        function getTextureValue(x, y, texture) {
+            switch (texture) {
+                case 1: // Vertical stripes
+                    return (Math.floor(x / 4) % 2 === 0);
+                case 2: // Horizontal stripes
+                    return (Math.floor(y / 4) % 2 === 0);
+                case 3: // Dotted squares
+                    return (Math.floor(x / 6) % 2 === 0 && Math.floor(y / 6) % 2 === 0);
+                case 4: // Mini checkers
+                    return ((Math.floor(x / 4) + Math.floor(y / 4)) % 2 === 0);
+                case 5: // Mega checkers
+                    return Math.sin(x * 0.2) + Math.cos(y * 0.2) > 0;
+                case 6: // Snakescales
+                    return ((Math.floor(x / 4) - Math.floor(y / 2)) % 2 === 0);
+                case 7: // Fishscales
+                    return ((Math.floor(x / 2) - Math.floor(y / 3)) % 2 === 0);
+                default:
+                    return false;
+            }
+        }
+
+        // Function to redraw all circles after grid is drawn
+        function redrawCircles() {
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+
+            const coordinateMultiplier = parseFloat(document.getElementById('coordinateMultiplier').value);
+
+            // Loop through and redraw each circle
+            circles.forEach(circle => {
+                let x = (circle.x * centerX) + centerX;
+                let y = (circle.y * centerY) + centerY;
+
+                // Draw the circle fill and wiggly outline based on the fuzz and texture value
+                drawPixelCircles(
+                    x, y, circle.diameter, circle.color, circle.outlineColor,
+                    circle.outlineThickness, circle.fuzz, circle.texture
+                );
+            });
+        }
+
+        // Track mouse movement to display a preview circle on hover
+        canvas.addEventListener('mousemove', function (event) {
+            const rect = canvas.getBoundingClientRect();
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+
+            const mouseX = (event.clientX - rect.left) * scaleX;
+            const mouseY = (event.clientY - rect.top) * scaleY;
+
+
+            // Clear the canvas before drawing the preview
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Redraw the grid and existing circles
+            drawGrid();
+            redrawCircles();
+
+            // Get the current diameter from the input field for hover preview
+            const diameter = parseInt(document.getElementById('diameter').value);
+            const colorValue = document.getElementById('color').value;
+            const outlineColor = document.getElementById('outlineColor').value;
+            const outlineThickness = parseInt(document.getElementById('outlineThickness').value);
+            const fuzz = parseInt(document.getElementById('fuzz').value);
+            const texture = parseInt(document.getElementById('texture').value);
+
+            // Use the same function as for the final circle to draw preview
+            drawPixelCircles(mouseX, mouseY, diameter, colorValue, outlineColor, outlineThickness, fuzz, texture);
+        });
+
+        // Add a wheel event listener to control the diameter with the mouse wheel
+        canvas.addEventListener('wheel', function (event) {
+            event.preventDefault();  // Prevent the default scrolling behavior
+
+            // Get the current diameter from the input field
+            const diameterInput = document.getElementById('diameter');
+            let diameter = parseInt(diameterInput.value);
+
+            // Adjust the diameter based on scroll direction (smooth scrolling)
+            const delta = event.deltaY > 0 ? -1 : 1; // Scroll up to increase, scroll down to decrease
+            diameter = Math.max(1, diameter + delta); // Set minimum diameter to 1
+
+            // Update the diameter input field
+            diameterInput.value = diameter;
+
+            // Redraw the hover circle immediately after changing diameter
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+
+            const mouseX = (event.clientX - rect.left) * scaleX;
+            const mouseY = (event.clientY - rect.top) * scaleY;
+
+            // Clear the canvas and redraw everything
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawGrid();
+            redrawCircles();
+
+            // Draw a new preview circle with updated diameter using the same function
+            const colorValue = document.getElementById('color').value;
+            const outlineColor = document.getElementById('outlineColor').value;
+            const outlineThickness = parseInt(document.getElementById('outlineThickness').value);
+            const fuzz = parseInt(document.getElementById('fuzz').value);
+            const texture = parseInt(document.getElementById('texture').value);
+
+            drawPixelCircles(mouseX, mouseY, diameter, colorValue, outlineColor, outlineThickness, fuzz, texture);
+        });
+
+        // Remove the preview circle when the mouse leaves the canvas
+        canvas.addEventListener('mouseout', function () {
+            // Clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Redraw the grid and existing circles
+            drawGrid();
+            redrawCircles();
+        });
+
+        // Handle click event to draw or delete on the canvas
+        canvas.addEventListener('click', function (event) {
+            const rect = canvas.getBoundingClientRect();
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const clickX = event.clientX - rect.left;
+            const clickY = event.clientY - rect.top;
+
+            // Check if delete mode is active
+            const deleteMode = document.getElementById('deleteMode').checked;
+
+            if (deleteMode) {
+                // Try to find and delete the circle that was clicked on
+                let circleToDelete = null;
+                for (let i = 0; i < circles.length; i++) {
+                    const circle = circles[i];
+                    const canvasX = (circle.x * centerX) + centerX;
+                    const canvasY = (circle.y * centerY) + centerY;
+
+                    // Calculate the distance between the click and the center of the circle
+                    const distance = Math.sqrt((clickX - canvasX) ** 2 + (clickY - canvasY) ** 2);
+                    if (distance <= circle.diameter) {
+                        // The click is inside this circle
+                        circleToDelete = i;
+                        break;
+                    }
+                }
+
+                if (circleToDelete !== null) {
+                    // Remove the circle from the array
+                    circles.splice(circleToDelete, 1);
+
+                    // Redraw the grid and remaining circles
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    drawGrid();
+                    redrawCircles();
+                }
+            } else {
+                // Normalize x, y with respect to the center of the canvas (without applying multiplier)
+                let x = (clickX - centerX) / centerX;  // Positive x = left on ballz, negative x = right on ballz, WHEN z = 1
+                let y = (clickY - centerY) / centerY;  // Positive y = down on ballz, negative y = up on ballz, WHEN z = 1
+
+                // Optionally: UV project 2D coordinates for broader spread of design
+                let z;
+                if (document.getElementById('UVProjection').checked) {
+                    const r = 1;
+                    const magnitudeSquared = x * x + y * y;
+                    z = Math.sqrt(Math.max(0, r * r - magnitudeSquared));
+                } else {
+                    z = 1;
+                }
+
+                const diameter = parseInt(document.getElementById('diameter').value);
+                const colorValue = document.getElementById('color').value;
+                const outlineColorValue = document.getElementById('outlineColor').value;
+                const outlineThickness = parseInt(document.getElementById('outlineThickness').value);
+                const fuzz = parseInt(document.getElementById('fuzz').value);
+                const texture = parseInt(document.getElementById('texture').value);
+                const group = parseInt(document.getElementById('group').value);
+
+                // Draw the circle fill and wiggly outline based on the fuzz and texture value
+                drawPixelCircles(clickX, clickY, diameter, colorValue, outlineColorValue, outlineThickness, fuzz, texture);
+
+                // Save circle data
+                circles.push({
+                    x: x.toFixed(2), y: y.toFixed(2), z: z, diameter: diameter,
+                    color: colorValue, fuzz: fuzz, outlineColor: outlineColorValue,
+                    outlineThickness: outlineThickness, texture: texture, group: group
+                });
+            }
+        });
+
+        // Ensure the grid is redrawn whenever the multiplier changes
+        document.getElementById('coordinateMultiplier').addEventListener('input', function () {
+            // Clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw the grid and then redraw all circles
+            drawGrid();
+            redrawCircles();
+        });
+
+        // Function to rotate a point (x, y, z) by the current yaw, pitch, and roll values (order matters!)
+        function rotate(x, y, z) {
+            // Apply yaw (Z-axis)
+            let tempX = x * Math.cos(yaw) - y * Math.sin(yaw);
+            let tempY = x * Math.sin(yaw) + y * Math.cos(yaw);
+            x = tempX;
+            y = tempY;
+
+            // Apply pitch (Y-axis)
+            let tempZ = z * Math.cos(pitch) - x * Math.sin(pitch);
+            tempX = z * Math.sin(pitch) + x * Math.cos(pitch);
+            z = tempZ;
+            x = tempX;
+
+            // Apply roll (X-axis)
+            tempY = y * Math.cos(roll) - z * Math.sin(roll);
+            tempZ = y * Math.sin(roll) + z * Math.cos(roll);
+            y = tempY;
+            z = tempZ;
+
+            return { x, y, z };
+        }
+
+        // Function to reverse the rotation applied to a point (x, y, z) when yaw and pitch inferred
+        function reverseRotation(x, y, z, yaw, pitch, roll = 0) {
+            // Reverse roll (X-axis rotation) - assuming no significant roll from the first point
+            let tempY = y * Math.cos(-roll) + z * Math.sin(-roll);
+            let tempZ = z * Math.cos(-roll) - y * Math.sin(-roll);
+            y = tempY;
+            z = tempZ;
+
+            // Reverse pitch (Y-axis rotation)
+            let tempX = x * Math.cos(-pitch) + z * Math.sin(-pitch);
+            tempZ = z * Math.cos(-pitch) - x * Math.sin(-pitch);
+            x = tempX;
+            z = tempZ;
+
+            // Reverse yaw (Z-axis rotation)
+            tempX = x * Math.cos(-yaw) - y * Math.sin(-yaw);
+            tempY = x * Math.sin(-yaw) + y * Math.cos(-yaw);
+            x = tempX;
+            y = tempY;
+
+            return { x, y, z };
+        }
+
+        // Function to set roll, pitch, and yaw based on face button
+        function setRotation(view) {
+            switch (view) {
+                case 'front':
+                    roll = 0;
+                    pitch = Math.PI;
+                    yaw = 0;
+                    break;
+                case 'back':
+                    roll = 0;
+                    pitch = 0;
+                    yaw = 0;
+                    break;
+                case 'top':
+                    roll = -Math.PI / 2;
+                    pitch = Math.PI;
+                    yaw = 0;
+                    break;
+                case 'bottom':
+                    roll = Math.PI / 2;
+                    pitch = Math.PI;
+                    yaw = 0;
+                    break;
+                case 'left':
+                    roll = 0;
+                    pitch = Math.PI / 2;
+                    yaw = 0;
+                    break;
+                case 'right':
+                    roll = 0;
+                    pitch = -Math.PI / 2;
+                    yaw = 0;
+                    break;
+            }
+
+            // Update the slider values
+            const rollSlider = document.getElementById('roll');
+            const pitchSlider = document.getElementById('pitch');
+            const yawSlider = document.getElementById('yaw');
+
+            rollSlider.value = roll;
+            pitchSlider.value = pitch;
+            yawSlider.value = yaw;
+
+            // Trigger the 'input' event on each slider to reflect the change visually
+            rollSlider.dispatchEvent(new Event('input'));
+            pitchSlider.dispatchEvent(new Event('input'));
+            yawSlider.dispatchEvent(new Event('input'));
+
+            // Redraw the sphere with the new rotation
+            drawSphere();
+        }
+
+        // Function to apply the transform if the checkbox is checked
+        function applyTransform(x, y, z) {
+            if (document.getElementById('transformRotation').checked) {
+                const rotated = rotate(x, y, z);
+                return { x: rotated.x, y: rotated.y, z: rotated.z };
+            }
+            return { x, y, z };
+        }
+
+        // Function to clean and conform input to proper TSV format
+        function conformToTSV(content) {
+            // Initial input log
+            console.log("Original content:", content);
+
+            // Replace occurrences of commas followed by spaces with tabs
+            content = content.replace(/,\s+/g, '\t');
+            console.log("After replacing commas followed by spaces:", content);
+
+            // Replace commas followed by tabs with tabs (in case commas were used inconsistently)
+            content = content.replace(/,\t+/g, '\t');
+            console.log("After replacing commas followed by tabs:", content);
+
+            // Replace any remaining commas with tabs (if input uses only commas as a delimiter)
+            content = content.replace(/,/g, '\t');
+            console.log("After replacing remaining commas:", content);
+
+            return content;
+        }
+
+        // Function to check if the sum of the absolute values of the floors of normalized x, y, z equals zero
+        function isProblematicVector(x, y, z) {
+            const normalized = normalizeVector(x, y, z);
+
+            // Check if the sum of the absolute values of the floors of normalized x, y, z equals zero
+            const sumFloors = Math.abs(Math.floor(normalized.x)) + Math.abs(Math.floor(normalized.y)) + Math.abs(Math.floor(normalized.z));
+
+            return sumFloors === 0;
+        }
+
+        // Function to normalize a vector
+        function normalizeVector(x, y, z) {
+            const magnitude = Math.sqrt(x * x + y * y + z * z);
+
+            if (magnitude === 0) {
+                return { x: 0, y: 0, z: 0 };  // Return unnormalized vector if magnitude is zero
+            }
+
+            const invMagnitude = 1 / magnitude;
+            return {
+                x: x * invMagnitude,
+                y: y * invMagnitude,
+                z: z * invMagnitude
+            };
+        }
+
+        // Function to find the minimum nudge for a problematic vector
+        function nudgeVectorIfNeeded(x, y, z) {
+            const threshold = 0.01; // Avoid very small numbers
+            const minNudge = 0.1;   // A nudge that helps push coordinates away from zero
+
+            // Detect if two or more coordinates are too close to zero
+            let zeroCount = (Math.abs(x) < threshold ? 1 : 0) +
+                (Math.abs(y) < threshold ? 1 : 0) +
+                (Math.abs(z) < threshold ? 1 : 0);
+
+            // If two or more coordinates are near zero, adjust them
+            if (zeroCount >= 2) {
+                // Prioritize nudging the smallest one or the one closest to zero
+                if (Math.abs(x) < threshold) {
+                    x = (x < 0 ? -minNudge : minNudge);
+                } else if (Math.abs(y) < threshold) {
+                    y = (y < 0 ? -minNudge : minNudge);
+                } else if (Math.abs(z) < threshold) {
+                    z = (z < 0 ? -minNudge : minNudge);
+                }
+            }
+
+            // Ensure no combination of x, y, z results in (0, 0, 0)
+            if (x === 0 && y === 0 && z === 0) {
+                x = minNudge;
+            }
+
+            return { x, y, z };
+        }
+
+        // Function to load input LNZ from textarea
+        function loadFromTSV() {
+            // Clear the existing circles array and canvas
+            circles = [];
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Redraw the grid first
+            drawGrid();
+
+            // Fetch the global settings (anchored and multiplier)
+            const coordinateMultiplier = parseFloat(document.getElementById('coordinateMultiplier').value);
+
+            // Get the TSV content from the textarea
+            let tsvContent = document.getElementById('tsvOutput').value;
+
+            // Conform input to proper TSV format
+            tsvContent = conformToTSV(tsvContent);
+
+            // Split the TSV content by lines
+            const lines = tsvContent.trim().split('\n').reverse();
+
+            // Parse all lines (including index 0) that do not start with ";" and have valid numbers
+            const parsedLines = lines.filter(line => {
+                const row = line.split('\t');
+                return !row[0].startsWith(';') && !isNaN(parseFloat(row[0]));
             });
 
-        </script>
+            // Loop through the parsed lines in normal order
+            parsedLines.forEach(line => {
+                const row = line.split('\t');
+
+                // Skip any line starting with a semicolon (;) or if the first field isn't a number
+                if (row[0].startsWith(';') || isNaN(parseFloat(row[0]))) {
+                    return;
+                }
+
+                // Extract the values based on the TSV columns
+                const baseBall = row[0];
+                const diameter = parseFloat(row[1]);
+
+                // Extract x, y, z from the row and apply coordinate multiplier
+                let x = parseFloat(row[2]) / coordinateMultiplier;
+                let y = parseFloat(row[3]) / coordinateMultiplier;
+                let z = parseFloat(row[4]) / coordinateMultiplier;
+
+                // Nudge the vector if needed to avoid NaN and problematic cases
+                const nudgedVector = nudgeVectorIfNeeded(x, y, z);
+                x = nudgedVector.x;
+                y = nudgedVector.y;
+                z = nudgedVector.z;
+
+                const colorValue = row[5];
+                const outlineColorValue = row[6];
+                const fuzz = parseInt(row[7]);
+                const outlineThickness = parseInt(row[8]);
+                const group = parseInt(row[9]);
+                const texture = parseInt(row[10]);
+
+                // Calculate actual canvas coordinates
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+                const canvasX = (x * centerX) + centerX;
+                const canvasY = (y * centerY) + centerY;
+
+                // Draw the circle on the canvas
+                ctx.beginPath();
+                ctx.arc(canvasX, canvasY, diameter, 0, Math.PI * 2);
+                ctx.fillStyle = getColorFromValue(colorValue);
+                ctx.fill();
+
+                // Outline handling based on outlineThickness value
+                if (outlineThickness === -2) {
+                    ctx.beginPath();
+                    ctx.arc(canvasX, canvasY, diameter, 0, Math.PI);
+                    ctx.strokeStyle = getColorFromValue(outlineColorValue);
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                } else if (outlineThickness >= 0) {
+                    ctx.lineWidth = outlineThickness;
+                    ctx.strokeStyle = getColorFromValue(outlineColorValue);
+                    ctx.stroke();
+                }
+
+                // Save parsed circle data
+                circles.push({
+                    baseBall: baseBall,
+                    x: x.toFixed(2),
+                    y: y.toFixed(2),
+                    z: z,
+                    diameter: diameter,
+                    color: colorValue,
+                    fuzz: fuzz,
+                    outlineColor: outlineColorValue,
+                    outlineThickness: outlineThickness,
+                    texture: texture,
+                    group: group
+                });
+            });
+
+            // Redraw circles
+            redrawCircles();
+        }
+
+        // Default example LNZ content
+        function loadDefaultLNZ() {
+            const defaultLNZ = `;baseball\tdiameter\tdirection (x,y,z)\tcolor\toutlinecolor\tfuzz\toutline\tgroup\ttexture\tanchored
+    6\t5\t-0.38,-0.54,1.00\t10\t244\t0\t-1\t-1\t1\t0
+    6\t10\t-0.42,-0.52,1.00\t35\t244\t0\t-1\t-1\t1\t0
+    6\t10\t-0.08,-0.08,1.00\t33\t244\t0\t-1\t-1\t1\t0
+    6\t10\t-0.02,-0.02,1.00\t33\t244\t0\t-1\t-1\t1\t0
+    6\t10\t0.08,0.02,1.00\t33\t244\t0\t-1\t-1\t1\t0
+    6\t10\t0.18,0.00,1.00\t33\t244\t0\t-1\t-1\t1\t0
+    6\t10\t0.26,-0.04,1.00\t33\t244\t0\t-1\t-1\t1\t0
+    6\t10\t0.32,-0.12,1.00\t33\t244\t0\t-1\t-1\t1\t0
+    6\t10\t0.36,-0.22,1.00\t33\t244\t0\t-1\t-1\t1\t0
+    6\t35\t0.00,0.02,1.00\t165\t244\t3\t-1\t-1\t1\t0
+    6\t35\t0.00,-0.20,1.00\t165\t244\t3\t-1\t-1\t1\t0
+    6\t35\t0.24,-0.10,1.00\t165\t244\t3\t-1\t-1\t1\t0
+    6\t35\t-0.24,-0.12,1.00\t165\t244\t3\t-1\t-1\t1\t0
+    6\t35\t-0.42,-0.46,1.00\t165\t244\t3\t-1\t-1\t1\t0
+    6\t30\t0.40,-0.30,1.00\t165\t244\t3\t-1\t-1\t1\t0
+    6\t25\t0.56,-0.46,1.00\t165\t244\t3\t-1\t-1\t1\t0
+    6\t20\t-0.46,-0.34,1.00\t65\t244\t0\t-1\t-1\t1\t0
+    6\t20\t-0.60,-0.32,1.00\t65\t244\t0\t-1\t-1\t1\t0
+    6\t20\t-0.72,-0.34,1.00\t65\t244\t0\t-1\t-1\t1\t0
+`;
+
+            // Set the default LNZ content into the textarea
+            document.getElementById('tsvOutput').value = defaultLNZ;
+
+            // Clear the canvas and redraw the grid first
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawGrid();
+
+            // Load the default LNZ from the TSV
+            loadFromTSV();
+        }
+
+        // Display the TSV and project circles onto the sphere
+        function displayTSV() {
+            const coordinateMultiplier = parseFloat(document.getElementById('coordinateMultiplier').value);
+            const anchored = document.getElementById('anchored').checked;
+
+            // Get the global baseBall once
+            let baseBall;
+            const petzType = document.getElementById('petzType').value;
+            if (petzType === 'addballz') {
+                baseBall = document.getElementById('addBallNumber').value;
+            } else {
+                baseBall = document.getElementById('baseBall').value;
+            }
+
+            // Prepare TSV content
+            let tsvContent = ";\n";
+
+            // Loop through the circles array and generate TSV rows
+            circles.forEach(circle => {
+                let x = circle.x * coordinateMultiplier;
+                let y = circle.y * coordinateMultiplier;
+                let z;
+
+                // Optionally: project UV for wider spread of design
+                if (document.getElementById('UVProjection').checked) {
+                    const r = 1;
+                    const magnitudeSquared = x * x + y * y;
+                    z = Math.sqrt(Math.max(0, r * r - magnitudeSquared));
+                } else {
+                    z = 1;
+                }
+
+                // Optionally: apply transformations (yaw, pitch, roll)
+                if (document.getElementById('transformRotation').checked) {
+                    const transformed = applyTransform(x, y, z);
+                    x = transformed.x.toFixed(2);
+                    y = transformed.y.toFixed(2);
+                    z = transformed.z.toFixed(2);
+                }
+
+                // Nudge the vector if needed to avoid NaN and problematic cases
+                const nudgedVector = nudgeVectorIfNeeded(x, y, z);
+                x = nudgedVector.x;
+                y = nudgedVector.y;
+                z = nudgedVector.z;
+
+                // Handle anchored column
+                const anchoredColumn = anchored ? ',0' : '';
+
+                // Generate the TSV row for the circle
+                tsvContent += `${baseBall},${circle.diameter},${x},${y},${z},${circle.color},${circle.outlineColor},${circle.fuzz},${circle.outlineThickness},${circle.group},${circle.texture}${anchoredColumn}\n`;
+            });
+
+            // Reverse TSV rows        
+            tsvContent = tsvContent.split('\n').reverse().join('\n');
+
+            // Put last row back at top
+            let tsvContentOut = ";baseball,diameter,x,y,z,color,outlinecolor,fuzz,outline,group,texture,anchored";
+            tsvContentOut += tsvContent;
+
+            // Set the TSV content in the output textarea
+            document.getElementById('tsvOutput').value = tsvContentOut;
+        }
+
+        // Function to project a 2D canvas point to a 3D sphere
+        function projectToSphere(x, y) {
+            const r = 1; // Assuming unit sphere
+            const z = Math.sqrt(r * r - x * x - y * y);
+            return { x: x, y: y, z: z };
+        }
+
+        // Function to draw a point on the sphere
+        function drawSpherePoint(x, y, z, diameter, color) {
+            const rotated = rotate(x, y, z);
+            const projected = project(rotated.x, rotated.y, rotated.z);
+
+            // Draw the circle on the sphere
+            sphereCtx.beginPath();
+            sphereCtx.arc(projected.x, projected.y, diameter / 2, 0, Math.PI * 2); // Adjust size by dividing by 2
+            sphereCtx.fillStyle = getColorFromValue(color);
+            sphereCtx.fill();
+        }
+
+        // Function to copy text from the textarea
+        document.getElementById('copyTextButton').addEventListener('click', function () {
+            const tsvOutput = document.getElementById('tsvOutput');
+            tsvOutput.select();
+            document.execCommand('copy'); // Copy the selected text to clipboard
+            alert('Copied to clipboard');
+        });
+
+    </script>
 
 </body>
 </html>
