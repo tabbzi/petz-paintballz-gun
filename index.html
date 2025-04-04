@@ -436,47 +436,119 @@
 
             // Draw the 3D sphere on the 2D canvas
             function drawSphere() {
-                sphereCtx.clearRect(0, 0, sphereCanvas.width, sphereCanvas.height);
+                    sphereCtx.clearRect(0, 0, sphereCanvas.width, sphereCanvas.height);
 
-                // First, draw the latitude lines
-                latitudeLines.forEach(line => {
-                    for (let i = 0; i < line.length - 1; i++) {
-                        const point1 = line[i];
-                        const point2 = line[i + 1];
-                        const rotated1 = rotate(point1.x, point1.y, point1.z);
-                        const rotated2 = rotate(point2.x, point2.y, point2.z);
-                        const projected1 = project(rotated1.x, rotated1.y, rotated1.z);
-                        const projected2 = project(rotated2.x, rotated2.y, rotated2.z);
+                    const hemisphereColor = (x, y, z) => {
+                        if (z > 0.5) return 'rgba(255, 0, 0, 0.15)';     // front
+                        if (z < -0.5) return 'rgba(0, 255, 0, 0.15)';    // back
+                        if (x > 0.5) return 'rgba(255, 255, 0, 0.15)';    // left
+                        if (x < -0.5) return 'rgba(0, 255, 255, 0.15)';   // right
+                        if (y > 0.5) return 'rgba(255, 0, 255, 0.15)';    // top
+                        if (y < -0.5) return 'rgba(255, 255, 255, 0.15)'; // bottom
+                        return null;
+                    };
 
-                        // Draw line between consecutive points along the latitude
+                    const faceLabels = [
+                        { label: 'BACK (+Z)', x: 0, y: 0, z: 1 },
+                        { label: 'FRONT (–Z)', x: 0, y: 0, z: -1 },
+                        { label: 'LEFT (+X)', x: 1, y: 0, z: 0 },
+                        { label: 'RIGHT (–X)', x: -1, y: 0, z: 0 },
+                        { label: 'BOTTOM (+Y)', x: 0, y: 1, z: 0 },
+                        { label: 'TOP (–Y)', x: 0, y: -1, z: 0 },
+                    ];
+
+                    // Fill hemispheres
+                    for (let lat = -Math.PI / 2; lat <= Math.PI / 2; lat += Math.PI / 24) {
+                        for (let lon = 0; lon <= 2 * Math.PI; lon += Math.PI / 24) {
+                            const x = Math.cos(lat) * Math.cos(lon);
+                            const y = Math.cos(lat) * Math.sin(lon);
+                            const z = Math.sin(lat);
+                            const rotated = rotate(x, y, z);
+                            const projected = project(rotated.x, rotated.y, rotated.z);
+                            const color = hemisphereColor(rotated.x, rotated.y, rotated.z);
+                            if (color) {
+                                sphereCtx.fillStyle = color;
+                                sphereCtx.fillRect(projected.x - 2, projected.y - 2, 4, 4);
+                            }
+                        }
+                    }
+
+                    // Draw latitude lines
+                    latitudeLines.forEach(line => {
+                        for (let i = 0; i < line.length - 1; i++) {
+                            const point1 = line[i];
+                            const point2 = line[i + 1];
+                            const rotated1 = rotate(point1.x, point1.y, point1.z);
+                            const rotated2 = rotate(point2.x, point2.y, point2.z);
+                            const projected1 = project(rotated1.x, rotated1.y, rotated1.z);
+                            const projected2 = project(rotated2.x, rotated2.y, rotated2.z);
+
+                            sphereCtx.beginPath();
+                            sphereCtx.moveTo(projected1.x, projected1.y);
+                            sphereCtx.lineTo(projected2.x, projected2.y);
+                            sphereCtx.strokeStyle = 'rgba(0, 128, 255, 0.5)';
+                            sphereCtx.lineWidth = 1;
+                            sphereCtx.stroke();
+                        }
+                    });
+
+                    // Draw longitude lines
+                    const lonStep = Math.PI / 12;
+                    for (let lon = 0; lon <= 2 * Math.PI; lon += lonStep) {
+                        let lastProjected = null;
+                        for (let lat = -Math.PI / 2; lat <= Math.PI / 2; lat += Math.PI / 36) {
+                            const x = Math.cos(lat) * Math.cos(lon);
+                            const y = Math.cos(lat) * Math.sin(lon);
+                            const z = Math.sin(lat);
+                            const rotated = rotate(x, y, z);
+                            const projected = project(rotated.x, rotated.y, rotated.z);
+
+                            if (lastProjected) {
+                                sphereCtx.beginPath();
+                                sphereCtx.moveTo(lastProjected.x, lastProjected.y);
+                                sphereCtx.lineTo(projected.x, projected.y);
+                                sphereCtx.strokeStyle = 'rgba(0, 128, 255, 0.3)';
+                                sphereCtx.lineWidth = 1;
+                                sphereCtx.stroke();
+                            }
+                            lastProjected = projected;
+                        }
+                    }
+
+                    // Draw paintballz
+                     const centerX = sphereCanvas.width / 2;
+                    const centerY = sphereCanvas.height / 2;
+                    const coordMult = parseFloat(document.getElementById('coordinateMultiplier').value);
+
+                    circles.forEach(ball => {
+                        const { x, y, z } = rotate(ball.x * coordMult, ball.y * coordMult, ball.z * coordMult);
+                        const { x: px, y: py } = project(x, y, z);
+                        const screenRadius = ball.diameter * 0.5;
                         sphereCtx.beginPath();
-                        sphereCtx.moveTo(projected1.x, projected1.y);
-                        sphereCtx.lineTo(projected2.x, projected2.y);
-                        sphereCtx.strokeStyle = 'rgba(0, 128, 255, 0.5)'; // Thinner, colored lines
-                        sphereCtx.lineWidth = 1; // Thinner lines
-                        sphereCtx.stroke();
+                        sphereCtx.arc(px, py, screenRadius, 0, Math.PI * 2);
+                        sphereCtx.fillStyle = getColorFromValue(ball.color);
+                        sphereCtx.fill();
+                    });
+
+                    // Floating face labels
+                    sphereCtx.font = '8px Roboto Mono';
+                    sphereCtx.fillStyle = 'white';
+                    sphereCtx.textAlign = 'center';
+                    faceLabels.forEach(face => {
+                    if (face.z > -0.2) { // only show labels on or near front
+                        const proj = project(face.x, face.y, face.z);
+                        sphereCtx.fillText(face.label, proj.x, proj.y);
                     }
                 });
 
-                // Now, draw the points
-                spherePoints.forEach(point => {
-                    const rotated = rotate(point.x, point.y, point.z);
-                    const projected = project(rotated.x, rotated.y, rotated.z);
-
-                    // Draw a small circle for each point on the sphere
+                    // Blue forward dot
+                    const originProjected = project(...Object.values(rotate(0, 0, 1)));
                     sphereCtx.beginPath();
-                    sphereCtx.arc(projected.x, projected.y, 3, 0, Math.PI * 2);
-                    sphereCtx.fillStyle = rotated.z > 0 ? 'red' : 'gray'; // Front half in red, back half in gray
+                    sphereCtx.arc(originProjected.x, originProjected.y, 5, 0, Math.PI * 2);
+                    sphereCtx.fillStyle = 'blue';
                     sphereCtx.fill();
-                });
+                }
 
-                // Show current axis position on the sphere
-                const originProjected = project(0, 0, 1); // The "forward" point on the sphere
-                sphereCtx.beginPath();
-                sphereCtx.arc(originProjected.x, originProjected.y, 5, 0, Math.PI * 2);
-                sphereCtx.fillStyle = 'blue'; // Mark the forward point in blue
-                sphereCtx.fill();
-            }
 
             // Update rotations based on slider input
             document.getElementById('roll').addEventListener('input', function () {
@@ -1130,7 +1202,6 @@
                 }
             }
 
-
             // Function to generate patterns based on texture value with transparency
             function getTextureValue(x, y, texture) {
                 switch (texture) {
@@ -1682,10 +1753,6 @@
 
                     // Generate the TSV row for the circle
                     tsvContent += `${baseBall},${circle.diameter},${x},${y},${z},${circle.color},${circle.outlineColor},${circle.fuzz},${circle.outlineThickness},${circle.group},${circle.texture}${anchoredColumn}\n`;
-
-                    // Project the circle onto the sphere (if needed)
-                    const spherePoint = projectToSphere(circle.x, circle.y);
-                    drawSpherePoint(spherePoint.x, spherePoint.y, spherePoint.z, circle.diameter, circle.color);
                 });
 
                 // Reverse TSV rows        
