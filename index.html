@@ -1076,39 +1076,60 @@
 
             // (new) Render circles in pixely style with representative texture, outline, and fuzz
             function drawPixelCircles(cx, cy, diameter, colorValue, outlineColorValue, outlineThickness, fuzz, texture) {
-                    const pixelSize = 2;
-                    const radius = diameter / 2;
-                    const fillColor = getColorFromValue(colorValue);
-                    const outlineColor = getColorFromValue(outlineColorValue);
+                const pixelSize = 2;
+                const radius = diameter / 2;
+                const fillColor = getColorFromValue(colorValue);
+                const outlineColor = getColorFromValue(outlineColorValue);
 
-                    for (let dx = -radius - outlineThickness; dx <= radius + outlineThickness; dx++) {
-                        for (let dy = -radius - outlineThickness; dy <= radius + outlineThickness; dy++) {
-                            const hash = ((dx * 73856093) ^ (dy * 19349663)) & 255;
-                            const rand = (hash / 255 - 0.5);
-                            const fuzzedRadius = radius + rand * fuzz;
+                const isFullOutline = outlineThickness > 0;
+                const isLeftOutline = outlineThickness === 0;
+                const isRightOutline = outlineThickness === -2;
+                const isNoOutline = outlineThickness === -1;
 
-                            const dist = Math.sqrt(dx * dx + dy * dy);
-                            const isFill = dist <= fuzzedRadius;
-                            const isOutline = dist > fuzzedRadius && dist <= fuzzedRadius + outlineThickness;
+                const effectiveOutlineThickness = isFullOutline ? outlineThickness : (isLeftOutline || isRightOutline ? 1 : 0);
 
-                            const px = Math.round(cx + dx * pixelSize);
-                            const py = Math.round(cy + dy * pixelSize);
+                for (let dx = -radius - effectiveOutlineThickness; dx <= radius + effectiveOutlineThickness; dx++) {
+                    for (let dy = -radius - effectiveOutlineThickness; dy <= radius + effectiveOutlineThickness; dy++) {
+                        // Stable hash-based fuzz
+                        const hash = ((dx * 73856093) ^ (dy * 19349663)) & 255;
+                        const rand = (hash / 255 - 0.5);
+                        const fuzzedRadius = radius + rand * fuzz;
 
-                            if (isFill) {
-                                ctx.fillStyle = fillColor;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        const isFill = dist <= fuzzedRadius;
+                        const isOutline = dist > fuzzedRadius && dist <= fuzzedRadius + effectiveOutlineThickness;
+
+                        const px = Math.round(cx + dx * pixelSize);
+                        const py = Math.round(cy + dy * pixelSize);
+
+                        if (isFill) {
+                            ctx.fillStyle = fillColor;
+                            ctx.fillRect(px, py, pixelSize, pixelSize);
+
+                            if (texture && getTextureValue(px, py, texture)) {
+                                ctx.fillStyle = 'rgba(255,255,255,0.3)';
                                 ctx.fillRect(px, py, pixelSize, pixelSize);
+                            }
+                        } else if (isOutline) {
+                            // Determine angle to classify left/right
+                            const angle = Math.atan2(dy, dx); // radians: -π to π
+                            const isLeftHalf = angle > Math.PI / 2 || angle < -Math.PI / 2;
+                            const isRightHalf = angle >= -Math.PI / 2 && angle <= Math.PI / 2;
 
-                                if (texture && getTextureValue(px, py, texture)) {
-                                    ctx.fillStyle = 'rgba(255,255,255,0.3)';
-                                    ctx.fillRect(px, py, pixelSize, pixelSize);
-                                }
-                            } else if (outlineThickness > 0 && isOutline) {
+                            const shouldDraw =
+                                isFullOutline ||
+                                (isLeftOutline && isLeftHalf) ||
+                                (isRightOutline && isRightHalf);
+
+                            if (shouldDraw) {
                                 ctx.fillStyle = outlineColor;
                                 ctx.fillRect(px, py, pixelSize, pixelSize);
                             }
                         }
                     }
                 }
+            }
+
 
             // Function to generate patterns based on texture value with transparency
             function getTextureValue(x, y, texture) {
