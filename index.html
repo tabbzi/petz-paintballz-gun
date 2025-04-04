@@ -1330,8 +1330,11 @@
             const rect = canvas.getBoundingClientRect();
             const centerX = canvas.width / 2;
             const centerY = canvas.height / 2;
-            const clickX = event.clientX - rect.left;
-            const clickY = event.clientY - rect.top;
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const clickX = (event.clientX - rect.left) * scaleX;
+            const clickY = (event.clientY - rect.top) * scaleY;
+
 
             // Check if delete mode is active
             const deleteMode = document.getElementById('deleteMode').checked;
