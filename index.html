@@ -348,16 +348,23 @@
             </label>
 
             <label>UV Projection:
+                <p class="note">projects better for wider spread of design</p>
                 <input type="checkbox" id="UVProjection">
             </label>
 
             <label>Anchored:
+                <p class="note">anchoring keeps size of paintballz constant no matter view angle</p>
                 <input type="checkbox" id="anchored" checked>
             </label>
 
             <label>Coordinate Multiplier:
+                <p class="note">controls spacing of paintballz in design</p>
                 <input type="number" id="coordinateMultiplier" value="2" step="0.5">
-                <p class="note">The <b>Coordinate Multiplier</b> controls spacing of Paint Ballz over Ballz.</p>
+            </label>
+
+            <label>Scale Multiplier:
+                <p class="note">controls sizing of paintballz in design</p>
+                <input type="number" id="scaleMultiplier" value="1" step="0.5">
             </label>
 
             <button onclick="displayTSV()">Display LNZ!</button>
@@ -518,7 +525,7 @@
                 }
 
                 // Draw paintballz
-                    const centerX = sphereCanvas.width / 2;
+                const centerX = sphereCanvas.width / 2;
                 const centerY = sphereCanvas.height / 2;
                 const coordMult = parseFloat(document.getElementById('coordinateMultiplier').value);
 
@@ -1781,8 +1788,12 @@
                 // Handle anchored column
                 const anchoredColumn = anchored ? ',0' : '';
 
+                // Rescale paintballz
+                const scaleMultiplier = parseFloat(document.getElementById('scaleMultiplier').value);
+                const adjustedDiameter = Math.ceil(circle.diameter * scaleMultiplier);
+
                 // Generate the TSV row for the circle
-                tsvContent += `${baseBall},${circle.diameter},${x},${y},${z},${circle.color},${circle.outlineColor},${circle.fuzz},${circle.outlineThickness},${circle.group},${circle.texture}${anchoredColumn}\n`;
+                tsvContent += `${baseBall},${adjustedDiameter},${x},${y},${z},${circle.color},${circle.outlineColor},${circle.fuzz},${circle.outlineThickness},${circle.group},${circle.texture}${anchoredColumn}\n`;
             });
 
             // Reverse TSV rows        
