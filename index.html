@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Petz Paintballz Gun</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto+Mono:wght@400&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --primary: #00bfa5;
@@ -22,7 +23,6 @@
             --shadow: rgba(0, 0, 0, 0.5);
         }
 
-
         body.light-mode {
             --primary: #009688;
             --primary-hover: #00bfa5;
@@ -37,7 +37,6 @@
             --shadow: rgba(0, 0, 0, 0.15);
         }
 
-
         body {
             font-family: 'Press Start 2P', monospace;
             font-size: 1.0em;
@@ -48,7 +47,6 @@
             line-height: 1.6;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
-
 
         h1,
         h2,
@@ -85,28 +83,15 @@
             color: var(--text-main);
         }
 
-        .note,
-        p,
-        label,
-        textarea,
-        select,
-        input,
-        .instr {
-            font-family: 'Roboto Mono', monospace;
-            color: var(--text-main);
-        }
-
         .note {
             font-size: 0.8em;
         }
 
         .instr {
             font-size: 14px;
-            color: var(--text-main);
             margin-bottom: 15px;
             line-height: 1.5;
         }
-
 
         .container {
             max-width: 1200px;
@@ -135,7 +120,6 @@
             box-shadow: 0 4px 15px var(--shadow);
             transition: background-color 0.3s ease, border-color 0.3s ease;
         }
-
 
         h1 {
             font-size: 1.5em;
@@ -175,7 +159,6 @@
             padding: 10px 15px 0;
         }
 
-
         button,
         .btn {
             font-family: 'Press Start 2P', monospace;
@@ -198,7 +181,6 @@
             background-color: var(--primary-hover);
             transform: translateY(-1px);
         }
-
 
         input[type="text"],
         input[type="number"],
@@ -233,7 +215,6 @@
             width: 100%;
         }
 
-
         ::-webkit-scrollbar {
             width: 12px;
         }
@@ -253,7 +234,6 @@
             background: var(--primary);
         }
 
-
         canvas {
             border: 3px solid var(--border);
             background-color: #303030;
@@ -264,6 +244,60 @@
         body.light-mode canvas {
             background-color: #ffffff;
             box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .color-trigger {
+            width: 24px;
+            height: 24px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .palette-popup {
+            position: absolute;
+            background: var(--bg-panel);
+            border: 2px solid var(--primary);
+            padding: 8px;
+            border-radius: 8px;
+            z-index: 5000;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
+            width: 320px;
+            margin-top: 5px;
+        }
+
+        .palette-popup .swatch-grid {
+            max-height: 300px;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: repeat(16, 1fr);
+            gap: 2px;
+            background: var(--bg-input);
+            padding: 2px;
+            border: 1px solid var(--border);
+        }
+
+        .palette-popup .swatch {
+            aspect-ratio: 1;
+            cursor: pointer;
+            position: relative;
+            border: 1px solid #222;
+            image-rendering: pixelated;
+        }
+
+        .palette-popup .swatch:hover {
+            outline: 2px solid #fff;
+            outline-offset: -2px;
+            z-index: 5;
+        }
+
+        .palette-popup .swatch-selected {
+            outline: 2px solid #fff !important;
+            outline-offset: -2px !important;
+            box-shadow: inset 0 0 8px #000 !important;
+            z-index: 5 !important;
         }
 
         .hidden {
@@ -279,50 +313,53 @@
     <div class="container">
         <h1>Petz Paintballz Gun</h1>
         <h2>v2.2</h2>
-        <p style="text-align:center;">
-            A handy web app for designing and exporting paintballz!
+        <p style="text-align:center;">A handy web app for designing and exporting paintballz!</p>
+        <p style="text-align:center;">- Kathleen @ <a href="https://www.tabbloza.com/petz" target="_blank">Tabbloza</a>
         </p>
+
         <p style="text-align:center;">
-            - Kathleen @ <a href="https://www.tabbloza.com/petz" target="_blank">Tabbloza</a>
+            Tip: You can save this HTML file and open it locally in your browser!
         </p>
 
         <details style="margin-bottom: 15px;">
             <summary style="cursor: pointer; font-size: 10px; color: var(--primary);">Update Log</summary>
+            <p class="instr" style="margin-bottom: 5px;">2026-10-14: Added continuous strokes, palette picker, shift hotkey for eraser, and clear button.</p>
             <p class="instr" style="margin-bottom: 5px;">2026-10-12: Updated theme!</p>
         </details>
 
         <div class="flex-row">
             <!-- Left Column: Canvases -->
             <div class="flex-1 card">
-                <h3>Draw your design!</h3>
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <canvas id="paintCanvas" width="500" height="500" style="max-width: 100%; height: auto;"></canvas>
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed var(--border); margin-bottom: 15px; padding-bottom: 10px;">
+                    <h3 style="border: none; padding: 0; margin: 0;">Draw your design!</h3>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <label style="margin: 0; display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                            <input type="checkbox" id="deleteMode" style="width: auto;"> Eraser <span class="note">(Shift)</span>
+                        </label>
+                        <label style="margin: 0; font-size: 10px;">Spacing %:</label>
+                        <input type="number" id="dragSpacing" value="150" min="100" max="300" step="50"
+                            style="width: 60px; padding: 4px;">
+                        <button onclick="clearCanvas()" style="margin: 0; padding: 6px 10px; background-color: #d32f2f; color: white;">Clear</button>
+                    </div>
                 </div>
 
-                <h3>Rotate your design...</h3>
-                <p class="note" style="margin-bottom: 15px;">Use the sliders to rotate the sphere and visualize the 3D
-                    space. The blue dot shows the face of the base ballz on which your design will be placed.</p>
-
                 <div style="text-align: center; margin-bottom: 20px;">
-                    <canvas id="sphereCanvas" width="300" height="300" style="max-width: 100%; height: auto;"></canvas>
+                    <canvas id="paintCanvas" width="500" height="500"
+                        style="max-width: 100%; height: auto; cursor: crosshair;"></canvas>
                 </div>
 
-                <label for="roll">Roll:</label>
-                <input type="range" id="roll" min="-3.14" max="3.14" step="0.01" value="0">
-
-                <label for="pitch">Pitch:</label>
-                <input type="range" id="pitch" min="-3.14" max="3.14" step="0.01" value="0">
-
-                <label for="yaw">Yaw:</label>
-                <input type="range" id="yaw" min="-3.14" max="3.14" step="0.01" value="0">
-
+                <h3>Export Projection Plane</h3>
+                <p class="note" style="margin-bottom: 15px;">Select the face of the base ballz on which your design will
+                    be placed upon export.</p>
                 <div class="flex-row" style="gap: 5px; margin-top: 15px; justify-content: center;">
-                    <button onclick="setRotation('front')">Front</button>
-                    <button onclick="setRotation('back')">Back</button>
-                    <button onclick="setRotation('top')">Top</button>
-                    <button onclick="setRotation('bottom')">Bottom</button>
-                    <button onclick="setRotation('left')">Left</button>
-                    <button onclick="setRotation('right')">Right</button>
+                    <button id="btn-front" onclick="setRotation('front')"
+                        style="background-color: var(--primary-hover);">Front</button>
+                    <button id="btn-back" onclick="setRotation('back')">Back</button>
+                    <button id="btn-top" onclick="setRotation('top')">Top</button>
+                    <button id="btn-bottom" onclick="setRotation('bottom')">Bottom</button>
+                    <button id="btn-left" onclick="setRotation('left')">Left</button>
+                    <button id="btn-right" onclick="setRotation('right')">Right</button>
                 </div>
             </div>
 
@@ -333,35 +370,58 @@
                 <label>Palette File:</label>
                 <input type="file" id="paletteFileInput" accept=".act,.pal,.bmp,.png">
 
-                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                    <input type="checkbox" id="deleteMode" style="width: auto;"> Delete Mode
-                </label>
+                <h3 style="margin-top: 30px;">Color Slots</h3>
+                <div id="slotList" style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;"></div>
+                <div class="flex-row" style="gap: 5px; margin-bottom: 10px;">
+                    <button onclick="addColorSlot()" style="flex: 1;">+ Slot</button>
+                    <button onclick="removeColorSlot()" style="flex: 1;">- Slot</button>
+                    <button id="cycleModeBtn" onclick="toggleCycleMode()"
+                        style="flex: 2; background-color: var(--border); color: white;">Mode: Pick Slots</button>
+                </div>
+
+                <div style="border-top: 1px solid var(--border); padding-top: 15px; margin-top: 15px;">
+                    <label>Main Color:</label>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <div id="colorSwatchTrigger" class="color-trigger" style="background: rgb(205,198,193);"
+                            onclick="togglePalettePopup('color')"></div>
+                        <span id="colorIndexLabel" style="width: 30px;">15</span>
+                        <input type="number" id="color" value="15" min="0" max="255" style="width: 80px;"
+                            oninput="updateColorFromInput(this.value)">
+                    </div>
+                    <div id="colorPalettePopup" class="palette-popup hidden">
+                        <div class="swatch-grid" id="colorSwatchGrid"></div>
+                    </div>
+
+                    <label>Outline Color:</label>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div id="outlineColorSwatchTrigger" class="color-trigger" style="background: rgb(0,0,0);"
+                            onclick="togglePalettePopup('outlineColor')"></div>
+                        <span id="outlineColorIndexLabel" style="width: 30px;">244</span>
+                        <input type="number" id="outlineColor" value="244" min="0" max="255" style="width: 80px;"
+                            oninput="updateOutlineColorFromInput(this.value)">
+                    </div>
+                    <div id="outlineColorPalettePopup" class="palette-popup hidden">
+                        <div class="swatch-grid" id="outlineColorSwatchGrid"></div>
+                    </div>
+                </div>
 
                 <h3 style="margin-top: 30px;">Paintballz Properties</h3>
-                <p class="note">These settings apply to <i>each</i> paintballz placed!</p>
+                <p class="note">Applied per-slot!</p>
 
                 <label>Diameter (% of base):</label>
-                <input type="number" id="diameter" value="30" min="1" max="100" step="1">
-
-                <label>Color:</label>
-                <input list="colorOptions" value="15" id="color" name="color">
-                <datalist id="colorOptions"></datalist>
+                <input type="number" id="diameter" value="30" min="1" max="100" step="1" oninput="saveSlotSettings()">
 
                 <label>Fuzz:</label>
-                <input type="number" id="fuzz" value="0">
-
-                <label>Outline Color:</label>
-                <input list="outlineColorOptions" value="244" id="outlineColor" name="outlineColor">
-                <datalist id="outlineColorOptions"></datalist>
+                <input type="number" id="fuzz" value="0" oninput="saveSlotSettings()">
 
                 <label>Outline Thickness:</label>
-                <input type="number" id="outlineThickness" value="-1">
+                <input type="number" id="outlineThickness" value="-1" oninput="saveSlotSettings()">
 
                 <label>Texture:</label>
-                <input type="number" id="texture" value="1">
+                <input type="number" id="texture" value="1" oninput="saveSlotSettings()">
 
                 <label>Group:</label>
-                <input type="number" id="group" value="-1">
+                <input type="number" id="group" value="-1" oninput="saveSlotSettings()">
 
                 <h3 style="margin-top: 30px;">Global Properties</h3>
                 <p class="note">These settings apply to <i>all</i> output paintballz!</p>
@@ -386,13 +446,13 @@
                 </div>
 
                 <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                    <input type="checkbox" id="transformRotation" style="width: auto;">
-                    <span>Transform for Roll/Pitch/Yaw <span class="note" style="display: inline;">(rotates design
+                    <input type="checkbox" id="transformRotation" checked style="width: auto;">
+                    <span>Transform for Selected Plane <span class="note" style="display: inline;">(rotates design
                             around base)</span></span>
                 </label>
 
                 <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                    <input type="checkbox" id="UVProjection" style="width: auto;">
+                    <input type="checkbox" id="UVProjection" checked style="width: auto;">
                     <span>UV Projection <span class="note" style="display: inline;">(projects better for wider
                             spread)</span></span>
                 </label>
@@ -436,186 +496,13 @@
             }
         });
 
-        window.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('petzType').value = 'addballz';
-            updateBaseBallDropdown();     // Initialize base ball dropdown
-            loadDefaultPalette();         // Load reshade.act on page load
-            drawGrid();                   // Draw the canvas grid
-            redrawCircles();              // If anything was previously saved
-        });
-
         const canvas = document.getElementById('paintCanvas');
-        const sphereCanvas = document.getElementById('sphereCanvas');
         const ctx = canvas.getContext('2d');
-        ctx.imageSmoothingEnabled = false; // disable anti-aliasing
-        const sphereCtx = sphereCanvas.getContext('2d');
-        sphereCtx.imageSmoothingEnabled = false;
+        ctx.imageSmoothingEnabled = false;
         let circles = [];
 
         // Initial roll, pitch, yaw values
-        let roll = 0, pitch = 0, yaw = 0;
-
-        // Array to store points of the sphere (latitude and longitude based)
-        const spherePoints = [];
-        const radius = 100;
-        const latitudeLines = []; // To store lines along latitude
-
-        // Generate points for the sphere
-        for (let lat = -Math.PI / 2; lat <= Math.PI / 2; lat += Math.PI / 12) {
-            let latitudeLine = [];
-            for (let lon = 0; lon <= 2 * Math.PI; lon += Math.PI / 12) {
-                const x = Math.cos(lat) * Math.cos(lon);
-                const y = Math.cos(lat) * Math.sin(lon);
-                const z = Math.sin(lat);
-                const point = { x, y, z };
-                spherePoints.push(point);
-                latitudeLine.push(point); // Add points to the current latitude line
-            }
-            latitudeLines.push(latitudeLine); // Store the latitude line
-        }
-
-        function project(x, y, z) {
-            const scale = radius / (radius + z); // Simple perspective projection
-            return {
-                x: (sphereCanvas.width / 2) + x * scale * radius,
-                y: (sphereCanvas.height / 2) + y * scale * radius
-            };
-        }
-
-        // Draw the 3D sphere on the 2D canvas
-        function drawSphere() {
-            sphereCtx.clearRect(0, 0, sphereCanvas.width, sphereCanvas.height);
-
-            const hemisphereColor = (x, y, z) => {
-                if (z > 0.5) return 'rgba(255, 0, 0, 0.15)';     // front
-                if (z < -0.5) return 'rgba(0, 255, 0, 0.15)';    // back
-                if (x > 0.5) return 'rgba(255, 255, 0, 0.15)';    // left
-                if (x < -0.5) return 'rgba(0, 255, 255, 0.15)';   // right
-                if (y > 0.5) return 'rgba(255, 0, 255, 0.15)';    // top
-                if (y < -0.5) return 'rgba(255, 255, 255, 0.15)'; // bottom
-                return null;
-            };
-
-            const faceLabels = [
-                { label: 'BACK (+Z)', x: 0, y: 0, z: 1 },
-                { label: 'FRONT (–Z)', x: 0, y: 0, z: -1 },
-                { label: 'LEFT (+X)', x: 1, y: 0, z: 0 },
-                { label: 'RIGHT (–X)', x: -1, y: 0, z: 0 },
-                { label: 'BOTTOM (+Y)', x: 0, y: 1, z: 0 },
-                { label: 'TOP (–Y)', x: 0, y: -1, z: 0 },
-            ];
-
-            // Fill hemispheres
-            for (let lat = -Math.PI / 2; lat <= Math.PI / 2; lat += Math.PI / 24) {
-                for (let lon = 0; lon <= 2 * Math.PI; lon += Math.PI / 24) {
-                    const x = Math.cos(lat) * Math.cos(lon);
-                    const y = Math.cos(lat) * Math.sin(lon);
-                    const z = Math.sin(lat);
-                    const rotated = rotate(x, y, z);
-                    const projected = project(rotated.x, rotated.y, rotated.z);
-                    const color = hemisphereColor(rotated.x, rotated.y, rotated.z);
-                    if (color) {
-                        sphereCtx.fillStyle = color;
-                        sphereCtx.fillRect(projected.x - 2, projected.y - 2, 4, 4);
-                    }
-                }
-            }
-
-            // Draw latitude lines
-            latitudeLines.forEach(line => {
-                for (let i = 0; i < line.length - 1; i++) {
-                    const point1 = line[i];
-                    const point2 = line[i + 1];
-                    const rotated1 = rotate(point1.x, point1.y, point1.z);
-                    const rotated2 = rotate(point2.x, point2.y, point2.z);
-                    const projected1 = project(rotated1.x, rotated1.y, rotated1.z);
-                    const projected2 = project(rotated2.x, rotated2.y, rotated2.z);
-
-                    sphereCtx.beginPath();
-                    sphereCtx.moveTo(projected1.x, projected1.y);
-                    sphereCtx.lineTo(projected2.x, projected2.y);
-                    sphereCtx.strokeStyle = 'rgba(0, 128, 255, 0.5)';
-                    sphereCtx.lineWidth = 1;
-                    sphereCtx.stroke();
-                }
-            });
-
-            // Draw longitude lines
-            const lonStep = Math.PI / 12;
-            for (let lon = 0; lon <= 2 * Math.PI; lon += lonStep) {
-                let lastProjected = null;
-                for (let lat = -Math.PI / 2; lat <= Math.PI / 2; lat += Math.PI / 36) {
-                    const x = Math.cos(lat) * Math.cos(lon);
-                    const y = Math.cos(lat) * Math.sin(lon);
-                    const z = Math.sin(lat);
-                    const rotated = rotate(x, y, z);
-                    const projected = project(rotated.x, rotated.y, rotated.z);
-
-                    if (lastProjected) {
-                        sphereCtx.beginPath();
-                        sphereCtx.moveTo(lastProjected.x, lastProjected.y);
-                        sphereCtx.lineTo(projected.x, projected.y);
-                        sphereCtx.strokeStyle = 'rgba(0, 128, 255, 0.3)';
-                        sphereCtx.lineWidth = 1;
-                        sphereCtx.stroke();
-                    }
-                    lastProjected = projected;
-                }
-            }
-
-            // Draw paintballz
-            const centerX = sphereCanvas.width / 2;
-            const centerY = sphereCanvas.height / 2;
-            const coordMult = parseFloat(document.getElementById('coordinateMultiplier').value);
-
-            circles.forEach(ball => {
-                const { x, y, z } = rotate(ball.x * coordMult, ball.y * coordMult, ball.z * coordMult);
-                const { x: px, y: py } = project(x, y, z);
-                const screenRadius = ball.diameter * 0.5;
-                sphereCtx.beginPath();
-                sphereCtx.arc(px, py, screenRadius, 0, Math.PI * 2);
-                sphereCtx.fillStyle = getColorFromValue(ball.color);
-                sphereCtx.fill();
-            });
-
-            // Floating face labels
-            sphereCtx.font = '8px Roboto Mono';
-            sphereCtx.fillStyle = 'white';
-            sphereCtx.textAlign = 'center';
-            faceLabels.forEach(face => {
-                if (face.z > -0.2) { // only show labels on or near front
-                    const proj = project(face.x, face.y, face.z);
-                    sphereCtx.fillText(face.label, proj.x, proj.y);
-                }
-            });
-
-            // Blue forward dot
-            const originProjected = project(...Object.values(rotate(0, 0, 1)));
-            sphereCtx.beginPath();
-            sphereCtx.arc(originProjected.x, originProjected.y, 5, 0, Math.PI * 2);
-            sphereCtx.fillStyle = 'blue';
-            sphereCtx.fill();
-        }
-
-
-        // Update rotations based on slider input
-        document.getElementById('roll').addEventListener('input', function () {
-            roll = parseFloat(this.value);
-            drawSphere();
-        });
-
-        document.getElementById('pitch').addEventListener('input', function () {
-            pitch = parseFloat(this.value);
-            drawSphere();
-        });
-
-        document.getElementById('yaw').addEventListener('input', function () {
-            yaw = parseFloat(this.value);
-            drawSphere();
-        });
-
-        // Draw the sphere initially
-        drawSphere();
+        let roll = 0, pitch = Math.PI, yaw = 0; // Default to Front
 
         const dogzBaseBallz = [
             "0: L ankle", "1: L eyebrow1", "2: L eyebrow2", "3: L eyebrow3",
@@ -650,70 +537,31 @@
         ];
 
         const babyzBaseBallz = [
-            "0: ankleL", "1: ankleR",
-            "2: archL", "3: archR",
-            "4: belly",
-            "5: bigtoeL", "6: bigtoeR",
-            "7: bridge",
-            "8: cheekL", "9: cheekR",
-            "10: chestL", "11: chestR",
-            "12: chin1", "13: chin2", "14: chin3", "15: chin4",
-            "16: ear1L", "17: ear1R",
-            "18: ear2L", "19: ear2R",
-            "20: ear3L", "21: ear3R",
-            "22: ear4L", "23: ear4R",
-            "24: ear5L", "25: ear5R",
-            "26: ear6L", "27: ear6R",
-            "28: earcenterL", "29: earcenterR",
-            "30: elbowL", "31: elbowR",
-            "32: extra1", "33: extra2", "34: extra3",
-            "35: eyeL", "36: eyeR",
-            "37: eyebrow1L", "38: eyebrow1R", "39: eyebrow2L", "40: eyebrow2R",
-            "41: eyebrow3L", "42: eyebrow3R", "43: eyebrow4L", "44: eyebrow4R",
-            "45: eyebrow5L", "46: eyebrow5R",
-            "47: finger_index1L", "48: finger_index1R",
-            "49: finger_index2L", "50: finger_index2R",
-            "51: finger_middle1L", "52: finger_middle1R",
-            "53: finger_middle2L", "54: finger_middle2R",
-            "55: finger_pinky1L", "56: finger_pinky1R",
-            "57: finger_pinky2L", "58: finger_pinky2R",
-            "59: football1L", "60: football1R",
-            "61: football2L", "62: football2R",
-            "63: head",
-            "64: heelL", "65: heelR",
-            "66: hipL", "67: hipR",
-            "68: irisL", "69: irisR",
-            "70: jock",
-            "71: kneeL", "72: kneeR",
+            "0: ankleL", "1: ankleR", "2: archL", "3: archR", "4: belly", "5: bigtoeL", "6: bigtoeR", "7: bridge",
+            "8: cheekL", "9: cheekR", "10: chestL", "11: chestR", "12: chin1", "13: chin2", "14: chin3", "15: chin4",
+            "16: ear1L", "17: ear1R", "18: ear2L", "19: ear2R", "20: ear3L", "21: ear3R", "22: ear4L", "23: ear4R",
+            "24: ear5L", "25: ear5R", "26: ear6L", "27: ear6R", "28: earcenterL", "29: earcenterR", "30: elbowL", "31: elbowR",
+            "32: extra1", "33: extra2", "34: extra3", "35: eyeL", "36: eyeR", "37: eyebrow1L", "38: eyebrow1R", "39: eyebrow2L", "40: eyebrow2R",
+            "41: eyebrow3L", "42: eyebrow3R", "43: eyebrow4L", "44: eyebrow4R", "45: eyebrow5L", "46: eyebrow5R",
+            "47: finger_index1L", "48: finger_index1R", "49: finger_index2L", "50: finger_index2R", "51: finger_middle1L", "52: finger_middle1R",
+            "53: finger_middle2L", "54: finger_middle2R", "55: finger_pinky1L", "56: finger_pinky1R", "57: finger_pinky2L", "58: finger_pinky2R",
+            "59: football1L", "60: football1R", "61: football2L", "62: football2R", "63: head", "64: heelL", "65: heelR",
+            "66: hipL", "67: hipR", "68: irisL", "69: irisR", "70: jock", "71: kneeL", "72: kneeR",
             "73: lowerLip1", "74: lowerLip2", "75: lowerLip3", "76: lowerLip4", "77: lowerLip5", "78: lowerLip6",
-            "79: mouthTopL", "80: mouthTopR",
-            "81: neck",
-            "82: nose1", "83: nose2", "84: nosemiddle", "85: nostrilL", "86: nostrilR",
-            "87: origin",
-            "88: palm1L", "89: palm1R", "90: palm2L", "91: palm2R", "92: palm3L", "93: palm3R",
-            "94: shoulderL", "95: shoulderR",
-            "96: templeL", "97: templeR",
-            "98: thumb1L", "99: thumb1R", "100: thumb2L", "101: thumb2R",
+            "79: mouthTopL", "80: mouthTopR", "81: neck", "82: nose1", "83: nose2", "84: nosemiddle", "85: nostrilL", "86: nostrilR",
+            "87: origin", "88: palm1L", "89: palm1R", "90: palm2L", "91: palm2R", "92: palm3L", "93: palm3R",
+            "94: shoulderL", "95: shoulderR", "96: templeL", "97: templeR", "98: thumb1L", "99: thumb1R", "100: thumb2L", "101: thumb2R",
             "102: toe_indexL", "103: toe_indexR", "104: toe_middleL", "105: toe_middleR", "106: toe_pinkyL", "107: toe_pinkyR",
-            "108: tongue1",
-            "109: underchin",
-            "110: upperLip1", "111: upperLip2", "112: upperLip3", "113: upperLip4", "114: upperLip5", "115: upperLip6",
-            "116: wristL", "117: wristR",
-            "118: zorient",
-            "119: ztrans"
+            "108: tongue1", "109: underchin", "110: upperLip1", "111: upperLip2", "112: upperLip3", "113: upperLip4", "114: upperLip5", "115: upperLip6",
+            "116: wristL", "117: wristR", "118: zorient", "119: ztrans"
         ];
 
-        // Define colorMap globally for use in drawing and value lookup
         let colorMap = {};
-
-        // Load palette file selected by user
-        document.getElementById('paletteFileInput').addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const palette = await parsePaletteFile(file);
-                applyPalette(palette);
-            }
-        });
+        let activePalette = [];
+        let activePaletteTarget = null;
+        let colorSlots = [{ color: '15', outlineColor: '244', fuzz: '0', outlineThickness: '-1', texture: '1', group: '-1', diameter: '30' }];
+        let activeSlotIndex = 0;
+        let isCycleMode = false;
 
         const defaultPalette = [
             [255, 255, 255],
@@ -974,118 +822,204 @@
             [0, 0, 0]
         ];
 
-        // Load default palette
-        function loadDefaultPalette() {
-            if (typeof defaultPalette !== 'undefined') {
-                applyPalette(defaultPalette);
-            } else {
-                console.warn("Default palette not found.");
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('petzType').value = 'addballz';
+            updateBaseBallDropdown();
+            applyPalette(defaultPalette);
+            buildSlotList();
+            updateSlotUI();
+            drawGrid();
+            redrawCircles();
+        });
+
+        // --- PALETTE & SLOTS LOGIC ---
+        document.getElementById('paletteFileInput').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const palette = await parsePaletteFile(file);
+                applyPalette(palette);
             }
-        }
+        });
 
         async function parsePaletteFile(file) {
             const buffer = await file.arrayBuffer();
             const ext = file.name.split('.').pop().toLowerCase();
             const bytes = new Uint8Array(buffer);
             let palette = [];
-
             if (ext === 'act' || ext === 'pal') {
-                // ACT/PAL: 768 bytes = 256 colors × 3 bytes
-                if (bytes.length < 768) {
-                    console.error("ACT/PAL file too short, should be 768 bytes");
-                    return [];
-                }
-                for (let i = 0; i < 768; i += 3) {
-                    palette.push([bytes[i], bytes[i + 1], bytes[i + 2]]);
-                }
+                if (bytes.length < 768) return [];
+                for (let i = 0; i < 768; i += 3) palette.push([bytes[i], bytes[i + 1], bytes[i + 2]]);
             } else if (ext === 'bmp') {
-                // BMP: Palette starts after 54 bytes (14 header + 40 DIB) for 8-bit indexed BMP
-                // Each color is 4 bytes: B G R 00
                 const bmpHeaderSize = 54;
-                if (bytes.length < bmpHeaderSize + 256 * 4) {
-                    console.error("BMP file too small for full palette");
-                    return [];
-                }
-                for (let i = bmpHeaderSize; i < bmpHeaderSize + 256 * 4; i += 4) {
-                    palette.push([bytes[i + 2], bytes[i + 1], bytes[i]]);
-                }
+                if (bytes.length < bmpHeaderSize + 256 * 4) return [];
+                for (let i = bmpHeaderSize; i < bmpHeaderSize + 256 * 4; i += 4) palette.push([bytes[i + 2], bytes[i + 1], bytes[i]]);
             } else if (ext === 'png') {
-                // PNG: Find PLTE chunk after 8-byte PNG signature
                 let offset = 8;
                 while (offset < bytes.length) {
                     const length = (bytes[offset] << 24) | (bytes[offset + 1] << 16) | (bytes[offset + 2] << 8) | bytes[offset + 3];
                     const type = String.fromCharCode(...bytes.slice(offset + 4, offset + 8));
                     if (type === 'PLTE') {
-                        for (let i = offset + 8; i < offset + 8 + length; i += 3) {
-                            palette.push([bytes[i], bytes[i + 1], bytes[i + 2]]);
-                        }
+                        for (let i = offset + 8; i < offset + 8 + length; i += 3) palette.push([bytes[i], bytes[i + 1], bytes[i + 2]]);
                         break;
                     }
                     offset += 8 + length + 4;
                 }
             }
-
-            return palette.slice(0, 256); // Cap at 256 colors
+            return palette.slice(0, 256);
         }
 
-        // Print palette (debugging)
-        function printPalette(palette) {
-            const output = palette.map(rgb => `[${rgb[0]}, ${rgb[1]}, ${rgb[2]}]`).join(',\n');
-            const container = document.createElement('pre');
-            container.style.whiteSpace = 'pre-wrap';
-            container.style.background = '#111';
-            container.style.padding = '1em';
-            container.style.border = '1px solid #666';
-            container.style.color = '#0f0';
-            container.textContent = `const defaultPalette = [\n${output}\n];`;
-
-            document.body.appendChild(container);
-        }
-
-        // Apply palette to datalist inputs and populate colorMap
         function applyPalette(palette) {
-            const colorDatalist = document.getElementById('colorOptions');
-            const outlineDatalist = document.getElementById('outlineColorOptions');
-            colorDatalist.innerHTML = '';
-            outlineDatalist.innerHTML = '';
+            activePalette = palette;
             colorMap = {};
-            //printPalette(palette);
-
             palette.forEach(([r, g, b], index) => {
-                const rgb = `rgb(${r},${g},${b})`;
-                colorMap[index] = rgb;
-
-                const option = document.createElement('option');
-                option.label = `${index} (${rgb})`;
-                option.style.backgroundColor = rgb;
-
-                const outlineOption = option.cloneNode(true);
-                outlineOption.style.backgroundColor = rgb;
-
-                colorDatalist.appendChild(option);
-                outlineDatalist.appendChild(outlineOption);
+                colorMap[index] = `rgb(${r},${g},${b})`;
             });
+            updateSlotUI();
+            redrawCircles();
         }
 
-        // Lookup function for drawing/rendering
         function getColorFromValue(value) {
             const index = parseInt(value);
             return colorMap[index] || 'rgb(0,0,0)';
         }
 
-        document.getElementById('color').addEventListener('input', function () {
-            const val = parseInt(this.value);
-            const rgb = colorMap[val];
-            if (rgb) this.style.backgroundColor = rgb;
+        function togglePalettePopup(target) {
+            const popup = document.getElementById(target + 'PalettePopup');
+            if (activePaletteTarget && activePaletteTarget !== target) {
+                document.getElementById(activePaletteTarget + 'PalettePopup').classList.add('hidden');
+            }
+            if (popup.classList.contains('hidden')) {
+                renderSwatchGrid(target);
+                popup.classList.remove('hidden');
+                activePaletteTarget = target;
+            } else {
+                popup.classList.add('hidden');
+                activePaletteTarget = null;
+            }
+        }
+
+        function renderSwatchGrid(target) {
+            const grid = document.getElementById(target + 'SwatchGrid');
+            grid.innerHTML = '';
+            const currentVal = parseInt(document.getElementById(target).value) || 0;
+            activePalette.forEach(([r, g, b], i) => {
+                const s = document.createElement('div');
+                s.className = 'swatch' + (i === currentVal ? ' swatch-selected' : '');
+                s.style.backgroundColor = `rgb(${r},${g},${b})`;
+                s.onclick = (e) => {
+                    e.stopPropagation(); selectSwatch(target, i);
+                    document.getElementById(target + 'PalettePopup').classList.add('hidden');
+                    activePaletteTarget = null;
+                };
+                grid.appendChild(s);
+            });
+        }
+
+        function selectSwatch(target, index) {
+            document.getElementById(target).value = index;
+            const [r, g, b] = activePalette[index] || [0, 0, 0];
+            document.getElementById(target + 'SwatchTrigger').style.background = `rgb(${r},${g},${b})`;
+            if (target === 'color') document.getElementById('colorIndexLabel').textContent = index;
+            if (target === 'outlineColor') document.getElementById('outlineColorIndexLabel').textContent = index;
+            saveSlotSettings();
+        }
+
+        function updateColorFromInput(val) {
+            const index = parseInt(val); if (isNaN(index) || index < 0 || index > 255) return;
+            if (colorMap[index]) {
+                document.getElementById('colorSwatchTrigger').style.background = colorMap[index];
+                document.getElementById('colorIndexLabel').textContent = index;
+                saveSlotSettings();
+            }
+        }
+
+        function updateOutlineColorFromInput(val) {
+            const index = parseInt(val); if (isNaN(index) || index < 0 || index > 255) return;
+            if (colorMap[index]) {
+                document.getElementById('outlineColorSwatchTrigger').style.background = colorMap[index];
+                document.getElementById('outlineColorIndexLabel').textContent = index;
+                saveSlotSettings();
+            }
+        }
+
+        document.addEventListener('click', (e) => {
+            if (activePaletteTarget) {
+                const popup = document.getElementById(activePaletteTarget + 'PalettePopup');
+                const trigger = document.getElementById(activePaletteTarget + 'SwatchTrigger');
+                if (!popup.contains(e.target) && !trigger.contains(e.target)) {
+                    popup.classList.add('hidden');
+                    activePaletteTarget = null;
+                }
+            }
         });
 
-        document.getElementById('outlineColor').addEventListener('input', function () {
-            const val = parseInt(this.value);
-            const rgb = colorMap[val];
-            if (rgb) this.style.backgroundColor = rgb;
-        });
+        function toggleCycleMode() {
+            isCycleMode = !isCycleMode;
+            const btn = document.getElementById('cycleModeBtn');
+            btn.textContent = isCycleMode ? 'Mode: Cycle Slots' : 'Mode: Pick Slots';
+            btn.style.backgroundColor = isCycleMode ? 'var(--primary)' : 'var(--border)';
+        }
 
-        // Update dropdowns for Catz or Dogz selection
+        function buildSlotList() {
+            const list = document.getElementById('slotList');
+            list.innerHTML = '';
+            colorSlots.forEach((slot, i) => {
+                const btn = document.createElement('button');
+                btn.textContent = `S${i + 1}`;
+                const slotColor = getColorFromValue(slot.color);
+                btn.style.cssText = `flex: 1 1 20%; font-size: 9px; padding: 6px; background-color: ${slotColor}; color: white; text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000; border: 2px solid var(--border); border-radius: 4px; cursor: pointer;`;
+                if (i === activeSlotIndex) {
+                    btn.style.borderColor = '#ffffff';
+                    btn.style.boxShadow = '0 0 0 2px var(--primary)';
+                }
+                btn.onclick = () => { activeSlotIndex = i; updateSlotUI(); buildSlotList(); };
+                list.appendChild(btn);
+            });
+        }
+
+        function updateSlotUI() {
+            const slot = colorSlots[activeSlotIndex];
+            if (!slot) return;
+            document.getElementById('color').value = slot.color;
+            document.getElementById('colorIndexLabel').textContent = slot.color;
+            document.getElementById('colorSwatchTrigger').style.background = getColorFromValue(slot.color);
+            document.getElementById('outlineColor').value = slot.outlineColor;
+            document.getElementById('outlineColorIndexLabel').textContent = slot.outlineColor;
+            document.getElementById('outlineColorSwatchTrigger').style.background = getColorFromValue(slot.outlineColor);
+            document.getElementById('fuzz').value = slot.fuzz;
+            document.getElementById('outlineThickness').value = slot.outlineThickness;
+            document.getElementById('texture').value = slot.texture;
+            document.getElementById('group').value = slot.group;
+            document.getElementById('diameter').value = slot.diameter;
+        }
+
+        function addColorSlot() {
+            const defaults = colorSlots[activeSlotIndex];
+            colorSlots.push({ ...defaults });
+            activeSlotIndex = colorSlots.length - 1;
+            buildSlotList(); updateSlotUI();
+        }
+
+        function removeColorSlot() {
+            if (colorSlots.length <= 1) return;
+            colorSlots.splice(activeSlotIndex, 1);
+            if (activeSlotIndex >= colorSlots.length) activeSlotIndex = colorSlots.length - 1;
+            buildSlotList(); updateSlotUI();
+        }
+
+        function saveSlotSettings() {
+            const slot = colorSlots[activeSlotIndex];
+            slot.color = document.getElementById('color').value;
+            slot.outlineColor = document.getElementById('outlineColor').value;
+            slot.fuzz = document.getElementById('fuzz').value;
+            slot.outlineThickness = document.getElementById('outlineThickness').value;
+            slot.texture = document.getElementById('texture').value;
+            slot.group = document.getElementById('group').value;
+            slot.diameter = document.getElementById('diameter').value;
+            buildSlotList();
+        }
+
+        // --- DRAWING & CANVAS ---
         function updateBaseBallDropdown() {
             const petzType = document.getElementById('petzType').value;
             const baseBallInput = document.getElementById('baseBall');
@@ -1093,108 +1027,69 @@
             const addBallLabel = document.getElementById('addBallLabel');
             const baseBallLabel = document.getElementById('baseBallLabel');
 
-            // Clear existing datalist options
             baseBallDatalist.innerHTML = '';
-
-            if (petzType === 'dogz') {
-                baseBallInput.style.display = 'inline';
-                baseBallLabel.style.display = 'inline';
-                addBallLabel.style.display = 'none';
-
-                // Populate datalist for Dogz
-                dogzBaseBallz.forEach((ball, index) => {
-                    baseBallDatalist.innerHTML += `<option value="${index}">${ball}</option>`;
-                });
-            } else if (petzType === 'catz') {
-                baseBallInput.style.display = 'inline';
-                baseBallLabel.style.display = 'inline';
-                addBallLabel.style.display = 'none';
-
-                // Populate datalist for Catz
-                catzBaseBallz.forEach((ball, index) => {
-                    baseBallDatalist.innerHTML += `<option value="${index}">${ball}</option>`;
-                });
-            } else if (petzType === 'babyz') {
-                baseBallInput.style.display = 'inline';
-                baseBallLabel.style.display = 'inline';
-                addBallLabel.style.display = 'none';
-
-                // Populate datalist for Babyz
-                babyzBaseBallz.forEach((ball, index) => {
-                    baseBallDatalist.innerHTML += `<option value="${index}">${ball}</option>`;
-                });
-            } else if (petzType === 'addballz') {
-                baseBallInput.style.display = 'none';
-                baseBallLabel.style.display = 'none';
-                addBallLabel.style.display = 'inline';
+            if (petzType === 'addballz') {
+                baseBallInput.style.display = 'none'; baseBallLabel.style.display = 'none'; addBallLabel.style.display = 'inline';
+            } else {
+                baseBallInput.style.display = 'inline'; baseBallLabel.style.display = 'inline'; addBallLabel.style.display = 'none';
+                const arr = petzType === 'dogz' ? dogzBaseBallz : (petzType === 'catz' ? catzBaseBallz : babyzBaseBallz);
+                arr.forEach((ball, index) => { baseBallDatalist.innerHTML += `<option value="${index}">${ball}</option>`; });
             }
         }
 
-        // Canvas grid
         function drawGrid() {
-            const gridSpacing = 50; // Set spacing between grid lines
-            const textOffset = 15; // Set offset for text labels
+            const gridSpacing = 50;
+            const textOffset = 15;
             const centerX = canvas.width / 2;
             const centerY = canvas.height / 2;
-
-            // Fetch the global coordinate multiplier
             const coordinateMultiplier = parseFloat(document.getElementById('coordinateMultiplier').value);
 
-            // Draw vertical grid lines and labels
             ctx.beginPath();
-            ctx.strokeStyle = '#888'; // Light gray for grid lines
+            ctx.strokeStyle = '#888';
             ctx.lineWidth = 1;
             for (let x = 0; x <= canvas.width; x += gridSpacing) {
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x, canvas.height);
-                ctx.stroke();
-
-                // Label the x-axis based on the multiplier, converting back to coordinate system
+                ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
                 const labelValueX = ((x - centerX) / centerX * coordinateMultiplier).toFixed(2);
-                ctx.fillStyle = '#888'; // Color for axis labels
+                ctx.fillStyle = '#888';
                 ctx.font = '12px Arial';
                 ctx.fillText(labelValueX, x + 2, centerY + textOffset);
             }
-
-            // Draw horizontal grid lines and labels
             ctx.beginPath();
             for (let y = 0; y <= canvas.height; y += gridSpacing) {
-                ctx.moveTo(0, y);
-                ctx.lineTo(canvas.width, y);
-                ctx.stroke();
-
-                // Label the y-axis based on the multiplier, converting back to coordinate system
+                ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
                 const labelValueY = ((centerY - y) / centerY * coordinateMultiplier).toFixed(2);
                 ctx.fillText(labelValueY, centerX + textOffset, y - 2);
             }
-
-            // Draw axes lines (X and Y)
             ctx.beginPath();
-            ctx.strokeStyle = '#555'; // Darker color for axes
+            ctx.strokeStyle = '#555';
             ctx.lineWidth = 2;
-
-            // Vertical axis (Y-axis)
-            ctx.moveTo(centerX, 0);
-            ctx.lineTo(centerX, canvas.height);
-            ctx.stroke();
-
-            // Horizontal axis (X-axis)
-            ctx.moveTo(0, centerY);
-            ctx.lineTo(canvas.width, centerY);
-            ctx.stroke();
+            ctx.moveTo(centerX, 0); ctx.lineTo(centerX, canvas.height); ctx.stroke();
+            ctx.moveTo(0, centerY); ctx.lineTo(canvas.width, centerY); ctx.stroke();
         }
 
-        // Redraw grid when multiplier changes
         document.getElementById('coordinateMultiplier').addEventListener('input', function () {
-            drawGrid();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawGrid(); redrawCircles();
         });
 
-        // Draw the grid when page loads
-        window.onload = function () {
-            drawGrid();
-        };
+        function redrawCircles() {
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            circles.forEach(circle => {
+                let x = (circle.x * centerX) + centerX;
+                let y = (circle.y * centerY) + centerY;
+                drawPixelCircles(x, y, circle.diameter, circle.color, circle.outlineColor, circle.outlineThickness, circle.fuzz, circle.texture);
+            });
+        }
 
-        // Render pixelated circles with design settings
+        function clearCanvas() {
+            if (confirm("Are you sure you want to clear your entire design?")) {
+                circles = [];
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawGrid();
+            }
+        }
+
         function drawPixelCircles(cx, cy, diameter, colorValue, outlineColorValue, outlineThickness, fuzz, texture) {
             const pixelSize = 2;
             const radius = diameter / 2;
@@ -1204,44 +1099,32 @@
             const isFullOutline = outlineThickness > 0;
             const isLeftOutline = outlineThickness === 0;
             const isRightOutline = outlineThickness === -2;
-            const isNoOutline = outlineThickness === -1;
 
             const effectiveOutlineThickness = isFullOutline ? outlineThickness : (isLeftOutline || isRightOutline ? 1 : 0);
 
             for (let dx = -radius - effectiveOutlineThickness; dx <= radius + effectiveOutlineThickness; dx++) {
                 for (let dy = -radius - effectiveOutlineThickness; dy <= radius + effectiveOutlineThickness; dy++) {
-                    // Stable hash-based fuzz
                     const hash = ((dx * 73856093) ^ (dy * 19349663)) & 255;
                     const rand = (hash / 255 - 0.5);
                     const fuzzedRadius = radius + rand * fuzz;
-
                     const dist = Math.sqrt(dx * dx + dy * dy);
                     const isFill = dist <= fuzzedRadius;
                     const isOutline = dist > fuzzedRadius && dist <= fuzzedRadius + effectiveOutlineThickness;
-
                     const px = Math.round(cx + dx * pixelSize);
                     const py = Math.round(cy + dy * pixelSize);
 
                     if (isFill) {
                         ctx.fillStyle = fillColor;
                         ctx.fillRect(px, py, pixelSize, pixelSize);
-
                         if (texture && getTextureValue(px, py, texture)) {
                             ctx.fillStyle = 'rgba(255,255,255,0.3)';
                             ctx.fillRect(px, py, pixelSize, pixelSize);
                         }
                     } else if (isOutline) {
-                        // Determine angle to classify left/right
-                        const angle = Math.atan2(dy, dx); // radians: -π to π
+                        const angle = Math.atan2(dy, dx);
                         const isLeftHalf = angle > Math.PI / 2 || angle < -Math.PI / 2;
                         const isRightHalf = angle >= -Math.PI / 2 && angle <= Math.PI / 2;
-
-                        const shouldDraw =
-                            isFullOutline ||
-                            (isLeftOutline && isLeftHalf) ||
-                            (isRightOutline && isRightHalf);
-
-                        if (shouldDraw) {
+                        if (isFullOutline || (isLeftOutline && isLeftHalf) || (isRightOutline && isRightHalf)) {
                             ctx.fillStyle = outlineColor;
                             ctx.fillRect(px, py, pixelSize, pixelSize);
                         }
@@ -1250,502 +1133,268 @@
             }
         }
 
-        // Function to generate patterns based on texture value with transparency
         function getTextureValue(x, y, texture) {
-            switch (texture) {
-                case 1: // Vertical stripes
-                    return (Math.floor(x / 4) % 2 === 0);
-                case 2: // Horizontal stripes
-                    return (Math.floor(y / 4) % 2 === 0);
-                case 3: // Dotted squares
-                    return (Math.floor(x / 6) % 2 === 0 && Math.floor(y / 6) % 2 === 0);
-                case 4: // Mini checkers
-                    return ((Math.floor(x / 4) + Math.floor(y / 4)) % 2 === 0);
-                case 5: // Mega checkers
-                    return Math.sin(x * 0.2) + Math.cos(y * 0.2) > 0;
-                case 6: // Snakescales
-                    return ((Math.floor(x / 4) - Math.floor(y / 2)) % 2 === 0);
-                case 7: // Fishscales
-                    return ((Math.floor(x / 2) - Math.floor(y / 3)) % 2 === 0);
-                default:
-                    return false;
+            switch (parseInt(texture)) {
+                case 1: return (Math.floor(x / 4) % 2 === 0);
+                case 2: return (Math.floor(y / 4) % 2 === 0);
+                case 3: return (Math.floor(x / 6) % 2 === 0 && Math.floor(y / 6) % 2 === 0);
+                case 4: return ((Math.floor(x / 4) + Math.floor(y / 4)) % 2 === 0);
+                case 5: return Math.sin(x * 0.2) + Math.cos(y * 0.2) > 0;
+                case 6: return ((Math.floor(x / 4) - Math.floor(y / 2)) % 2 === 0);
+                case 7: return ((Math.floor(x / 2) - Math.floor(y / 3)) % 2 === 0);
+                default: return false;
             }
         }
 
-        // Function to redraw all circles after grid is drawn
-        function redrawCircles() {
-            const centerX = canvas.width / 2;
-            const centerY = canvas.height / 2;
+        // --- CONTINUOUS STROKE / DRAGGING ---
+        let isDragging = false;
+        let lastDragPoint = null;
 
-            const coordinateMultiplier = parseFloat(document.getElementById('coordinateMultiplier').value);
+        canvas.addEventListener('mousedown', (event) => {
+            isDragging = true;
+            lastDragPoint = null;
+            handleCanvasAction(event);
+        });
 
-            // Loop through and redraw each circle
-            circles.forEach(circle => {
-                let x = (circle.x * centerX) + centerX;
-                let y = (circle.y * centerY) + centerY;
-
-                // Draw the circle fill and wiggly outline based on the fuzz and texture value
-                drawPixelCircles(
-                    x, y, circle.diameter, circle.color, circle.outlineColor,
-                    circle.outlineThickness, circle.fuzz, circle.texture
-                );
-            });
-        }
-
-        // Track mouse movement to display a preview circle on hover
-        canvas.addEventListener('mousemove', function (event) {
+        canvas.addEventListener('mousemove', (event) => {
             const rect = canvas.getBoundingClientRect();
             const centerX = canvas.width / 2;
             const centerY = canvas.height / 2;
             const scaleX = canvas.width / rect.width;
             const scaleY = canvas.height / rect.height;
-
             const mouseX = (event.clientX - rect.left) * scaleX;
             const mouseY = (event.clientY - rect.top) * scaleY;
 
+            const slot = colorSlots[activeSlotIndex];
+            const diameter = parseInt(slot.diameter);
 
-            // Clear the canvas before drawing the preview
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Redraw the grid and existing circles
             drawGrid();
             redrawCircles();
 
-            // Get the current diameter from the input field for hover preview
-            const diameter = parseInt(document.getElementById('diameter').value);
-            const colorValue = document.getElementById('color').value;
-            const outlineColor = document.getElementById('outlineColor').value;
-            const outlineThickness = parseInt(document.getElementById('outlineThickness').value);
-            const fuzz = parseInt(document.getElementById('fuzz').value);
-            const texture = parseInt(document.getElementById('texture').value);
+            // Hover preview
+            const deleteMode = document.getElementById('deleteMode').checked || event.shiftKey;
+            if (deleteMode) {
+                ctx.beginPath(); ctx.arc(mouseX, mouseY, 8, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 50, 50, 0.8)'; ctx.fill();
+            } else {
+                drawPixelCircles(mouseX, mouseY, diameter, slot.color, slot.outlineColor, slot.outlineThickness, slot.fuzz, slot.texture);
+            }
 
-            // Use the same function as for the final circle to draw preview
-            drawPixelCircles(mouseX, mouseY, diameter, colorValue, outlineColor, outlineThickness, fuzz, texture);
+            if (isDragging) {
+                const spacingPercent = parseInt(document.getElementById('dragSpacing').value) || 100;
+                const radiusPx = diameter * 0.5;
+                const spacing = Math.max(1, radiusPx * (spacingPercent / 100));
+
+                if (lastDragPoint) {
+                    const dx = mouseX - lastDragPoint.x;
+                    const dy = mouseY - lastDragPoint.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist >= spacing) {
+                        const steps = Math.floor(dist / spacing);
+                        for (let i = 1; i <= steps; i++) {
+                            const t = i / steps;
+                            const px = lastDragPoint.x + dx * t;
+                            const py = lastDragPoint.y + dy * t;
+
+                            if (deleteMode) {
+                                let circleToDelete = null;
+                                for (let j = 0; j < circles.length; j++) {
+                                    const circle = circles[j];
+                                    const canvasX = (circle.x * centerX) + centerX;
+                                    const canvasY = (circle.y * centerY) + centerY;
+                                    const d = Math.sqrt((px - canvasX) ** 2 + (py - canvasY) ** 2);
+                                    if (d <= (circle.diameter * 0.5) + 4) { circleToDelete = j; break; }
+                                }
+                                if (circleToDelete !== null) circles.splice(circleToDelete, 1);
+                            } else {
+                                let cx = (px - centerX) / centerX;
+                                let cy = (py - centerY) / centerY;
+                                let cz = 1;
+                                if (document.getElementById('UVProjection').checked) cz = Math.sqrt(Math.max(0, 1 - cx * cx - cy * cy));
+
+                                if (isCycleMode && colorSlots.length > 1) {
+                                    activeSlotIndex = (activeSlotIndex + 1) % colorSlots.length;
+                                    updateSlotUI(); buildSlotList();
+                                }
+                                const cSlot = colorSlots[activeSlotIndex];
+                                drawPixelCircles(px, py, cSlot.diameter, cSlot.color, cSlot.outlineColor, cSlot.outlineThickness, cSlot.fuzz, cSlot.texture);
+
+                                circles.push({
+                                    x: cx.toFixed(2), y: cy.toFixed(2), z: cz.toFixed(2), diameter: parseInt(cSlot.diameter),
+                                    color: cSlot.color, fuzz: cSlot.fuzz, outlineColor: cSlot.outlineColor,
+                                    outlineThickness: cSlot.outlineThickness, texture: cSlot.texture, group: cSlot.group
+                                });
+                            }
+                        }
+                        lastDragPoint = { x: mouseX, y: mouseY };
+                    }
+                } else {
+                    lastDragPoint = { x: mouseX, y: mouseY };
+                }
+            }
         });
 
-        // Add a wheel event listener to control the diameter with the mouse wheel
-        canvas.addEventListener('wheel', function (event) {
-            event.preventDefault();  // Prevent the default scrolling behavior
+        canvas.addEventListener('mouseup', () => { isDragging = false; lastDragPoint = null; });
+        canvas.addEventListener('mouseleave', () => {
+            isDragging = false; lastDragPoint = null;
+            ctx.clearRect(0, 0, canvas.width, canvas.height); drawGrid(); redrawCircles();
+        });
 
-            // Get the current diameter from the input field
+        canvas.addEventListener('wheel', function (event) {
+            event.preventDefault();
             const diameterInput = document.getElementById('diameter');
             let diameter = parseInt(diameterInput.value);
-
-            // Adjust the diameter based on scroll direction (smooth scrolling)
-            const delta = event.deltaY > 0 ? -1 : 1; // Scroll up to increase, scroll down to decrease
-            diameter = Math.max(1, diameter + delta); // Set minimum diameter to 1
-
-            // Update the diameter input field
+            diameter = Math.max(1, diameter + (event.deltaY > 0 ? -1 : 1));
             diameterInput.value = diameter;
+            saveSlotSettings();
 
-            // Redraw the hover circle immediately after changing diameter
             const rect = canvas.getBoundingClientRect();
-            const scaleX = canvas.width / rect.width;
-            const scaleY = canvas.height / rect.height;
-
-            const mouseX = (event.clientX - rect.left) * scaleX;
-            const mouseY = (event.clientY - rect.top) * scaleY;
-
-            // Clear the canvas and redraw everything
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawGrid();
-            redrawCircles();
-
-            // Draw a new preview circle with updated diameter using the same function
-            const colorValue = document.getElementById('color').value;
-            const outlineColor = document.getElementById('outlineColor').value;
-            const outlineThickness = parseInt(document.getElementById('outlineThickness').value);
-            const fuzz = parseInt(document.getElementById('fuzz').value);
-            const texture = parseInt(document.getElementById('texture').value);
-
-            drawPixelCircles(mouseX, mouseY, diameter, colorValue, outlineColor, outlineThickness, fuzz, texture);
+            const mouseX = (event.clientX - rect.left) * (canvas.width / rect.width);
+            const mouseY = (event.clientY - rect.top) * (canvas.height / rect.height);
+            ctx.clearRect(0, 0, canvas.width, canvas.height); drawGrid(); redrawCircles();
+            const slot = colorSlots[activeSlotIndex];
+            drawPixelCircles(mouseX, mouseY, diameter, slot.color, slot.outlineColor, slot.outlineThickness, slot.fuzz, slot.texture);
         });
 
-        // Remove the preview circle when the mouse leaves the canvas
-        canvas.addEventListener('mouseout', function () {
-            // Clear the canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Redraw the grid and existing circles
-            drawGrid();
-            redrawCircles();
-        });
-
-        // Handle click event to draw or delete on the canvas
-        canvas.addEventListener('click', function (event) {
+        function handleCanvasAction(event) {
             const rect = canvas.getBoundingClientRect();
             const centerX = canvas.width / 2;
             const centerY = canvas.height / 2;
-            const scaleX = canvas.width / rect.width;
-            const scaleY = canvas.height / rect.height;
-            const clickX = (event.clientX - rect.left) * scaleX;
-            const clickY = (event.clientY - rect.top) * scaleY;
-
-
-            // Check if delete mode is active
-            const deleteMode = document.getElementById('deleteMode').checked;
+            const clickX = (event.clientX - rect.left) * (canvas.width / rect.width);
+            const clickY = (event.clientY - rect.top) * (canvas.height / rect.height);
+            const deleteMode = document.getElementById('deleteMode').checked || event.shiftKey;
 
             if (deleteMode) {
-                // Try to find and delete the circle that was clicked on
                 let circleToDelete = null;
                 for (let i = 0; i < circles.length; i++) {
-                    const circle = circles[i];
-                    const canvasX = (circle.x * centerX) + centerX;
-                    const canvasY = (circle.y * centerY) + centerY;
-
-                    // Calculate the distance between the click and the center of the circle
-                    const distance = Math.sqrt((clickX - canvasX) ** 2 + (clickY - canvasY) ** 2);
-                    if (distance <= circle.diameter) {
-                        // The click is inside this circle
-                        circleToDelete = i;
-                        break;
+                    const canvasX = (circles[i].x * centerX) + centerX;
+                    const canvasY = (circles[i].y * centerY) + centerY;
+                    if (Math.sqrt((clickX - canvasX) ** 2 + (clickY - canvasY) ** 2) <= (circles[i].diameter * 0.5) + 4) {
+                        circleToDelete = i; break;
                     }
                 }
-
                 if (circleToDelete !== null) {
-                    // Remove the circle from the array
                     circles.splice(circleToDelete, 1);
-
-                    // Redraw the grid and remaining circles
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    drawGrid();
-                    redrawCircles();
+                    ctx.clearRect(0, 0, canvas.width, canvas.height); drawGrid(); redrawCircles();
                 }
             } else {
-                // Normalize x, y with respect to the center of the canvas (without applying multiplier)
-                let x = (clickX - centerX) / centerX;  // Positive x = left on ballz, negative x = right on ballz, WHEN z = 1
-                let y = (clickY - centerY) / centerY;  // Positive y = down on ballz, negative y = up on ballz, WHEN z = 1
+                let x = (clickX - centerX) / centerX;
+                let y = (clickY - centerY) / centerY;
+                let z = 1;
+                if (document.getElementById('UVProjection').checked) z = Math.sqrt(Math.max(0, 1 - x * x - y * y));
 
-                // Optionally: UV project 2D coordinates for broader spread of design
-                let z;
-                if (document.getElementById('UVProjection').checked) {
-                    const r = 1;
-                    const magnitudeSquared = x * x + y * y;
-                    z = Math.sqrt(Math.max(0, r * r - magnitudeSquared));
-                } else {
-                    z = 1;
+                if (isCycleMode && colorSlots.length > 1) {
+                    activeSlotIndex = (activeSlotIndex + 1) % colorSlots.length;
+                    updateSlotUI(); buildSlotList();
                 }
+                const slot = colorSlots[activeSlotIndex];
+                drawPixelCircles(clickX, clickY, parseInt(slot.diameter), slot.color, slot.outlineColor, slot.outlineThickness, slot.fuzz, slot.texture);
 
-                const diameter = parseInt(document.getElementById('diameter').value);
-                const colorValue = document.getElementById('color').value;
-                const outlineColorValue = document.getElementById('outlineColor').value;
-                const outlineThickness = parseInt(document.getElementById('outlineThickness').value);
-                const fuzz = parseInt(document.getElementById('fuzz').value);
-                const texture = parseInt(document.getElementById('texture').value);
-                const group = parseInt(document.getElementById('group').value);
-
-                // Draw the circle fill and wiggly outline based on the fuzz and texture value
-                drawPixelCircles(clickX, clickY, diameter, colorValue, outlineColorValue, outlineThickness, fuzz, texture);
-
-                // Save circle data
                 circles.push({
-                    x: x.toFixed(2), y: y.toFixed(2), z: z, diameter: diameter,
-                    color: colorValue, fuzz: fuzz, outlineColor: outlineColorValue,
-                    outlineThickness: outlineThickness, texture: texture, group: group
+                    x: x.toFixed(2), y: y.toFixed(2), z: z.toFixed(2), diameter: parseInt(slot.diameter),
+                    color: slot.color, fuzz: slot.fuzz, outlineColor: slot.outlineColor,
+                    outlineThickness: slot.outlineThickness, texture: slot.texture, group: slot.group
                 });
             }
-        });
+        }
 
-        // Ensure the grid is redrawn whenever the multiplier changes
-        document.getElementById('coordinateMultiplier').addEventListener('input', function () {
-            // Clear the canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Draw the grid and then redraw all circles
-            drawGrid();
-            redrawCircles();
-        });
-
-        // Function to rotate a point (x, y, z) by the current yaw, pitch, and roll values (order matters!)
+        // --- ROTATION & EXPORT ---
         function rotate(x, y, z) {
-            // Apply yaw (Z-axis)
             let tempX = x * Math.cos(yaw) - y * Math.sin(yaw);
             let tempY = x * Math.sin(yaw) + y * Math.cos(yaw);
-            x = tempX;
-            y = tempY;
+            x = tempX; y = tempY;
 
-            // Apply pitch (Y-axis)
             let tempZ = z * Math.cos(pitch) - x * Math.sin(pitch);
             tempX = z * Math.sin(pitch) + x * Math.cos(pitch);
-            z = tempZ;
-            x = tempX;
+            z = tempZ; x = tempX;
 
-            // Apply roll (X-axis)
             tempY = y * Math.cos(roll) - z * Math.sin(roll);
             tempZ = y * Math.sin(roll) + z * Math.cos(roll);
-            y = tempY;
-            z = tempZ;
+            y = tempY; z = tempZ;
 
             return { x, y, z };
         }
 
-        // Function to reverse the rotation applied to a point (x, y, z) when yaw and pitch inferred
-        function reverseRotation(x, y, z, yaw, pitch, roll = 0) {
-            // Reverse roll (X-axis rotation) - assuming no significant roll from the first point
-            let tempY = y * Math.cos(-roll) + z * Math.sin(-roll);
-            let tempZ = z * Math.cos(-roll) - y * Math.sin(-roll);
-            y = tempY;
-            z = tempZ;
-
-            // Reverse pitch (Y-axis rotation)
-            let tempX = x * Math.cos(-pitch) + z * Math.sin(-pitch);
-            tempZ = z * Math.cos(-pitch) - x * Math.sin(-pitch);
-            x = tempX;
-            z = tempZ;
-
-            // Reverse yaw (Z-axis rotation)
-            tempX = x * Math.cos(-yaw) - y * Math.sin(-yaw);
-            tempY = x * Math.sin(-yaw) + y * Math.cos(-yaw);
-            x = tempX;
-            y = tempY;
-
-            return { x, y, z };
-        }
-
-        // Function to set roll, pitch, and yaw based on face button
         function setRotation(view) {
+            ['front', 'back', 'top', 'bottom', 'left', 'right'].forEach(v => {
+                document.getElementById('btn-' + v).style.backgroundColor = 'var(--primary)';
+            });
+            document.getElementById('btn-' + view).style.backgroundColor = 'var(--primary-hover)';
+
             switch (view) {
-                case 'front':
-                    roll = 0;
-                    pitch = Math.PI;
-                    yaw = 0;
-                    break;
-                case 'back':
-                    roll = 0;
-                    pitch = 0;
-                    yaw = 0;
-                    break;
-                case 'top':
-                    roll = -Math.PI / 2;
-                    pitch = Math.PI;
-                    yaw = 0;
-                    break;
-                case 'bottom':
-                    roll = Math.PI / 2;
-                    pitch = Math.PI;
-                    yaw = 0;
-                    break;
-                case 'left':
-                    roll = 0;
-                    pitch = Math.PI / 2;
-                    yaw = 0;
-                    break;
-                case 'right':
-                    roll = 0;
-                    pitch = -Math.PI / 2;
-                    yaw = 0;
-                    break;
+                case 'front': roll = 0; pitch = Math.PI; yaw = 0; break;
+                case 'back': roll = 0; pitch = 0; yaw = 0; break;
+                case 'top': roll = -Math.PI / 2; pitch = Math.PI; yaw = 0; break;
+                case 'bottom': roll = Math.PI / 2; pitch = Math.PI; yaw = 0; break;
+                case 'left': roll = 0; pitch = Math.PI / 2; yaw = 0; break;
+                case 'right': roll = 0; pitch = -Math.PI / 2; yaw = 0; break;
             }
-
-            // Update the slider values
-            const rollSlider = document.getElementById('roll');
-            const pitchSlider = document.getElementById('pitch');
-            const yawSlider = document.getElementById('yaw');
-
-            rollSlider.value = roll;
-            pitchSlider.value = pitch;
-            yawSlider.value = yaw;
-
-            // Trigger the 'input' event on each slider to reflect the change visually
-            rollSlider.dispatchEvent(new Event('input'));
-            pitchSlider.dispatchEvent(new Event('input'));
-            yawSlider.dispatchEvent(new Event('input'));
-
-            // Redraw the sphere with the new rotation
-            drawSphere();
         }
 
-        // Function to apply the transform if the checkbox is checked
         function applyTransform(x, y, z) {
             if (document.getElementById('transformRotation').checked) {
-                const rotated = rotate(x, y, z);
-                return { x: rotated.x, y: rotated.y, z: rotated.z };
+                return rotate(x, y, z);
             }
             return { x, y, z };
         }
 
-        // Function to clean and conform input to proper TSV format
-        function conformToTSV(content) {
-            // Initial input log
-            console.log("Original content:", content);
-
-            // Replace occurrences of commas followed by spaces with tabs
-            content = content.replace(/,\s+/g, '\t');
-            console.log("After replacing commas followed by spaces:", content);
-
-            // Replace commas followed by tabs with tabs (in case commas were used inconsistently)
-            content = content.replace(/,\t+/g, '\t');
-            console.log("After replacing commas followed by tabs:", content);
-
-            // Replace any remaining commas with tabs (if input uses only commas as a delimiter)
-            content = content.replace(/,/g, '\t');
-            console.log("After replacing remaining commas:", content);
-
-            return content;
-        }
-
-        // Function to check if the sum of the absolute values of the floors of normalized x, y, z equals zero
         function isProblematicVector(x, y, z) {
-            const normalized = normalizeVector(x, y, z);
-
-            // Check if the sum of the absolute values of the floors of normalized x, y, z equals zero
-            const sumFloors = Math.abs(Math.floor(normalized.x)) + Math.abs(Math.floor(normalized.y)) + Math.abs(Math.floor(normalized.z));
-
-            return sumFloors === 0;
-        }
-
-        // Function to normalize a vector
-        function normalizeVector(x, y, z) {
             const magnitude = Math.sqrt(x * x + y * y + z * z);
-
-            if (magnitude === 0) {
-                return { x: 0, y: 0, z: 0 };  // Return unnormalized vector if magnitude is zero
-            }
-
-            const invMagnitude = 1 / magnitude;
-            return {
-                x: x * invMagnitude,
-                y: y * invMagnitude,
-                z: z * invMagnitude
-            };
+            if (magnitude === 0) return true;
+            const nx = x / magnitude, ny = y / magnitude, nz = z / magnitude;
+            return Math.abs(Math.floor(nx)) + Math.abs(Math.floor(ny)) + Math.abs(Math.floor(nz)) === 0;
         }
 
-        // Function to find the minimum nudge for a problematic vector
         function nudgeVectorIfNeeded(x, y, z) {
-            const threshold = 0.01; // Avoid very small numbers
-            const minNudge = 0.1;   // A nudge that helps push coordinates away from zero
-
-            // Detect if two or more coordinates are too close to zero
-            let zeroCount = (Math.abs(x) < threshold ? 1 : 0) +
-                (Math.abs(y) < threshold ? 1 : 0) +
-                (Math.abs(z) < threshold ? 1 : 0);
-
-            // If two or more coordinates are near zero, adjust them
+            const threshold = 0.01; const minNudge = 0.1;
+            let zeroCount = (Math.abs(x) < threshold ? 1 : 0) + (Math.abs(y) < threshold ? 1 : 0) + (Math.abs(z) < threshold ? 1 : 0);
             if (zeroCount >= 2) {
-                // Prioritize nudging the smallest one or the one closest to zero
-                if (Math.abs(x) < threshold) {
-                    x = (x < 0 ? -minNudge : minNudge);
-                } else if (Math.abs(y) < threshold) {
-                    y = (y < 0 ? -minNudge : minNudge);
-                } else if (Math.abs(z) < threshold) {
-                    z = (z < 0 ? -minNudge : minNudge);
-                }
+                if (Math.abs(x) < threshold) x = (x < 0 ? -minNudge : minNudge);
+                else if (Math.abs(y) < threshold) y = (y < 0 ? -minNudge : minNudge);
+                else if (Math.abs(z) < threshold) z = (z < 0 ? -minNudge : minNudge);
             }
-
-            // Ensure no combination of x, y, z results in (0, 0, 0)
-            if (x === 0 && y === 0 && z === 0) {
-                x = minNudge;
-            }
-
+            if (x === 0 && y === 0 && z === 0) x = minNudge;
             return { x, y, z };
         }
 
-        // Function to load input LNZ from textarea
+        function conformToTSV(content) {
+            return content.replace(/,\s+/g, '\t').replace(/,\t+/g, '\t').replace(/,/g, '\t');
+        }
+
         function loadFromTSV() {
-            // Clear the existing circles array and canvas
             circles = [];
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Redraw the grid first
             drawGrid();
 
-            // Fetch the global settings (anchored and multiplier)
             const coordinateMultiplier = parseFloat(document.getElementById('coordinateMultiplier').value);
+            let tsvContent = conformToTSV(document.getElementById('tsvOutput').value);
+            const lines = tsvContent.trim().split('\n').reverse().filter(line => !line.split('\t')[0].startsWith(';') && !isNaN(parseFloat(line.split('\t')[0])));
 
-            // Get the TSV content from the textarea
-            let tsvContent = document.getElementById('tsvOutput').value;
-
-            // Conform input to proper TSV format
-            tsvContent = conformToTSV(tsvContent);
-
-            // Split the TSV content by lines
-            const lines = tsvContent.trim().split('\n').reverse();
-
-            // Parse all lines (including index 0) that do not start with ";" and have valid numbers
-            const parsedLines = lines.filter(line => {
+            lines.forEach(line => {
                 const row = line.split('\t');
-                return !row[0].startsWith(';') && !isNaN(parseFloat(row[0]));
-            });
-
-            // Loop through the parsed lines in normal order
-            parsedLines.forEach(line => {
-                const row = line.split('\t');
-
-                // Skip any line starting with a semicolon (;) or if the first field isn't a number
-                if (row[0].startsWith(';') || isNaN(parseFloat(row[0]))) {
-                    return;
-                }
-
-                // Extract the values based on the TSV columns
                 const baseBall = row[0];
                 const diameter = parseFloat(row[1]);
 
-                // Extract x, y, z from the row and apply coordinate multiplier
                 let x = parseFloat(row[2]) / coordinateMultiplier;
                 let y = parseFloat(row[3]) / coordinateMultiplier;
                 let z = parseFloat(row[4]) / coordinateMultiplier;
 
-                // Nudge the vector if needed to avoid NaN and problematic cases
                 const nudgedVector = nudgeVectorIfNeeded(x, y, z);
-                x = nudgedVector.x;
-                y = nudgedVector.y;
-                z = nudgedVector.z;
+                x = nudgedVector.x; y = nudgedVector.y; z = nudgedVector.z;
 
-                const colorValue = row[5];
-                const outlineColorValue = row[6];
-                const fuzz = parseInt(row[7]);
-                const outlineThickness = parseInt(row[8]);
-                const group = parseInt(row[9]);
-                const texture = parseInt(row[10]);
-
-                // Calculate actual canvas coordinates
-                const centerX = canvas.width / 2;
-                const centerY = canvas.height / 2;
-                const canvasX = (x * centerX) + centerX;
-                const canvasY = (y * centerY) + centerY;
-
-                // Draw the circle on the canvas
-                ctx.beginPath();
-                ctx.arc(canvasX, canvasY, diameter, 0, Math.PI * 2);
-                ctx.fillStyle = getColorFromValue(colorValue);
-                ctx.fill();
-
-                // Outline handling based on outlineThickness value
-                if (outlineThickness === -2) {
-                    ctx.beginPath();
-                    ctx.arc(canvasX, canvasY, diameter, 0, Math.PI);
-                    ctx.strokeStyle = getColorFromValue(outlineColorValue);
-                    ctx.lineWidth = 1;
-                    ctx.stroke();
-                } else if (outlineThickness >= 0) {
-                    ctx.lineWidth = outlineThickness;
-                    ctx.strokeStyle = getColorFromValue(outlineColorValue);
-                    ctx.stroke();
-                }
-
-                // Save parsed circle data
                 circles.push({
-                    baseBall: baseBall,
-                    x: x.toFixed(2),
-                    y: y.toFixed(2),
-                    z: z,
-                    diameter: diameter,
-                    color: colorValue,
-                    fuzz: fuzz,
-                    outlineColor: outlineColorValue,
-                    outlineThickness: outlineThickness,
-                    texture: texture,
-                    group: group
+                    baseBall: baseBall, x: x.toFixed(2), y: y.toFixed(2), z: z, diameter: diameter,
+                    color: row[5], outlineColor: row[6], fuzz: parseInt(row[7]), outlineThickness: parseInt(row[8]),
+                    group: parseInt(row[9]), texture: parseInt(row[10])
                 });
             });
-
-            // Redraw circles
             redrawCircles();
         }
 
-        // Default example LNZ content
         function loadDefaultLNZ() {
-            const defaultLNZ = `;baseball\tdiameter\tdirection (x,y,z)\tcolor\toutlinecolor\tfuzz\toutline\tgroup\ttexture\tanchored
+            document.getElementById('tsvOutput').value = `;baseball\tdiameter\tdirection (x,y,z)\tcolor\toutlinecolor\tfuzz\toutline\tgroup\ttexture\tanchored
     6\t5\t-0.38,-0.54,1.00\t10\t244\t0\t-1\t-1\t1\t0
     6\t10\t-0.42,-0.52,1.00\t35\t244\t0\t-1\t-1\t1\t0
     6\t10\t-0.08,-0.08,1.00\t33\t244\t0\t-1\t-1\t1\t0
@@ -1766,115 +1415,46 @@
     6\t20\t-0.60,-0.32,1.00\t65\t244\t0\t-1\t-1\t1\t0
     6\t20\t-0.72,-0.34,1.00\t65\t244\t0\t-1\t-1\t1\t0
 `;
-
-            // Set the default LNZ content into the textarea
-            document.getElementById('tsvOutput').value = defaultLNZ;
-
-            // Clear the canvas and redraw the grid first
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawGrid();
-
-            // Load the default LNZ from the TSV
             loadFromTSV();
         }
 
-        // Display the TSV and project circles onto the sphere
         function displayTSV() {
             const coordinateMultiplier = parseFloat(document.getElementById('coordinateMultiplier').value);
             const anchored = document.getElementById('anchored').checked;
-
-            // Get the global baseBall once
-            let baseBall;
             const petzType = document.getElementById('petzType').value;
-            if (petzType === 'addballz') {
-                baseBall = document.getElementById('addBallNumber').value;
-            } else {
-                baseBall = document.getElementById('baseBall').value;
-            }
+            let baseBall = petzType === 'addballz' ? document.getElementById('addBallNumber').value : document.getElementById('baseBall').value;
 
-            // Prepare TSV content
             let tsvContent = ";\n";
-
-            // Loop through the circles array and generate TSV rows
             circles.forEach(circle => {
                 let x = circle.x * coordinateMultiplier;
                 let y = circle.y * coordinateMultiplier;
                 let z;
+                if (document.getElementById('UVProjection').checked) z = Math.sqrt(Math.max(0, 1 - x * x - y * y));
+                else z = 1;
 
-                // Optionally: project UV for wider spread of design
-                if (document.getElementById('UVProjection').checked) {
-                    const r = 1;
-                    const magnitudeSquared = x * x + y * y;
-                    z = Math.sqrt(Math.max(0, r * r - magnitudeSquared));
-                } else {
-                    z = 1;
-                }
-
-                // Optionally: apply transformations (yaw, pitch, roll)
                 if (document.getElementById('transformRotation').checked) {
                     const transformed = applyTransform(x, y, z);
-                    x = transformed.x.toFixed(2);
-                    y = transformed.y.toFixed(2);
-                    z = transformed.z.toFixed(2);
+                    x = transformed.x.toFixed(2); y = transformed.y.toFixed(2); z = transformed.z.toFixed(2);
                 }
 
-                // Nudge the vector if needed to avoid NaN and problematic cases
                 const nudgedVector = nudgeVectorIfNeeded(x, y, z);
-                x = nudgedVector.x;
-                y = nudgedVector.y;
-                z = nudgedVector.z;
-
-                // Handle anchored column
                 const anchoredColumn = anchored ? ',0' : '';
+                const adjustedDiameter = Math.ceil(circle.diameter * parseFloat(document.getElementById('scaleMultiplier').value));
 
-                // Rescale paintballz
-                const scaleMultiplier = parseFloat(document.getElementById('scaleMultiplier').value);
-                const adjustedDiameter = Math.ceil(circle.diameter * scaleMultiplier);
-
-                // Generate the TSV row for the circle
-                tsvContent += `${baseBall},${adjustedDiameter},${x},${y},${z},${circle.color},${circle.outlineColor},${circle.fuzz},${circle.outlineThickness},${circle.group},${circle.texture}${anchoredColumn}\n`;
+                tsvContent += `${baseBall},${adjustedDiameter},${nudgedVector.x},${nudgedVector.y},${nudgedVector.z},${circle.color},${circle.outlineColor},${circle.fuzz},${circle.outlineThickness},${circle.group},${circle.texture}${anchoredColumn}\n`;
             });
 
-            // Reverse TSV rows        
-            tsvContent = tsvContent.split('\n').reverse().join('\n');
-
-            // Put last row back at top
-            let tsvContentOut = ";baseball,diameter,x,y,z,color,outlinecolor,fuzz,outline,group,texture,anchored";
-            tsvContentOut += tsvContent;
-
-            // Set the TSV content in the output textarea
-            document.getElementById('tsvOutput').value = tsvContentOut;
+            tsvContent = ";baseball,diameter,x,y,z,color,outlinecolor,fuzz,outline,group,texture,anchored\n" + tsvContent.split('\n').reverse().join('\n');
+            document.getElementById('tsvOutput').value = tsvContent;
         }
 
-        // Function to project a 2D canvas point to a 3D sphere
-        function projectToSphere(x, y) {
-            const r = 1; // Assuming unit sphere
-            const z = Math.sqrt(r * r - x * x - y * y);
-            return { x: x, y: y, z: z };
-        }
-
-        // Function to draw a point on the sphere
-        function drawSpherePoint(x, y, z, diameter, color) {
-            const rotated = rotate(x, y, z);
-            const projected = project(rotated.x, rotated.y, rotated.z);
-
-            // Draw the circle on the sphere
-            sphereCtx.beginPath();
-            sphereCtx.arc(projected.x, projected.y, diameter / 2, 0, Math.PI * 2); // Adjust size by dividing by 2
-            sphereCtx.fillStyle = getColorFromValue(color);
-            sphereCtx.fill();
-        }
-
-        // Function to copy text from the textarea
         document.getElementById('copyTextButton').addEventListener('click', function () {
-            const tsvOutput = document.getElementById('tsvOutput');
-            tsvOutput.select();
-            document.execCommand('copy'); // Copy the selected text to clipboard
+            document.getElementById('tsvOutput').select();
+            document.execCommand('copy');
             alert('Copied to clipboard');
         });
 
     </script>
-
 </body>
 
 </html>
