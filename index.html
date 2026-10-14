@@ -477,6 +477,7 @@
 
                 <textarea id="tsvOutput" style="margin-top: 15px;"></textarea>
                 <button id="copyTextButton" style="width: 100%; margin-top: 5px;">Copy LNZ Code</button>
+                <button onclick="exportLnzLivePattern()" style="width: 100%; margin-top: 15px; background-color: #ff9800; color: #000;">Export LnzLive Stamp JSON</button>
             </div>
         </div>
     </div>
@@ -1453,6 +1454,78 @@
             document.execCommand('copy');
             alert('Copied to clipboard');
         });
+
+        function exportLnzLivePattern() {
+            let uniqueSlots = [];
+            let patternPaintballs = [];
+            const isAnchored = document.getElementById('anchored').checked;
+
+            circles.forEach(c => {
+                let slotObj = uniqueSlots.find(s =>
+                    s.color == c.color &&
+                    s.outline_color == c.outlineColor &&
+                    s.outline_type == c.outlineThickness &&
+                    s.fuzz == c.fuzz &&
+                    s.texture == c.texture &&
+                    s.group == c.group
+                );
+
+                let slotIndex = 0;
+                if (!slotObj) {
+                    let rgbString = colorMap[c.color] || "rgb(0,0,0)";
+                    let rgbMatch = rgbString.match(/\d+/g);
+                    let r = rgbMatch ? parseInt(rgbMatch[0]) / 255 : 1;
+                    let g = rgbMatch ? parseInt(rgbMatch[1]) / 255 : 1;
+                    let b = rgbMatch ? parseInt(rgbMatch[2]) / 255 : 1;
+
+                    slotObj = {
+                        color: c.color.toString(),
+                        outline_color: c.outlineColor.toString(),
+                        texture: c.texture.toString(),
+                        outline_type: parseInt(c.outlineThickness),
+                        fuzz: parseInt(c.fuzz),
+                        group: parseInt(c.group),
+                        anchored: isAnchored,
+                        scale: 100,
+                        display_color_r: r,
+                        display_color_g: g,
+                        display_color_b: b
+                    };
+                    uniqueSlots.push(slotObj);
+                    slotIndex = uniqueSlots.length;
+                } else {
+                    slotIndex = uniqueSlots.indexOf(slotObj) + 1;
+                }
+
+                patternPaintballs.push({
+                    x: parseFloat(c.x),
+                    y: parseFloat(c.y),
+                    diameter: parseInt(c.diameter),
+                    color_slot: slotIndex
+                });
+            });
+
+            let outObj = {
+                exporter: "LnzLive",
+                info: {
+                    time_generated: new Date().toISOString(),
+                    author: "Paintballz Gun Web",
+                    website: "https://www.tabbloza.com/petz",
+                    description: "Exported from Petz Paintballz Gun Web"
+                },
+                paintballs: patternPaintballs,
+                slots: uniqueSlots
+            };
+
+            let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(outObj, null, "\t"));
+            let dlAnchorElem = document.createElement('a');
+            dlAnchorElem.setAttribute("href", dataStr);
+            dlAnchorElem.setAttribute("download", "LnzLive_paintball_pattern_" + Math.floor(Date.now() / 1000) + ".json");
+            dlAnchorElem.style.display = 'none';
+            document.body.appendChild(dlAnchorElem);
+            dlAnchorElem.click();
+            document.body.removeChild(dlAnchorElem);
+        }
 
     </script>
 </body>
