@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petz Paintballz Gun</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto+Mono:wght@400&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00bfa5;
+            --primary-hover: #1de9b6;
+            --primary-dark: #004d40;
+            --bg-page: #2f2f2f;
+            --bg-panel: #1a1a1a;
+            --bg-input: #111111;
+            --border: #444444;
+            --text-main: #e0e0e0;
+            --text-header: #ffffff;
+            --text-muted: #999999;
+            --shadow: rgba(0, 0, 0, 0.5);
+        }
+
+        body.light-mode {
+            --primary: #009688;
+            --primary-hover: #00bfa5;
+            --primary-dark: #b2dfdb;
+            --bg-page: #e0e0e0;
+            --bg-panel: #f4f4f4;
+            --bg-input: #e8e8e8;
+            --border: #bdbdbd;
+            --text-main: #222222;
+            --text-header: #000000;
+            --text-muted: #666666;
+            --shadow: rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1.0em;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        h1,
+        h2,
+        h3 {
+            text-align: center;
+            color: var(--text-header);
+            text-shadow: 2px 2px 4px var(--shadow);
+        }
+
+        h2,
+        h3 {
+            color: var(--primary);
+        }
+
+        a:link,
+        a:visited {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: var(--primary-hover);
+            text-decoration: underline;
+        }
+
+        .note,
+        p,
+        label,
+        textarea,
+        select,
+        input,
+        .instr {
+            font-family: 'Roboto Mono', monospace;
+            color: var(--text-main);
+        }
+
+        .note {
+            font-size: 0.8em;
+        }
+
+        .instr {
+            font-size: 14px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .flex-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            align-items: flex-start;
+        }
+
+        .flex-1 {
+            flex: 1;
+            min-width: 320px;
+        }
+
+        .card {
+            background-color: var(--bg-panel);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px var(--shadow);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        h1 {
+            font-size: 1.5em;
+            margin: 10px 0 5px 0;
+        }
+
+        h2 {
+            font-size: 1.1em;
+            margin-bottom: 1.5em;
+        }
+
+        h3 {
+            font-size: 1em;
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-bottom: 2px dashed var(--border);
+            padding-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            margin: 15px 0 5px 0;
+            line-height: 1.4;
+        }
+
+        label .note {
+            display: block;
+            margin-top: 2px;
+            color: var(--text-muted);
+        }
+
+        .theme-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: right;
+            padding: 10px 15px 0;
+        }
+
+        button,
+        .btn {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 12px;
+            padding: 10px 15px;
+            color: #000;
+            background-color: var(--primary);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 2px 2px 0 var(--primary-dark);
+            transition: all 0.1s;
+            margin: 5px 0;
+            line-height: 1.5;
+            text-transform: uppercase;
+        }
+
+        button:hover,
+        .btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select,
+        textarea {
+            background-color: var(--bg-input);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 8px;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 13px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        textarea {
+            height: 200px;
+            resize: vertical;
+            font-size: 11px;
+            line-height: 1.2;
+        }
+
+        input[type="range"] {
+            width: 100%;
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-page);
+            border-left: 1px solid var(--border);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border: 2px solid var(--bg-page);
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        canvas {
+            border: 3px solid var(--border);
+            background-color: #303030;
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8);
+            image-rendering: pixelated;
+        }
+
+        body.light-mode canvas {
+            background-color: #ffffff;
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .color-trigger {
+            width: 24px;
+            height: 24px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .palette-popup {
+            position: absolute;
+            background: var(--bg-panel);
+            border: 2px solid var(--primary);
+            padding: 8px;
+            border-radius: 8px;
+            z-index: 5000;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
+            width: 320px;
+            margin-top: 5px;
+        }
+
+        .palette-popup .swatch-grid {
+            max-height: 300px;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: repeat(16, 1fr);
+            gap: 2px;
+            background: var(--bg-input);
+            padding: 2px;
+            border: 1px solid var(--border);
+        }
+
+        .palette-popup .swatch {
+            aspect-ratio: 1;
+            cursor: pointer;
+            position: relative;
+            border: 1px solid #222;
+            image-rendering: pixelated;
+        }
+
+        .palette-popup .swatch:hover {
+            outline: 2px solid #fff;
+            outline-offset: -2px;
+            z-index: 5;
+        }
+
+        .palette-popup .swatch-selected {
+            outline: 2px solid #fff !important;
+            outline-offset: -2px !important;
+            box-shadow: inset 0 0 8px #000 !important;
+            z-index: 5 !important;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="theme-wrapper">
+        <button id="themeToggle">Switch to Light Mode</button>
+    </div>
+    <div class="container">
+        <h1>Petz Paintballz Gun</h1>
+        <h2>v2.2</h2>
+        <p style="text-align:center;">A handy web app for designing and exporting paintballz!</p>
+        <p style="text-align:center;">- Kathleen @ <a href="https://www.tabbloza.com/petz" target="_blank">Tabbloza</a>
+        </p>
+
+        <p style="text-align:center;">
+            Tip: You can save this HTML file and open it locally in your browser!
+        </p>
+
+        <details style="margin-bottom: 15px;">
+            <summary style="cursor: pointer; font-size: 10px; color: var(--primary);">Update Log</summary>
+            <p class="instr" style="margin-bottom: 5px;">2026-10-14: Added continuous strokes, palette picker, shift hotkey for eraser, and clear button.</p>
+            <p class="instr" style="margin-bottom: 5px;">2026-10-12: Updated theme!</p>
+        </details>
+
+        <div class="flex-row">
+            <!-- Left Column: Canvases -->
+            <div class="flex-1 card">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed var(--border); margin-bottom: 15px; padding-bottom: 10px;">
+                    <h3 style="border: none; padding: 0; margin: 0;">Draw your design!</h3>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <label style="margin: 0; display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                            <input type="checkbox" id="deleteMode" style="width: auto;"> Eraser <span class="note">(Shift)</span>
+                        </label>
+                        <label style="margin: 0; font-size: 10px;">Spacing %:</label>
+                        <input type="number" id="dragSpacing" value="150" min="100" max="300" step="50"
+                            style="width: 60px; padding: 4px;">
+                        <button onclick="clearCanvas()" style="margin: 0; padding: 6px 10px; background-color: #d32f2f; color: white;">Clear</button>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <canvas id="paintCanvas" width="500" height="500"
+                        style="max-width: 100%; height: auto; cursor: crosshair;"></canvas>
+                </div>
+
+                <h3>Export Projection Plane</h3>
+                <p class="note" style="margin-bottom: 15px;">Select the face of the base ballz on which your design will
+                    be placed upon export.</p>
+                <div class="flex-row" style="gap: 5px; margin-top: 15px; justify-content: center;">
+                    <button id="btn-front" onclick="setRotation('front')"
+                        style="background-color: var(--primary-hover);">Front</button>
+                    <button id="btn-back" onclick="setRotation('back')">Back</button>
+                    <button id="btn-top" onclick="setRotation('top')">Top</button>
+                    <button id="btn-bottom" onclick="setRotation('bottom')">Bottom</button>
+                    <button id="btn-left" onclick="setRotation('left')">Left</button>
+                    <button id="btn-right" onclick="setRotation('right')">Right</button>
+                </div>
+            </div>
+
+            <!-- Right Column: Controls -->
+            <div class="flex-1 card">
+                <h3>Controls</h3>
+
+                <label>Palette File:</label>
+                <input type="file" id="paletteFileInput" accept=".act,.pal,.bmp,.png">
+
+                <h3 style="margin-top: 30px;">Color Slots</h3>
+                <div id="slotList" style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;"></div>
+                <div class="flex-row" style="gap: 5px; margin-bottom: 10px;">
+                    <button onclick="addColorSlot()" style="flex: 1;">+ Slot</button>
+                    <button onclick="removeColorSlot()" style="flex: 1;">- Slot</button>
+                    <button id="cycleModeBtn" onclick="toggleCycleMode()"
+                        style="flex: 2; background-color: var(--border); color: white;">Mode: Pick Slots</button>
+                </div>
+
+                <div style="border-top: 1px solid var(--border); padding-top: 15px; margin-top: 15px;">
+                    <label>Main Color:</label>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <div id="colorSwatchTrigger" class="color-trigger" style="background: rgb(205,198,193);"
+                            onclick="togglePalettePopup('color')"></div>
+                        <span id="colorIndexLabel" style="width: 30px;">15</span>
+                        <input type="number" id="color" value="15" min="0" max="255" style="width: 80px;"
+                            oninput="updateColorFromInput(this.value)">
+                    </div>
+                    <div id="colorPalettePopup" class="palette-popup hidden">
+                        <div class="swatch-grid" id="colorSwatchGrid"></div>
+                    </div>
+
+                    <label>Outline Color:</label>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div id="outlineColorSwatchTrigger" class="color-trigger" style="background: rgb(0,0,0);"
+                            onclick="togglePalettePopup('outlineColor')"></div>
+                        <span id="outlineColorIndexLabel" style="width: 30px;">244</span>
+                        <input type="number" id="outlineColor" value="244" min="0" max="255" style="width: 80px;"
+                            oninput="updateOutlineColorFromInput(this.value)">
+                    </div>
+                    <div id="outlineColorPalettePopup" class="palette-popup hidden">
+                        <div class="swatch-grid" id="outlineColorSwatchGrid"></div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 30px;">Paintballz Properties</h3>
+                <p class="note">Applied per-slot!</p>
+
+                <label>Diameter (% of base):</label>
+                <input type="number" id="diameter" value="30" min="1" max="100" step="1" oninput="saveSlotSettings()">
+
+                <label>Fuzz:</label>
+                <input type="number" id="fuzz" value="0" oninput="saveSlotSettings()">
+
+                <label>Outline Thickness:</label>
+                <input type="number" id="outlineThickness" value="-1" oninput="saveSlotSettings()">
+
+                <label>Texture:</label>
+                <input type="number" id="texture" value="1" oninput="saveSlotSettings()">
+
+                <label>Group:</label>
+                <input type="number" id="group" value="-1" oninput="saveSlotSettings()">
+
+                <h3 style="margin-top: 30px;">Global Properties</h3>
+                <p class="note">These settings apply to <i>all</i> output paintballz!</p>
+
+                <label>Select Petz Type:</label>
+                <select id="petzType" onchange="updateBaseBallDropdown()">
+                    <option value="dogz">Dogz</option>
+                    <option value="catz">Catz</option>
+                    <option value="babyz">Babyz</option>
+                    <option value="addballz" selected>Add Ballz</option>
+                </select>
+
+                <div id="baseBallLabel" style="display: none;">
+                    <label>Base Ballz #:</label>
+                    <input list="baseBallOptions" id="baseBall">
+                    <datalist id="baseBallOptions"></datalist>
+                </div>
+
+                <div id="addBallLabel">
+                    <label>Add Ballz #:</label>
+                    <input type="number" id="addBallNumber" min="67" value="67">
+                </div>
+
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                    <input type="checkbox" id="transformRotation" checked style="width: auto;">
+                    <span>Transform for Selected Plane <span class="note" style="display: inline;">(rotates design
+                            around base)</span></span>
+                </label>
+
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                    <input type="checkbox" id="UVProjection" checked style="width: auto;">
+                    <span>UV Projection <span class="note" style="display: inline;">(projects better for wider
+                            spread)</span></span>
+                </label>
+
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                    <input type="checkbox" id="anchored" checked style="width: auto;">
+                    <span>Anchored <span class="note" style="display: inline;">(keeps size constant in
+                            viewer)</span></span>
+                </label>
+
+                <label>Coordinate Multiplier: <span class="note">controls spacing of paintballz in design</span></label>
+                <input type="number" id="coordinateMultiplier" value="2" step="0.5">
+
+                <label>Scale Multiplier: <span class="note">controls sizing of paintballz in design</span></label>
+                <input type="number" id="scaleMultiplier" value="1" step="0.5">
+
+                <div class="flex-row" style="margin-top: 20px; gap: 10px;">
+                    <button onclick="displayTSV()" style="flex: 1;">Display LNZ!</button>
+                    <button onclick="loadFromTSV()" style="flex: 1;">Load from LNZ</button>
+                    <button onclick="loadDefaultLNZ()" style="flex: 1;">Load Example</button>
+                </div>
+
+                <textarea id="tsvOutput" style="margin-top: 15px;"></textarea>
+                <button id="copyTextButton" style="width: 100%; margin-top: 5px;">Copy LNZ Code</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const bodyElement = document.body;
+
+        themeToggleBtn.addEventListener('click', function () {
+            if (bodyElement.classList.contains('light-mode')) {
+                bodyElement.classList.remove('light-mode');
+                themeToggleBtn.textContent = 'Switch to Light Mode';
+            } else {
+                bodyElement.classList.add('light-mode');
+                themeToggleBtn.textContent = 'Switch to Dark Mode';
+            }
+        });
+
+        const canvas = document.getElementById('paintCanvas');
+        const ctx = canvas.getContext('2d');
+        ctx.imageSmoothingEnabled = false;
+        let circles = [];
+
+        // Initial roll, pitch, yaw values
+        let roll = 0, pitch = Math.PI, yaw = 0; // Default to Front
+
+        const dogzBaseBallz = [
+            "0: L ankle", "1: L eyebrow1", "2: L eyebrow2", "3: L eyebrow3",
+            "4: L ear1", "5: L ear2", "6: L ear3", "7: L elbow", "8: L eye",
+            "9: L finger1", "10: L finger2", "11: L finger3", "12: L foot",
+            "13: L hand", "14: L iris", "15: L jowl", "16: L knee", "17: L nostril",
+            "18: L shoulder", "19: L hip", "20: L toe1", "21: L toe2", "22: L toe3",
+            "23: L wrist", "24: R ankle", "25: R eyebrow1", "26: R eyebrow2", "27: R eyebrow3",
+            "28: R ear1", "29: R ear2", "30: R ear3", "31: R elbow", "32: R eye",
+            "33: R finger1", "34: R finger2", "35: R finger3", "36: R foot", "37: R hand",
+            "38: R iris", "39: R jowl", "40: R knee", "41: R nostril", "42: R shoulder",
+            "43: R hip", "44: R toe1", "45: R toe2", "46: R toe3", "47: R wrist",
+            "48: belly", "49: butt", "50: chest", "51: chin", "52: head", "53: jaw",
+            "54: neck", "55: nose (bottom)", "56: snout", "57: tail1", "58: tail2",
+            "59: tail3", "60: tail4", "61: tail5", "62: tail6", "63: tongue1", "64: tongue2",
+            "65: Z-trans", "66: Z-orient"
+        ];
+
+        const catzBaseBallz = [
+            "0: ankleL", "1: ankleR", "2: belly", "3: butt", "4: cheekL", "5: cheekR",
+            "6: chest", "7: chin", "8: earL1", "9: earL2", "10: earR1", "11: earR2",
+            "12: elbowL", "13: elbowR", "14: eyeL", "15: eyeR", "16: fingerL1", "17: fingerL2",
+            "18: fingerL3", "19: fingerR1", "20: fingerR2", "21: fingerR3", "22: handL",
+            "23: handR", "24: head", "25: hipL", "26: hipR", "27: irisL", "28: irisR",
+            "29: jaw", "30: jowlL", "31: jowlR", "32: kneeL", "33: kneeR", "34: knuckleL",
+            "35: knuckleR", "36: neck", "37: nose", "38: shoulderL", "39: shoulderR",
+            "40: snout", "41: soleL", "42: soleR", "43: tail1", "44: tail2", "45: tail3",
+            "46: tail4", "47: tail5", "48: tail6", "49: toeL1", "50: toeL2", "51: toeL3",
+            "52: toeR1", "53: toeR2", "54: toeR3", "55: tongue1", "56: tongue2", "57: whiskerL1",
+            "58: whiskerL2", "59: whiskerL3", "60: whiskerR1", "61: whiskerR2", "62: whiskerR3",
+            "63: wristL", "64: wristR", "65: Z-orient", "66: Z-trans"
+        ];
+
+        const babyzBaseBallz = [
+            "0: ankleL", "1: ankleR", "2: archL", "3: archR", "4: belly", "5: bigtoeL", "6: bigtoeR", "7: bridge",
+            "8: cheekL", "9: cheekR", "10: chestL", "11: chestR", "12: chin1", "13: chin2", "14: chin3", "15: chin4",
+            "16: ear1L", "17: ear1R", "18: ear2L", "19: ear2R", "20: ear3L", "21: ear3R", "22: ear4L", "23: ear4R",
+            "24: ear5L", "25: ear5R", "26: ear6L", "27: ear6R", "28: earcenterL", "29: earcenterR", "30: elbowL", "31: elbowR",
+            "32: extra1", "33: extra2", "34: extra3", "35: eyeL", "36: eyeR", "37: eyebrow1L", "38: eyebrow1R", "39: eyebrow2L", "40: eyebrow2R",
+            "41: eyebrow3L", "42: eyebrow3R", "43: eyebrow4L", "44: eyebrow4R", "45: eyebrow5L", "46: eyebrow5R",
+            "47: finger_index1L", "48: finger_index1R", "49: finger_index2L", "50: finger_index2R", "51: finger_middle1L", "52: finger_middle1R",
+            "53: finger_middle2L", "54: finger_middle2R", "55: finger_pinky1L", "56: finger_pinky1R", "57: finger_pinky2L", "58: finger_pinky2R",
+            "59: football1L", "60: football1R", "61: football2L", "62: football2R", "63: head", "64: heelL", "65: heelR",
+            "66: hipL", "67: hipR", "68: irisL", "69: irisR", "70: jock", "71: kneeL", "72: kneeR",
+            "73: lowerLip1", "74: lowerLip2", "75: lowerLip3", "76: lowerLip4", "77: lowerLip5", "78: lowerLip6",
+            "79: mouthTopL", "80: mouthTopR", "81: neck", "82: nose1", "83: nose2", "84: nosemiddle", "85: nostrilL", "86: nostrilR",
+            "87: origin", "88: palm1L", "89: palm1R", "90: palm2L", "91: palm2R", "92: palm3L", "93: palm3R",
+            "94: shoulderL", "95: shoulderR", "96: templeL", "97: templeR", "98: thumb1L", "99: thumb1R", "100: thumb2L", "101: thumb2R",
+            "102: toe_indexL", "103: toe_indexR", "104: toe_middleL", "105: toe_middleR", "106: toe_pinkyL", "107: toe_pinkyR",
+            "108: tongue1", "109: underchin", "110: upperLip1", "111: upperLip2", "112: upperLip3", "113: upperLip4", "114: upperLip5", "115: upperLip6",
+            "116: wristL", "117: wristR", "118: zorient", "119: ztrans"
+        ];
+
+        let colorMap = {};
+        let activePalette = [];
+        let activePaletteTarget = null;
+        let colorSlots = [{ color: '15', outlineColor: '244', fuzz: '0', outlineThickness: '-1', texture: '1', group: '-1', diameter: '30' }];
+        let activeSlotIndex = 0;
+        let isCycleMode = false;
+
+        const defaultPalette = [
+            [255, 255, 255], [128, 0, 0], [0, 128, 0], [128, 128, 0], [0, 0, 128], [128, 0, 128], [0, 128, 128], [192, 192, 192],
+            [192, 204, 216], [0, 0, 0], [231, 226, 221], [226, 220, 215], [221, 215, 210], [215, 209, 204], [210, 204, 199], [205, 198, 193],
+            [200, 193, 188], [194, 187, 182], [189, 182, 177], [184, 176, 171], [117, 117, 117], [112, 112, 112], [107, 107, 107], [102, 102, 102],
+            [97, 97, 97], [92, 92, 92], [87, 87, 87], [82, 82, 82], [77, 77, 77], [69, 69, 69], [66, 66, 66], [61, 61, 61], [54, 54, 54], [48, 48, 48],
+            [41, 41, 41], [36, 36, 36], [28, 28, 28], [23, 23, 23], [15, 15, 15], [7, 7, 7], [220, 194, 150], [214, 186, 143], [208, 179, 137],
+            [202, 171, 130], [196, 164, 124], [190, 156, 117], [184, 149, 111], [178, 141, 104], [172, 134, 98], [166, 126, 91], [135, 65, 34],
+            [127, 60, 33], [120, 54, 31], [112, 49, 30], [104, 43, 28], [97, 38, 27], [89, 32, 25], [81, 27, 24], [74, 21, 22], [66, 16, 21],
+            [180, 115, 22], [179, 110, 20], [176, 102, 17], [170, 94, 14], [167, 87, 12], [160, 79, 8], [157, 72, 7], [149, 64, 4], [146, 57, 2],
+            [138, 48, 0], [240, 158, 183], [236, 152, 181], [231, 146, 182], [225, 137, 180], [219, 132, 180], [214, 128, 179], [205, 121, 177],
+            [199, 117, 177], [191, 115, 176], [180, 110, 171], [168, 41, 1], [162, 37, 4], [156, 34, 7], [149, 30, 9], [143, 27, 12], [137, 23, 15],
+            [131, 20, 18], [124, 16, 20], [118, 13, 23], [112, 9, 26], [107, 74, 12], [106, 68, 12], [101, 59, 11], [96, 52, 11], [91, 44, 11],
+            [86, 38, 11], [82, 32, 10], [77, 27, 10], [72, 21, 9], [66, 16, 9], [166, 138, 56], [168, 137, 56], [163, 129, 56], [159, 123, 56],
+            [154, 116, 55], [150, 110, 54], [145, 104, 54], [141, 98, 53], [136, 93, 53], [131, 87, 52], [98, 112, 125], [93, 105, 118], [87, 99, 112],
+            [82, 92, 105], [77, 86, 99], [71, 79, 92], [66, 73, 86], [61, 61, 61], [54, 54, 54], [55, 60, 73], [50, 53, 66], [154, 142, 115], [150, 137, 110],
+            [142, 128, 103], [136, 121, 99], [127, 112, 92], [121, 106, 88], [112, 97, 81], [106, 91, 77], [98, 82, 71], [88, 74, 65], [66, 182, 68],
+            [60, 174, 62], [52, 162, 54], [44, 150, 46], [36, 137, 38], [36, 128, 32], [35, 114, 26], [36, 99, 20], [33, 85, 15], [32, 69, 11],
+            [17, 89, 223], [16, 80, 209], [15, 69, 194], [14, 61, 180], [12, 51, 166], [11, 37, 152], [10, 22, 138], [9, 11, 124], [14, 7, 110],
+            [19, 6, 96], [216, 240, 255], [172, 224, 255], [153, 214, 255], [130, 202, 255], [117, 182, 232], [104, 192, 255], [81, 150, 220],
+            [24, 156, 206], [86, 139, 185], [30, 137, 169], [235, 237, 167], [234, 235, 144], [209, 204, 119], [247, 244, 0], [237, 232, 50],
+            [198, 198, 12], [195, 195, 52], [159, 162, 23], [159, 159, 67], [110, 122, 46], [255, 255, 255], [192, 228, 231], [172, 198, 213],
+            [167, 167, 177], [160, 160, 168], [116, 160, 182], [119, 158, 180], [122, 156, 179], [125, 154, 178], [128, 152, 176], [226, 190, 172],
+            [213, 147, 144], [215, 118, 110], [184, 115, 103], [159, 119, 115], [162, 106, 93], [137, 100, 88], [152, 87, 77], [106, 69, 66],
+            [90, 60, 49], [114, 158, 140], [0, 128, 128], [66, 122, 117], [0, 128, 128], [57, 120, 96], [61, 90, 99], [38, 88, 71], [33, 65, 43],
+            [18, 57, 48], [255, 255, 255], [255, 255, 255], [244, 246, 216], [233, 216, 194], [44, 95, 89], [211, 244, 197], [196, 211, 159],
+            [255, 199, 26], [176, 184, 155], [175, 177, 119], [165, 148, 142], [172, 169, 143], [215, 160, 20], [198, 127, 8], [202, 110, 70],
+            [121, 142, 97], [153, 126, 77], [128, 128, 128], [101, 155, 42], [0, 203, 22], [167, 108, 57], [255, 66, 0], [151, 100, 66],
+            [153, 101, 42], [221, 52, 106], [41, 68, 117], [88, 105, 181], [66, 107, 132], [80, 100, 128], [117, 89, 74], [254, 24, 20],
+            [110, 92, 43], [156, 66, 57], [184, 50, 66], [136, 68, 66], [85, 68, 127], [126, 140, 134], [207, 16, 12], [146, 25, 20],
+            [255, 0, 254], [17, 40, 14], [13, 16, 41], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [255, 255, 255], [80, 100, 128], [0, 0, 0],
+            [128, 128, 128], [255, 0, 0], [0, 255, 0], [255, 255, 0], [0, 0, 255], [255, 0, 255], [0, 255, 255], [0, 0, 0]
+        ];
+
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('petzType').value = 'addballz';
+            updateBaseBallDropdown();
+            applyPalette(defaultPalette);
+            buildSlotList();
+            updateSlotUI();
+            drawGrid();
+            redrawCircles();
+        });
+
+        // --- PALETTE & SLOTS LOGIC ---
+        document.getElementById('paletteFileInput').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const palette = await parsePaletteFile(file);
+                applyPalette(palette);
+            }
+        });
+
+        async function parsePaletteFile(file) {
+            const buffer = await file.arrayBuffer();
+            const ext = file.name.split('.').pop().toLowerCase();
+            const bytes = new Uint8Array(buffer);
+            let palette = [];
+            if (ext === 'act' || ext === 'pal') {
+                if (bytes.length < 768) return [];
+                for (let i = 0; i < 768; i += 3) palette.push([bytes[i], bytes[i + 1], bytes[i + 2]]);
+            } else if (ext === 'bmp') {
+                const bmpHeaderSize = 54;
+                if (bytes.length < bmpHeaderSize + 256 * 4) return [];
+                for (let i = bmpHeaderSize; i < bmpHeaderSize + 256 * 4; i += 4) palette.push([bytes[i + 2], bytes[i + 1], bytes[i]]);
+            } else if (ext === 'png') {
+                let offset = 8;
+                while (offset < bytes.length) {
+                    const length = (bytes[offset] << 24) | (bytes[offset + 1] << 16) | (bytes[offset + 2] << 8) | bytes[offset + 3];
+                    const type = String.fromCharCode(...bytes.slice(offset + 4, offset + 8));
+                    if (type === 'PLTE') {
+                        for (let i = offset + 8; i < offset + 8 + length; i += 3) palette.push([bytes[i], bytes[i + 1], bytes[i + 2]]);
+                        break;
+                    }
+                    offset += 8 + length + 4;
+                }
+            }
+            return palette.slice(0, 256);
+        }
+
+        function applyPalette(palette) {
+            activePalette = palette;
+            colorMap = {};
+            palette.forEach(([r, g, b], index) => {
+                colorMap[index] = `rgb(${r},${g},${b})`;
+            });
+            updateSlotUI();
+            redrawCircles();
+        }
+
+        function getColorFromValue(value) {
+            const index = parseInt(value);
+            return colorMap[index] || 'rgb(0,0,0)';
+        }
+
+        function togglePalettePopup(target) {
+            const popup = document.getElementById(target + 'PalettePopup');
+            if (activePaletteTarget && activePaletteTarget !== target) {
+                document.getElementById(activePaletteTarget + 'PalettePopup').classList.add('hidden');
+            }
+            if (popup.classList.contains('hidden')) {
+                renderSwatchGrid(target);
+                popup.classList.remove('hidden');
+                activePaletteTarget = target;
+            } else {
+                popup.classList.add('hidden');
+                activePaletteTarget = null;
+            }
+        }
+
+        function renderSwatchGrid(target) {
+            const grid = document.getElementById(target + 'SwatchGrid');
+            grid.innerHTML = '';
+            const currentVal = parseInt(document.getElementById(target).value) || 0;
+            activePalette.forEach(([r, g, b], i) => {
+                const s = document.createElement('div');
+                s.className = 'swatch' + (i === currentVal ? ' swatch-selected' : '');
+                s.style.backgroundColor = `rgb(${r},${g},${b})`;
+                s.onclick = (e) => {
+                    e.stopPropagation(); selectSwatch(target, i);
+                    document.getElementById(target + 'PalettePopup').classList.add('hidden');
+                    activePaletteTarget = null;
+                };
+                grid.appendChild(s);
+            });
+        }
+
+        function selectSwatch(target, index) {
+            document.getElementById(target).value = index;
+            const [r, g, b] = activePalette[index] || [0, 0, 0];
+            document.getElementById(target + 'SwatchTrigger').style.background = `rgb(${r},${g},${b})`;
+            if (target === 'color') document.getElementById('colorIndexLabel').textContent = index;
+            if (target === 'outlineColor') document.getElementById('outlineColorIndexLabel').textContent = index;
+            saveSlotSettings();
+        }
+
+        function updateColorFromInput(val) {
+            const index = parseInt(val); if (isNaN(index) || index < 0 || index > 255) return;
+            if (colorMap[index]) {
+                document.getElementById('colorSwatchTrigger').style.background = colorMap[index];
+                document.getElementById('colorIndexLabel').textContent = index;
+                saveSlotSettings();
+            }
+        }
+
+        function updateOutlineColorFromInput(val) {
+            const index = parseInt(val); if (isNaN(index) || index < 0 || index > 255) return;
+            if (colorMap[index]) {
+                document.getElementById('outlineColorSwatchTrigger').style.background = colorMap[index];
+                document.getElementById('outlineColorIndexLabel').textContent = index;
+                saveSlotSettings();
+            }
+        }
+
+        document.addEventListener('click', (e) => {
+            if (activePaletteTarget) {
+                const popup = document.getElementById(activePaletteTarget + 'PalettePopup');
+                const trigger = document.getElementById(activePaletteTarget + 'SwatchTrigger');
+                if (!popup.contains(e.target) && !trigger.contains(e.target)) {
+                    popup.classList.add('hidden');
+                    activePaletteTarget = null;
+                }
+            }
+        });
+
+        function toggleCycleMode() {
+            isCycleMode = !isCycleMode;
+            const btn = document.getElementById('cycleModeBtn');
+            btn.textContent = isCycleMode ? 'Mode: Cycle Slots' : 'Mode: Pick Slots';
+            btn.style.backgroundColor = isCycleMode ? 'var(--primary)' : 'var(--border)';
+        }
+
+        function buildSlotList() {
+            const list = document.getElementById('slotList');
+            list.innerHTML = '';
+            colorSlots.forEach((slot, i) => {
+                const btn = document.createElement('button');
+                btn.textContent = `S${i + 1}`;
+                const slotColor = getColorFromValue(slot.color);
+                btn.style.cssText = `flex: 1 1 20%; font-size: 9px; padding: 6px; background-color: ${slotColor}; color: white; text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000; border: 2px solid var(--border); border-radius: 4px; cursor: pointer;`;
+                if (i === activeSlotIndex) {
+                    btn.style.borderColor = '#ffffff';
+                    btn.style.boxShadow = '0 0 0 2px var(--primary)';
+                }
+                btn.onclick = () => { activeSlotIndex = i; updateSlotUI(); buildSlotList(); };
+                list.appendChild(btn);
+            });
+        }
+
+        function updateSlotUI() {
+            const slot = colorSlots[activeSlotIndex];
+            if (!slot) return;
+            document.getElementById('color').value = slot.color;
+            document.getElementById('colorIndexLabel').textContent = slot.color;
+            document.getElementById('colorSwatchTrigger').style.background = getColorFromValue(slot.color);
+            document.getElementById('outlineColor').value = slot.outlineColor;
+            document.getElementById('outlineColorIndexLabel').textContent = slot.outlineColor;
+            document.getElementById('outlineColorSwatchTrigger').style.background = getColorFromValue(slot.outlineColor);
+            document.getElementById('fuzz').value = slot.fuzz;
+            document.getElementById('outlineThickness').value = slot.outlineThickness;
+            document.getElementById('texture').value = slot.texture;
+            document.getElementById('group').value = slot.group;
+            document.getElementById('diameter').value = slot.diameter;
+        }
+
+        function addColorSlot() {
+            const defaults = colorSlots[activeSlotIndex];
+            colorSlots.push({ ...defaults });
+            activeSlotIndex = colorSlots.length - 1;
+            buildSlotList(); updateSlotUI();
+        }
+
+        function removeColorSlot() {
+            if (colorSlots.length <= 1) return;
+            colorSlots.splice(activeSlotIndex, 1);
+            if (activeSlotIndex >= colorSlots.length) activeSlotIndex = colorSlots.length - 1;
+            buildSlotList(); updateSlotUI();
+        }
+
+        function saveSlotSettings() {
+            const slot = colorSlots[activeSlotIndex];
+            slot.color = document.getElementById('color').value;
+            slot.outlineColor = document.getElementById('outlineColor').value;
+            slot.fuzz = document.getElementById('fuzz').value;
+            slot.outlineThickness = document.getElementById('outlineThickness').value;
+            slot.texture = document.getElementById('texture').value;
+            slot.group = document.getElementById('group').value;
+            slot.diameter = document.getElementById('diameter').value;
+            buildSlotList();
+        }
+
+        // --- DRAWING & CANVAS ---
+        function updateBaseBallDropdown() {
+            const petzType = document.getElementById('petzType').value;
+            const baseBallInput = document.getElementById('baseBall');
+            const baseBallDatalist = document.getElementById('baseBallOptions');
+            const addBallLabel = document.getElementById('addBallLabel');
+            const baseBallLabel = document.getElementById('baseBallLabel');
+
+            baseBallDatalist.innerHTML = '';
+            if (petzType === 'addballz') {
+                baseBallInput.style.display = 'none'; baseBallLabel.style.display = 'none'; addBallLabel.style.display = 'inline';
+            } else {
+                baseBallInput.style.display = 'inline'; baseBallLabel.style.display = 'inline'; addBallLabel.style.display = 'none';
+                const arr = petzType === 'dogz' ? dogzBaseBallz : (petzType === 'catz' ? catzBaseBallz : babyzBaseBallz);
+                arr.forEach((ball, index) => { baseBallDatalist.innerHTML += `<option value="${index}">${ball}</option>`; });
+            }
+        }
+
+        function drawGrid() {
+            const gridSpacing = 50;
+            const textOffset = 15;
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const coordinateMultiplier = parseFloat(document.getElementById('coordinateMultiplier').value);
+
+            ctx.beginPath();
+            ctx.strokeStyle = '#888';
+            ctx.lineWidth = 1;
+            for (let x = 0; x <= canvas.width; x += gridSpacing) {
+                ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+                const labelValueX = ((x - centerX) / centerX * coordinateMultiplier).toFixed(2);
+                ctx.fillStyle = '#888';
+                ctx.font = '12px Arial';
+                ctx.fillText(labelValueX, x + 2, centerY + textOffset);
+            }
+            ctx.beginPath();
+            for (let y = 0; y <= canvas.height; y += gridSpacing) {
+                ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+                const labelValueY = ((centerY - y) / centerY * coordinateMultiplier).toFixed(2);
+                ctx.fillText(labelValueY, centerX + textOffset, y - 2);
+            }
+            ctx.beginPath();
+            ctx.strokeStyle = '#555';
+            ctx.lineWidth = 2;
+            ctx.moveTo(centerX, 0); ctx.lineTo(centerX, canvas.height); ctx.stroke();
+            ctx.moveTo(0, centerY); ctx.lineTo(canvas.width, centerY); ctx.stroke();
+        }
+
+        document.getElementById('coordinateMultiplier').addEventListener('input', function () {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawGrid(); redrawCircles();
+        });
+
+        function redrawCircles() {
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            circles.forEach(circle => {
+                let x = (circle.x * centerX) + centerX;
+                let y = (circle.y * centerY) + centerY;
+                drawPixelCircles(x, y, circle.diameter, circle.color, circle.outlineColor, circle.outlineThickness, circle.fuzz, circle.texture);
+            });
+        }
+
+        function clearCanvas() {
+            if (confirm("Are you sure you want to clear your entire design?")) {
+                circles = [];
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawGrid();
+            }
+        }
+
+        function drawPixelCircles(cx, cy, diameter, colorValue, outlineColorValue, outlineThickness, fuzz, texture) {
+            const pixelSize = 2;
+            const radius = diameter / 2;
+            const fillColor = getColorFromValue(colorValue);
+            const outlineColor = getColorFromValue(outlineColorValue);
+
+            const isFullOutline = outlineThickness > 0;
+            const isLeftOutline = outlineThickness === 0;
+            const isRightOutline = outlineThickness === -2;
+
+            const effectiveOutlineThickness = isFullOutline ? outlineThickness : (isLeftOutline || isRightOutline ? 1 : 0);
+
+            for (let dx = -radius - effectiveOutlineThickness; dx <= radius + effectiveOutlineThickness; dx++) {
+                for (let dy = -radius - effectiveOutlineThickness; dy <= radius + effectiveOutlineThickness; dy++) {
+                    const hash = ((dx * 73856093) ^ (dy * 19349663)) & 255;
+                    const rand = (hash / 255 - 0.5);
+                    const fuzzedRadius = radius + rand * fuzz;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    const isFill = dist <= fuzzedRadius;
+                    const isOutline = dist > fuzzedRadius && dist <= fuzzedRadius + effectiveOutlineThickness;
+                    const px = Math.round(cx + dx * pixelSize);
+                    const py = Math.round(cy + dy * pixelSize);
+
+                    if (isFill) {
+                        ctx.fillStyle = fillColor;
+                        ctx.fillRect(px, py, pixelSize, pixelSize);
+                        if (texture && getTextureValue(px, py, texture)) {
+                            ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                            ctx.fillRect(px, py, pixelSize, pixelSize);
+                        }
+                    } else if (isOutline) {
+                        const angle = Math.atan2(dy, dx);
+                        const isLeftHalf = angle > Math.PI / 2 || angle < -Math.PI / 2;
+                        const isRightHalf = angle >= -Math.PI / 2 && angle <= Math.PI / 2;
+                        if (isFullOutline || (isLeftOutline && isLeftHalf) || (isRightOutline && isRightHalf)) {
+                            ctx.fillStyle = outlineColor;
+                            ctx.fillRect(px, py, pixelSize, pixelSize);
+                        }
+                    }
+                }
+            }
+        }
+
+        function getTextureValue(x, y, texture) {
+            switch (parseInt(texture)) {
+                case 1: return (Math.floor(x / 4) % 2 === 0);
+                case 2: return (Math.floor(y / 4) % 2 === 0);
+                case 3: return (Math.floor(x / 6) % 2 === 0 && Math.floor(y / 6) % 2 === 0);
+                case 4: return ((Math.floor(x / 4) + Math.floor(y / 4)) % 2 === 0);
+                case 5: return Math.sin(x * 0.2) + Math.cos(y * 0.2) > 0;
+                case 6: return ((Math.floor(x / 4) - Math.floor(y / 2)) % 2 === 0);
+                case 7: return ((Math.floor(x / 2) - Math.floor(y / 3)) % 2 === 0);
+                default: return false;
+            }
+        }
+
+        // --- CONTINUOUS STROKE / DRAGGING ---
+        let isDragging = false;
+        let lastDragPoint = null;
+
+        canvas.addEventListener('mousedown', (event) => {
+            isDragging = true;
+            lastDragPoint = null;
+            handleCanvasAction(event);
+        });
+
+        canvas.addEventListener('mousemove', (event) => {
+            const rect = canvas.getBoundingClientRect();
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const mouseX = (event.clientX - rect.left) * scaleX;
+            const mouseY = (event.clientY - rect.top) * scaleY;
+
+            const slot = colorSlots[activeSlotIndex];
+            const diameter = parseInt(slot.diameter);
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawGrid();
+            redrawCircles();
+
+            // Hover preview
+            const deleteMode = document.getElementById('deleteMode').checked || event.shiftKey;
+            if (deleteMode) {
+                ctx.beginPath(); ctx.arc(mouseX, mouseY, 8, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 50, 50, 0.8)'; ctx.fill();
+            } else {
+                drawPixelCircles(mouseX, mouseY, diameter, slot.color, slot.outlineColor, slot.outlineThickness, slot.fuzz, slot.texture);
+            }
+
+            if (isDragging) {
+                const spacingPercent = parseInt(document.getElementById('dragSpacing').value) || 100;
+                const radiusPx = diameter * 0.5;
+                const spacing = Math.max(1, radiusPx * (spacingPercent / 100));
+
+                if (lastDragPoint) {
+                    const dx = mouseX - lastDragPoint.x;
+                    const dy = mouseY - lastDragPoint.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist >= spacing) {
+                        const steps = Math.floor(dist / spacing);
+                        for (let i = 1; i <= steps; i++) {
+                            const t = i / steps;
+                            const px = lastDragPoint.x + dx * t;
+                            const py = lastDragPoint.y + dy * t;
+
+                            if (deleteMode) {
+                                let circleToDelete = null;
+                                for (let j = 0; j < circles.length; j++) {
+                                    const circle = circles[j];
+                                    const canvasX = (circle.x * centerX) + centerX;
+                                    const canvasY = (circle.y * centerY) + centerY;
+                                    const d = Math.sqrt((px - canvasX) ** 2 + (py - canvasY) ** 2);
+                                    if (d <= (circle.diameter * 0.5) + 4) { circleToDelete = j; break; }
+                                }
+                                if (circleToDelete !== null) circles.splice(circleToDelete, 1);
+                            } else {
+                                let cx = (px - centerX) / centerX;
+                                let cy = (py - centerY) / centerY;
+                                let cz = 1;
+                                if (document.getElementById('UVProjection').checked) cz = Math.sqrt(Math.max(0, 1 - cx * cx - cy * cy));
+
+                                if (isCycleMode && colorSlots.length > 1) {
+                                    activeSlotIndex = (activeSlotIndex + 1) % colorSlots.length;
+                                    updateSlotUI(); buildSlotList();
+                                }
+                                const cSlot = colorSlots[activeSlotIndex];
+                                drawPixelCircles(px, py, cSlot.diameter, cSlot.color, cSlot.outlineColor, cSlot.outlineThickness, cSlot.fuzz, cSlot.texture);
+
+                                circles.push({
+                                    x: cx.toFixed(2), y: cy.toFixed(2), z: cz.toFixed(2), diameter: parseInt(cSlot.diameter),
+                                    color: cSlot.color, fuzz: cSlot.fuzz, outlineColor: cSlot.outlineColor,
+                                    outlineThickness: cSlot.outlineThickness, texture: cSlot.texture, group: cSlot.group
+                                });
+                            }
+                        }
+                        lastDragPoint = { x: mouseX, y: mouseY };
+                    }
+                } else {
+                    lastDragPoint = { x: mouseX, y: mouseY };
+                }
+            }
+        });
+
+        canvas.addEventListener('mouseup', () => { isDragging = false; lastDragPoint = null; });
+        canvas.addEventListener('mouseleave', () => {
+            isDragging = false; lastDragPoint = null;
+            ctx.clearRect(0, 0, canvas.width, canvas.height); drawGrid(); redrawCircles();
+        });
+
+        canvas.addEventListener('wheel', function (event) {
+            event.preventDefault();
+            const diameterInput = document.getElementById('diameter');
+            let diameter = parseInt(diameterInput.value);
+            diameter = Math.max(1, diameter + (event.deltaY > 0 ? -1 : 1));
+            diameterInput.value = diameter;
+            saveSlotSettings();
+
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = (event.clientX - rect.left) * (canvas.width / rect.width);
+            const mouseY = (event.clientY - rect.top) * (canvas.height / rect.height);
+            ctx.clearRect(0, 0, canvas.width, canvas.height); drawGrid(); redrawCircles();
+            const slot = colorSlots[activeSlotIndex];
+            drawPixelCircles(mouseX, mouseY, diameter, slot.color, slot.outlineColor, slot.outlineThickness, slot.fuzz, slot.texture);
+        });
+
+        function handleCanvasAction(event) {
+            const rect = canvas.getBoundingClientRect();
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const clickX = (event.clientX - rect.left) * (canvas.width / rect.width);
+            const clickY = (event.clientY - rect.top) * (canvas.height / rect.height);
+            const deleteMode = document.getElementById('deleteMode').checked || event.shiftKey;
+
+            if (deleteMode) {
+                let circleToDelete = null;
+                for (let i = 0; i < circles.length; i++) {
+                    const canvasX = (circles[i].x * centerX) + centerX;
+                    const canvasY = (circles[i].y * centerY) + centerY;
+                    if (Math.sqrt((clickX - canvasX) ** 2 + (clickY - canvasY) ** 2) <= (circles[i].diameter * 0.5) + 4) {
+                        circleToDelete = i; break;
+                    }
+                }
+                if (circleToDelete !== null) {
+                    circles.splice(circleToDelete, 1);
+                    ctx.clearRect(0, 0, canvas.width, canvas.height); drawGrid(); redrawCircles();
+                }
+            } else {
+                let x = (clickX - centerX) / centerX;
+                let y = (clickY - centerY) / centerY;
+                let z = 1;
+                if (document.getElementById('UVProjection').checked) z = Math.sqrt(Math.max(0, 1 - x * x - y * y));
+
+                if (isCycleMode && colorSlots.length > 1) {
+                    activeSlotIndex = (activeSlotIndex + 1) % colorSlots.length;
+                    updateSlotUI(); buildSlotList();
+                }
+                const slot = colorSlots[activeSlotIndex];
+                drawPixelCircles(clickX, clickY, parseInt(slot.diameter), slot.color, slot.outlineColor, slot.outlineThickness, slot.fuzz, slot.texture);
+
+                circles.push({
+                    x: x.toFixed(2), y: y.toFixed(2), z: z.toFixed(2), diameter: parseInt(slot.diameter),
+                    color: slot.color, fuzz: slot.fuzz, outlineColor: slot.outlineColor,
+                    outlineThickness: slot.outlineThickness, texture: slot.texture, group: slot.group
+                });
+            }
+        }
+
+        // --- ROTATION & EXPORT ---
+        function rotate(x, y, z) {
+            let tempX = x * Math.cos(yaw) - y * Math.sin(yaw);
+            let tempY = x * Math.sin(yaw) + y * Math.cos(yaw);
+            x = tempX; y = tempY;
+
+            let tempZ = z * Math.cos(pitch) - x * Math.sin(pitch);
+            tempX = z * Math.sin(pitch) + x * Math.cos(pitch);
+            z = tempZ; x = tempX;
+
+            tempY = y * Math.cos(roll) - z * Math.sin(roll);
+            tempZ = y * Math.sin(roll) + z * Math.cos(roll);
+            y = tempY; z = tempZ;
+
+            return { x, y, z };
+        }
+
+        function setRotation(view) {
+            ['front', 'back', 'top', 'bottom', 'left', 'right'].forEach(v => {
+                document.getElementById('btn-' + v).style.backgroundColor = 'var(--primary)';
+            });
+            document.getElementById('btn-' + view).style.backgroundColor = 'var(--primary-hover)';
+
+            switch (view) {
+                case 'front': roll = 0; pitch = Math.PI; yaw = 0; break;
+                case 'back': roll = 0; pitch = 0; yaw = 0; break;
+                case 'top': roll = -Math.PI / 2; pitch = Math.PI; yaw = 0; break;
+                case 'bottom': roll = Math.PI / 2; pitch = Math.PI; yaw = 0; break;
+                case 'left': roll = 0; pitch = Math.PI / 2; yaw = 0; break;
+                case 'right': roll = 0; pitch = -Math.PI / 2; yaw = 0; break;
+            }
+        }
+
+        function applyTransform(x, y, z) {
+            if (document.getElementById('transformRotation').checked) {
+                return rotate(x, y, z);
+            }
+            return { x, y, z };
+        }
+
+        function isProblematicVector(x, y, z) {
+            const magnitude = Math.sqrt(x * x + y * y + z * z);
+            if (magnitude === 0) return true;
+            const nx = x / magnitude, ny = y / magnitude, nz = z / magnitude;
+            return Math.abs(Math.floor(nx)) + Math.abs(Math.floor(ny)) + Math.abs(Math.floor(nz)) === 0;
+        }
+
+        function nudgeVectorIfNeeded(x, y, z) {
+            const threshold = 0.01; const minNudge = 0.1;
+            let zeroCount = (Math.abs(x) < threshold ? 1 : 0) + (Math.abs(y) < threshold ? 1 : 0) + (Math.abs(z) < threshold ? 1 : 0);
+            if (zeroCount >= 2) {
+                if (Math.abs(x) < threshold) x = (x < 0 ? -minNudge : minNudge);
+                else if (Math.abs(y) < threshold) y = (y < 0 ? -minNudge : minNudge);
+                else if (Math.abs(z) < threshold) z = (z < 0 ? -minNudge : minNudge);
+            }
+            if (x === 0 && y === 0 && z === 0) x = minNudge;
+            return { x, y, z };
+        }
+
+        function conformToTSV(content) {
+            return content.replace(/,\s+/g, '\t').replace(/,\t+/g, '\t').replace(/,/g, '\t');
+        }
+
+        function loadFromTSV() {
+            circles = [];
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawGrid();
+
+            const coordinateMultiplier = parseFloat(document.getElementById('coordinateMultiplier').value);
+            let tsvContent = conformToTSV(document.getElementById('tsvOutput').value);
+            const lines = tsvContent.trim().split('\n').reverse().filter(line => !line.split('\t')[0].startsWith(';') && !isNaN(parseFloat(line.split('\t')[0])));
+
+            lines.forEach(line => {
+                const row = line.split('\t');
+                const baseBall = row[0];
+                const diameter = parseFloat(row[1]);
+
+                let x = parseFloat(row[2]) / coordinateMultiplier;
+                let y = parseFloat(row[3]) / coordinateMultiplier;
+                let z = parseFloat(row[4]) / coordinateMultiplier;
+
+                const nudgedVector = nudgeVectorIfNeeded(x, y, z);
+                x = nudgedVector.x; y = nudgedVector.y; z = nudgedVector.z;
+
+                circles.push({
+                    baseBall: baseBall, x: x.toFixed(2), y: y.toFixed(2), z: z, diameter: diameter,
+                    color: row[5], outlineColor: row[6], fuzz: parseInt(row[7]), outlineThickness: parseInt(row[8]),
+                    group: parseInt(row[9]), texture: parseInt(row[10])
+                });
+            });
+            redrawCircles();
+        }
+
+        function loadDefaultLNZ() {
+            document.getElementById('tsvOutput').value = `;baseball\tdiameter\tdirection (x,y,z)\tcolor\toutlinecolor\tfuzz\toutline\tgroup\ttexture\tanchored
+    6\t5\t-0.38,-0.54,1.00\t10\t244\t0\t-1\t-1\t1\t0
+    6\t10\t-0.42,-0.52,1.00\t35\t244\t0\t-1\t-1\t1\t0
+    6\t10\t-0.08,-0.08,1.00\t33\t244\t0\t-1\t-1\t1\t0
+    6\t10\t-0.02,-0.02,1.00\t33\t244\t0\t-1\t-1\t1\t0
+    6\t10\t0.08,0.02,1.00\t33\t244\t0\t-1\t-1\t1\t0
+    6\t10\t0.18,0.00,1.00\t33\t244\t0\t-1\t-1\t1\t0
+    6\t10\t0.26,-0.04,1.00\t33\t244\t0\t-1\t-1\t1\t0
+    6\t10\t0.32,-0.12,1.00\t33\t244\t0\t-1\t-1\t1\t0
+    6\t10\t0.36,-0.22,1.00\t33\t244\t0\t-1\t-1\t1\t0
+    6\t35\t0.00,0.02,1.00\t165\t244\t3\t-1\t-1\t1\t0
+    6\t35\t0.00,-0.20,1.00\t165\t244\t3\t-1\t-1\t1\t0
+    6\t35\t0.24,-0.10,1.00\t165\t244\t3\t-1\t-1\t1\t0
+    6\t35\t-0.24,-0.12,1.00\t165\t244\t3\t-1\t-1\t1\t0
+    6\t35\t-0.42,-0.46,1.00\t165\t244\t3\t-1\t-1\t1\t0
+    6\t30\t0.40,-0.30,1.00\t165\t244\t3\t-1\t-1\t1\t0
+    6\t25\t0.56,-0.46,1.00\t165\t244\t3\t-1\t-1\t1\t0
+    6\t20\t-0.46,-0.34,1.00\t65\t244\t0\t-1\t-1\t1\t0
+    6\t20\t-0.60,-0.32,1.00\t65\t244\t0\t-1\t-1\t1\t0
+    6\t20\t-0.72,-0.34,1.00\t65\t244\t0\t-1\t-1\t1\t0
+`;
+            loadFromTSV();
+        }
+
+        function displayTSV() {
+            const coordinateMultiplier = parseFloat(document.getElementById('coordinateMultiplier').value);
+            const anchored = document.getElementById('anchored').checked;
+            const petzType = document.getElementById('petzType').value;
+            let baseBall = petzType === 'addballz' ? document.getElementById('addBallNumber').value : document.getElementById('baseBall').value;
+
+            let tsvContent = ";\n";
+            circles.forEach(circle => {
+                let x = circle.x * coordinateMultiplier;
+                let y = circle.y * coordinateMultiplier;
+                let z;
+                if (document.getElementById('UVProjection').checked) z = Math.sqrt(Math.max(0, 1 - x * x - y * y));
+                else z = 1;
+
+                if (document.getElementById('transformRotation').checked) {
+                    const transformed = applyTransform(x, y, z);
+                    x = transformed.x.toFixed(2); y = transformed.y.toFixed(2); z = transformed.z.toFixed(2);
+                }
+
+                const nudgedVector = nudgeVectorIfNeeded(x, y, z);
+                const anchoredColumn = anchored ? ',0' : '';
+                const adjustedDiameter = Math.ceil(circle.diameter * parseFloat(document.getElementById('scaleMultiplier').value));
+
+                tsvContent += `${baseBall},${adjustedDiameter},${nudgedVector.x},${nudgedVector.y},${nudgedVector.z},${circle.color},${circle.outlineColor},${circle.fuzz},${circle.outlineThickness},${circle.group},${circle.texture}${anchoredColumn}\n`;
+            });
+
+            tsvContent = ";baseball,diameter,x,y,z,color,outlinecolor,fuzz,outline,group,texture,anchored\n" + tsvContent.split('\n').reverse().join('\n');
+            document.getElementById('tsvOutput').value = tsvContent;
+        }
+
+        document.getElementById('copyTextButton').addEventListener('click', function () {
+            document.getElementById('tsvOutput').select();
+            document.execCommand('copy');
+            alert('Copied to clipboard');
+        });
+
+    </script>
+</body>
+
+</html>
