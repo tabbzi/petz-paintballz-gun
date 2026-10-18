@@ -1,41 +1,29 @@
 # petz-paintballz-gun
-Web app using HTML5 + Java to draw and export LNZ Paint Ballz
+
+Web app using HTML5 + JavaScript to draw and export LNZ Paint Ballz
 
 Load the [live demo](https://tabbzi.github.io/petz-paintballz-gun/) here!
 
-## To-Do
-- [ ]  Fix sizing inconsistencies
-- [ ]  Add all the colors and corresponding hex colors for all games... or handle palettes better, somehow
-- [ ]  Add a tracker to change order or delete circles manually
-- [ ]  Add a palette that can be set up and then swapped through using tab or to specific options using numbers
-- [ ]  Allow local image to be uploaded as background
-- [ ]  Perfect parameters
-- [ ]  Figure out why tattoos on PWS sometimes don't work due to NaN floating point error
-- [ ]  Make labels on draw area more clear
-- [ ]  Normalize load from LNZ to eliminate any roll / pitch / yaw transformations back to (0,0,1) (figure out that math)
-- [ ]  Remove nonfunctional function for autopopulating dropdown with color map
-- [ ]  Add documentation on how to use Paintballz Gun and warning to back up Paintballz often
-- [ ]  Add a ico and splash image of a Catz with paintball scope
-- [ ]  Clear Java for any vulerabilities before hosting on FTP
-- [x]  Make helper sphere less confusing by projecting design onto it
-- [x]  Add light mode / dark mode toggle
-- [x]  Fix NaN floating point error when loading or outputting LNZ where normalized x, y, and z values all round (floor) to zero
-- [x]  Change output to comma-delimited to be very explicit!
-- [x]  Render fuzz on circles e.g. https://stackoverflow.com/questions/33907082/draw-squiggly-line-along-a-curve-in-javascript
-- [x]  Render no outline when -1 and render left half-circle outline when -2 e.g. https://www.kirupa.com/html5/drawing_circles_canvas.htm
-- [x]  Confirm roll yaw pitch values are correct relative to Petz
-- [x]  Confirm buttons give correct roll yaw pitch values relative to Petz
-- [x]  Enable scroll bar size changer
-- [x]  Host live version on GitHub.io
-- [x]  Remove extra rotation function
-- [x]  Add a copy button
-- [x]  Add a hover cursor circle to see where placing
-- [x]  Add a delete circle functionality
-- [x]  Add preset roll yaw pitch for centered on back top front right left bottom of ball with visual guide
-- [x]  Allow comma-delimited LNZ input in addition to tab-delimited (or just remove commas from input)
-- [x]  Move base ballz to global properties
-- [x]  Remove transform that happens during initial draw (comment out see what it does)
-- [x]  Add quick ref for Babyz base ballz too
+## Features
+
+- Draw paintballz by clicking and dragging on canvas
+- Toggle eraser (or hold `SHIFT`) to remove paintballz
+- Load custom palette from `.act`, `.pal`, `.bmp`, or `.png` files, or use the built-in game palette
+- Color slots with per-slot properties (diameter, fuzz, outline, texture, group)
+- Automatically cycle through color slots while drawing
+- Select which on what ballz face (relative to pet) to place design on base ballz (front, back, top, bottom, left, right)
+- LNZ import/export `[Paintballz]` code and copy to clipboard
+- LnzLive stamp export to export designs as LnzLive stamp JSON files
+- Dark / Light mode to toggle between dark and light themes
+
+## Usage
+
+1. Open `index.html` in a browser or visit the [live demo](https://tabbzi.github.io/petz-paintballz-gun/)
+2. Draw your paintball pattern on the canvas
+3. Adjust per-slot properties: diameter, fuzz, outline thickness, texture, and group
+4. Select the export face and configure global settings (pet type, base ball, coordinate/scale multipliers)
+5. Click "Display LNZ!" to generate output, or "Export LnzLive Stamp JSON" to bring into LnzLive
+6. Copy the LNZ code or load existing LNZ data to edit
 
 ## License
 
